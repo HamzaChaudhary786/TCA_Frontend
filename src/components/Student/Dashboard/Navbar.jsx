@@ -135,6 +135,7 @@ const Navbar = ({ heading }) => {
             onLogoutClick={onLogoutClick}
             onProfileClick={onProfileClick}
             onSettingsClick={onSettingsClick}
+            onClose={() => setIsProfileMenu(false)}
           />}
         </div>
       </div>

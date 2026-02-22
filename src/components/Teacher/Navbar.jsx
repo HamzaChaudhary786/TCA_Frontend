@@ -68,7 +68,7 @@ const Navbar = ({ heading }) => {
           <div className="flex flex-col items-start justify-center">
             {heading ?
               <div className="md:ml-14">
-                <p className="font-medium md:text-xl text-sm sm:mr-3 md:text-3xl">{heading}</p>
+                <p className="font-medium text-sm sm:mr-3 md:text-3xl">{heading}</p>
               </div> :
               <div className="hidden md:flex flex-col">
                 <p className="text-xl font-semibold">Hello {userData.name} </p>
@@ -83,7 +83,7 @@ const Navbar = ({ heading }) => {
                   }`}
                 onClick={toggleMail}
               >
-                <IoMailOutline />
+                <IoMailOutline className="h-5 w-5" />
               </div>
               <div
                 className={`p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${bell ? "bg-[#0B1053] text-white" : ""
@@ -113,6 +113,7 @@ const Navbar = ({ heading }) => {
                 onLogoutClick={onLogoutClick}
                 onProfileClick={onProfileClick}
                 onSettingsClick={onSettingsClick}
+                onClose={() => setIsProfileMenu(false)}
               />
             }
           </div>
