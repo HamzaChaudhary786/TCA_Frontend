@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import { GoPerson } from "react-icons/go";
 import { LuSettings } from "react-icons/lu";
 import { IoIosLogOut } from "react-icons/io";
 import { useSidebar } from "../../context/SidebarContext";
+import useClickOutside from "../../hooks/useClickOutlise";
 
-const ProfileMenu = ({ onProfileClick, onSettingsClick, onLogoutClick, dashboard }) => {
+const ProfileMenu = ({ onProfileClick, onSettingsClick, onLogoutClick, dashboard, onClose }) => {
   const { isSidebarOpen } = useSidebar();
+  const menuRef = useRef(null);
+  useClickOutside(menuRef, onClose);
   return (
-    <div className={`fixed flex ${!dashboard ? "mt-10" : "mt-2"} ${isSidebarOpen ? "-z-50" : "z-10"} bg-white rounded-md shadow-lg right-0 md:right-10 top-16 w-60`}>
+    <div ref={menuRef} className={`fixed flex ${!dashboard ? "mt-10" : "mt-2"} ${isSidebarOpen ? "-z-50" : "z-10"} bg-white rounded-md shadow-lg right-0 md:right-10 top-16 w-60`}>
       <div className="flex flex-col flex-1 gap-2 px-5 py-5 ">
         <div className="flex flex-col flex-1 gap-2 py-2 border-b border-black/10">
           <div className="flex items-center gap-2 cursor-pointer text-grey hover:text-black" onClick={onProfileClick}>

@@ -114,8 +114,8 @@ const Navbar = ({ heading }) => {
 
 
   const { userData } = useUser();
-    const { isSidebarOpen, setIsSidebarOpen, isopen, setIsopen } = useSidebar();
-  
+  const { isSidebarOpen, setIsSidebarOpen, isopen, setIsopen } = useSidebar();
+
 
 
   return (
@@ -172,6 +172,7 @@ const Navbar = ({ heading }) => {
               onLogoutClick={onLogoutClick}
               onProfileClick={onProfileClick}
               onSettingsClick={onSettingsClick}
+              onClose={() => setIsProfileMenu(false)}
             />
           }
         </div>

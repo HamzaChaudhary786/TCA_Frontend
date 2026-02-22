@@ -155,6 +155,7 @@ const Navbar = ({ heading }) => {
                 onLogoutClick={onLogoutClick}
                 dashboard={true}
                 userData={userData}
+                onClose={() => setIsProfileMenu(false)}
               />}
           </div>
         </div>
