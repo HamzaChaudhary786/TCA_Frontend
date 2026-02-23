@@ -110,7 +110,7 @@ const MyCalendar = ({ data, isPending, refetch, isRefetching }) => {
 
 
   return (
-    <div className="flex relative ">
+    <div className="flex">
 
 
       <div className="">

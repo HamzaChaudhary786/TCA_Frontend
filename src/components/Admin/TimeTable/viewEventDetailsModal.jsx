@@ -221,7 +221,7 @@ export default function ViewEventDetailsModal({
           }}
         />
         <div className="flex gap-2">
-          <div className="flex flex-col w-56 gap-4 max-h-[80vh] overflow-y-auto">
+          <div className="flex flex-col w-full gap-4 max-h-[80vh] overflow-y-auto">
             <div className="flex items-center justify-between w-full mb-2">
               <div className="flex-1">
                 <h2 className="text-xl font-semibold text-gray-800">
