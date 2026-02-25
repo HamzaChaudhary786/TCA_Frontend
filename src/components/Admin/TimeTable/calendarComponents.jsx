@@ -29,7 +29,7 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
       />
 
       <div
-        className="cursor-pointer rounded-lg w-full min-w-[120px] transition-all duration-200 hover:shadow-md  text-[#0B1053] border-2 border-[#0B1053] mb-1"
+        className="cursor-pointer rounded-lg sm:w-full w-72 transition-all duration-200 hover:shadow-md  text-[#0B1053] border-2 border-[#0B1053] mb-1"
         style={{ height: `${eventHeight - 4}px`, minHeight: `${eventHeight - 4}px` }}
         onClick={() => {
           console.log("Admin event clicked:", event);

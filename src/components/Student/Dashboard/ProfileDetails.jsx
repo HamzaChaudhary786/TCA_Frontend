@@ -44,6 +44,25 @@ const ProfileDetails = ({ onclose }) => {
   const [selectedFile, setSelectedFile] = useState(userData?.profilePic || IMAGES.Profile);
   const [parentEmail, setParentEmail] = useState(userData?.guardianEmail);
   const [parentPhone, setParentPhone] = useState(userData?.guardianPhoneNumber);
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const handleProfileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
 
   const handleEditClick = () => {
     setAllowedEdit(true);
@@ -99,9 +118,9 @@ const ProfileDetails = ({ onclose }) => {
               </div>
               <div className="flex flex-col items-center justify-center text-center">
                 <label htmlFor="profile" className="cursor-pointer">
-                  <img src={profile || userData.profilePic} alt="" className="w-28 h-28 rounded-full" />
+                  <img src={previewUrl || userData.profilePic || profile} alt="" className="w-28 h-28 rounded-full" />
                 </label>
-                <input id="profile" type="file" onChange={(e) => setSelectedFile(e.target.files[0])} className="hidden" />
+                <input id="profile" type="file" onChange={handleProfileChange} className="hidden" />
                 <p>{userData?.name}</p>
                 {/* <p>Bio</p> */}
                 <p>

@@ -87,7 +87,7 @@ const Sidebar = () => {
 
   const Menubar = () => (
     <div
-      className={`sm:w-72 w-full h-full shadow-lg bg-[#0B1053]   px-4 md:px-8 flex flex-col justify-between z-50 relative`}
+      className={`sm:w-72 w-full sm:h-screen h-full shadow-lg bg-[#0B1053]   px-4 md:px-8 flex flex-col justify-between z-50 relative`}
     >
       <div>
         <div className="text-white flex justify-end items-center ">

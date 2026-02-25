@@ -54,6 +54,24 @@ const ProfileDetails = ({ onclose }) => {
   const [allowedEdit, setAllowedEdit] = useState(false);
   const [selectedPdf, setSelectedPdf] = useState(userData.cv || "");
   const [selectedProfile, setSelectedProfile] = useState(userData.profilePic || "");
+  const [previewUrl, setPreviewUrl] = useState(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const handleProfileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedProfile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
 
 
 
@@ -126,9 +144,9 @@ const ProfileDetails = ({ onclose }) => {
               </div>
               <div className="flex flex-col items-center justify-center text-center">
                 <label className="cursor-pointer" htmlFor="profile">
-                  <img src={userData.profilePic || profile} alt="" className="w-28 h-28 rounded-full" />
+                  <img src={previewUrl || userData.profilePic || profile} alt="" className="w-28 h-28 rounded-full" />
                 </label>
-                <input type="file" onChange={(e) => { setSelectedProfile(e.target.files[0]) }} id={"profile"} className="hidden" />
+                <input type="file" onChange={handleProfileChange} id={"profile"} className="hidden" />
                 <p>{userData.name}</p>
                 <p>Bio</p>
                 <p className="text-xs">

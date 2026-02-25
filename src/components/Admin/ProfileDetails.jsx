@@ -39,12 +39,30 @@ const ProfileDetails = ({ onClose }) => {
   const { userData, setUserData } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [userDataObj, setUserDataObj] = useState({
     name: userData?.name || "",
     email: userData?.email || "",
     phoneNumber: userData?.phoneNumber || "",
     bio: userData?.bio || "",
   });
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
 
 
@@ -87,12 +105,12 @@ const ProfileDetails = ({ onClose }) => {
           <p className="text-xl font-medium">My Profile</p>
           <IoClose onClick={() => onClose()} className="cursor-pointer" />
         </div>
- 
+
         <div className="flex flex-col items-center py-4">
           <label htmlFor="profile" className="cursor-pointer">
-            <img src={profile || userData.profilePic} alt="Profile" className="w-28 h-28 rounded-full" />
+            <img src={previewUrl || userData.profilePic || profile} alt="Profile" className="w-28 h-28 rounded-full object-cover" />
           </label>
-          <input id="profile" type="file" className="hidden" onChange={(e) => setSelectedFile(e.target.files[0])} />
+          <input id="profile" type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
           <p className="mt-2 font-medium">{userData.name}</p>
           <p className="text-sm text-gray-500">{userData.bio || "No bio available"}</p>
         </div>
