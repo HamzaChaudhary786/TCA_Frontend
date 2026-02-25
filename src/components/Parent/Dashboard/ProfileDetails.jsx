@@ -7,11 +7,27 @@ import { useParent } from "../../../context/ParentContext";
 import { useBlur } from "../../../context/BlurContext";
 import useClickOutside from "../../../hooks/useClickOutlise";
 
+
 const ProfileDetails = ({ onclose }) => {
   const [allowedEdit, setAllowedEdit] = useState(false);
   // const { isBlurred, toggleBlur } = useBlur();
   const { allSubjects, setAllSubjects, selectedChild } = useParent();
+  
+const [profileImage, setProfileImage] = useState(IMAGES.Profile);
 
+const fileInputRef = useRef(null);
+
+const handleImageClick = () => {
+  fileInputRef.current.click(); // Opens the file dialog
+};
+
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const imageURL = URL.createObjectURL(file);
+    setProfileImage(imageURL); // Updates the profile image
+  }
+};
 
   const ref = useRef(null);
 
@@ -73,7 +89,10 @@ const ProfileDetails = ({ onclose }) => {
               </div>
             </div>
             <div className="flex flex-col items-center justify-center text-center">
-              <img src={IMAGES.Profile} alt="" className="sm:w-28 sm:h-28 w-20 h-20" />
+              <label htmlFor="profile" className="cursor-pointer">
+                <img src={profileImage} alt="" className="sm:w-28 sm:h-28 w-20 h-20" />
+              </label>
+              <input id="profile" type="file" className="hidden" onChange={handleImageChange} accept="image/*" ref={fileInputRef} />
               <p>{selectedChild.name}</p>
               <p>Bio</p>
               <p>
