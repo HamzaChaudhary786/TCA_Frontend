@@ -1,4 +1,6 @@
 import React from "react";
+import IMAGES from "../../../assets/images";
+
 
 const DataRows = ({
   index,
@@ -30,9 +32,9 @@ const DataRows = ({
         >
           <img
             className=" rounded-full md:h-7 md:w-7 sm:h-5 sm:w-5 object-cover"
-            src={studentProfile}
+            src={studentProfile || IMAGES.Profile}
             alt="Student Profile"
-          />{" "}
+          />
         </p>
         <p
           className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-[16px] lg:text-[14px] text-[14px] md:text-left ${header ? "font-semibold md:ml-14 text-center" : ""

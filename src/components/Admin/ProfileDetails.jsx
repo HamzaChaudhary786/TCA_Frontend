@@ -14,8 +14,12 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useBlur } from "../../context/BlurContext";
 import useClickOutside from "../../hooks/useClickOutlise";
 import { uploadFile } from "../../utils/FileUpload";
+import { handleProfileImageUpdate } from "../../utils/Admin/profileImageUtils";
+
 
 const CustomInput = ({ label, value, status, icon, name, valuesObj, setValuesObj, isEmail }) => (
+
+
   <div className="my-1 text-sm w-full">
     <div className="flex items-center gap-4 w-full">
       <div className="p-3 bg-white rounded-md border border-gray-300">
@@ -45,14 +49,21 @@ const ProfileDetails = ({ onClose }) => {
     email: userData?.email || "",
     phoneNumber: userData?.phoneNumber || "",
     bio: userData?.bio || "",
+    profilePic: userData?.profilePic || "",
   });
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+
+      // Use the separated utility to handle the upload
+      await handleProfileImageUpdate(file, (url) => {
+        console.log("Uploaded Image URL:", url);
+        setUserDataObj(prev => ({ ...prev, profilePic: url }));
+      }, setLoading);
     }
   };
 
@@ -76,12 +87,6 @@ const ProfileDetails = ({ onClose }) => {
 
   const updateUserMutation = useMutation({
     mutationFn: async (data) => {
-      if (selectedFile) {
-        console.log("i am working");
-
-        const fileUrl = await uploadFile(selectedFile);
-        data.profilePic = fileUrl;
-      }
       return updateUser(data, userData._id);
     },
     onSuccess: (data) => {
@@ -97,6 +102,12 @@ const ProfileDetails = ({ onClose }) => {
       localStorage.setItem("tcauser", JSON.stringify(userData));
     }
   }, [userData]);
+
+
+
+  const [loading, setLoading] = useState(false); // Move it here, top-level
+
+
 
   return (
     <div className="absolute top-0 right-0 z-10 flex bg-white h-full rounded-md shadow-lg sm:w-96 w-72" ref={ref}>

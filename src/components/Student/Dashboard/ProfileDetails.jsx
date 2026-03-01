@@ -16,6 +16,8 @@ import profile from "../../../assets/images/profilepic.png"
 import { useBlur } from "../../../context/BlurContext";
 import useClickOutside from "../../../hooks/useClickOutlise";
 import { uploadFile } from "../../../utils/FileUpload";
+import { handleProfileImageUpdate } from "../../../utils/Admin/profileImageUtils";
+
 const ProfileDetails = ({ onclose }) => {
 
   const { userData, setUserData } = useUser();
@@ -45,6 +47,7 @@ const ProfileDetails = ({ onclose }) => {
   const [parentEmail, setParentEmail] = useState(userData?.guardianEmail);
   const [parentPhone, setParentPhone] = useState(userData?.guardianPhoneNumber);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [profilePic, setProfilePic] = useState(userData?.profilePic || "");
 
   React.useEffect(() => {
     return () => {
@@ -54,12 +57,18 @@ const ProfileDetails = ({ onclose }) => {
     };
   }, [previewUrl]);
 
-  const handleProfileChange = (e) => {
+  const handleProfileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+
+      // Use the separated utility to handle the upload
+      await handleProfileImageUpdate(file, (url) => {
+        console.log("Uploaded Image URL:", url);
+        setProfilePic(url);
+      }, setLoading);
     }
   };
 
@@ -69,16 +78,10 @@ const ProfileDetails = ({ onclose }) => {
   };
 
 
-  let profilePic = ""
   const handleSaveDetails = async () => {
     setLoading(true);
 
-    if (selectedFile) {
-      console.log("i am working");
-
-      const fileUrl = await uploadFile(selectedFile);
-      profilePic = fileUrl;
-    }
+    // Image upload is now handled as soon as the file is selected via handleProfileImageUpdate.
 
     const data = {
       name, email, bio, phoneNumber: phone, guardianName: parentName, guardianEmail: parentEmail,
