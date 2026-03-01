@@ -106,8 +106,8 @@ const Login = () => {
     }
 
     return (
-        <div className='flex min-h-screen flex-col md:flex-row w-full flex-1 bg-hero-pattern bg-[#0B1053]' >
-            <div className=' bg-cover bg-hero-pattern absolute lg:w-72 lg:h-72' ></div>
+        <div className='flex min-h-screen flex-col md:flex-row w-full flex-1 bg-[#0B1053]' >
+            {/* <div className=' bg-cover bg-hero-pattern absolute lg:w-72 lg:h-72' ></div> */}
             <div className='flex flex-1 sm:flex-[4] w-full  px-4 py-10 justify-center'>
                 <div className='flex items-center justify-center'>
                     <img src={IMAGES.logo} alt="" className='sm:w-full sm:h-32 h-13 w-56  lg:w-auto lg:h-auto bg-cover' />

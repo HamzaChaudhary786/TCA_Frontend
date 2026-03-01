@@ -1,7 +1,7 @@
 import React from "react";
 import { SlArrowRight } from "react-icons/sl";
 import IMAGES from "../../../assets/images";
-import ProfilePic from "../../../assets/images/profilepic.png";
+
 
 const DataRows = ({
   index,
@@ -23,27 +23,24 @@ const DataRows = ({
         className={`p-[0.5] w-full space-x-5 py-1 md:pl-5 md:pr-10 flex flex-row items-center justify-around border-b border-grey mt-1`}
       >
         <p
-          className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${
-            header ? "font-semibold" : ""
-          }`}
+          className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${header ? "font-semibold" : ""
+            }`}
         >
           {index + "."}
         </p>
         <p
-          className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${
-            header ? "hidden" : "flex"
-          }`}
+          className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${header ? "hidden" : "flex"
+            }`}
         >
           <img
             className=" rounded-full h-10 w-10 object-cover "
-             src={ProfilePic}
+            src={studentProfile || IMAGES.Profile}
             alt="Student Profile"
-          />{" "}
+          />
         </p>
         <p
-          className={`w-full md:flex-[3] my-1 md:my-0 text-center text-sm md:text-left ${
-            header ? "font-semibold md:ml-14  text-center" : ""
-          }`}
+          className={`w-full md:flex-[3] my-1 md:my-0 text-center text-sm md:text-left ${header ? "font-semibold md:ml-14  text-center" : ""
+            }`}
         >
           {studentName}
         </p>
@@ -62,11 +59,10 @@ const DataRows = ({
           {studentClass}
         </p> */}
         <p
-          className={`w-full flex md:flex-[3] justify-between items-center my-1 md:my-0 text-center text-sm md:text-left ${
-            header ? "font-semibold" : ""
-          }`}
+          className={`w-full flex md:flex-[3] justify-between items-center my-1 md:my-0 text-center text-sm md:text-left ${header ? "font-semibold" : ""
+            }`}
         >
-          {contact}  {!header &&  <SlArrowRight size={20} /> }
+          {contact}  {!header && <SlArrowRight size={20} />}
         </p>
       </div>
     </div>

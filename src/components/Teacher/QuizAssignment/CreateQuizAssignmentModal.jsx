@@ -304,7 +304,7 @@ const CreateQuizAssignmentModal = ({
 
   return (
     <div
-      className={`fixed z-10 mt-10 bg-white max-h-[85vh] overflow-y-auto custom-scrollbar  p-8 w-full md:w-[600px] px-16 text-black rounded-xl ml-5 md:ml-96 ${open ? "" : "hidden"
+      className={`fixed z-10 mt-10 bg-white max-h-[85vh] overflow-y-auto custom-scrollbar  p-8 w-[90%] ml-[5%] md:w-[600px] px-5 sm:px-16 text-black rounded-xl md:ml-96 ${open ? "" : "hidden"
         }`}
 
       ref={ref}
@@ -337,7 +337,7 @@ const CreateQuizAssignmentModal = ({
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  padding: "4px 16px",
+                  // padding: "4px 16px",
                   borderRadius: "8px",
                   width: "100%",
                   alignItems: "center",

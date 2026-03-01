@@ -18,7 +18,7 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
   const eventHeight = Math.max(100, durationHours * 100); // Minimum 100px, scale by 100px per hour
 
   return (
-    <div className="relative flex flex-1 w-full overflow-visible">
+    <div className="relative flex flex-1 w-full">
       <ViewEventDetailsModal
         refetch={refetch}
         isRefetching={isRefetching}
@@ -29,17 +29,17 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
       />
 
       <div
-        className="cursor-pointer rounded-lg sm:w-full w-72 transition-all duration-200 hover:shadow-md  text-[#0B1053] border-2 border-[#0B1053] mb-1"
+        className="cursor-pointer rounded-lg sm:w-full w-72 transition-all duration-200 hover:shadow-md  text-[#0B1053] border-2 border-[#0B1053] mb-1 overflow-hidden"
         style={{ height: `${eventHeight - 4}px`, minHeight: `${eventHeight - 4}px` }}
         onClick={() => {
           console.log("Admin event clicked:", event);
           setdetailsModalOpen(true);
         }}
       >
-        <div className="flex flex-col h-full justify-start items-start p-2 space-y-1">
+        <div className="flex flex-col h-full justify-start items-start p-1 space-y-1">
           <div className="text-[10px] leading-tight">
-            <span className="font-bold text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>T.Name:</span>
-            <div className="font-semibold text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
+            <span className="font-normal text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>T.Name:</span>
+            <div className="font-normal text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
               {event.teacher ? event.teacher.teacherID.name : ""}
             </div>
           </div>
@@ -48,15 +48,15 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
             <div className="font-semibold text-slate-900" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
               {event.title ? event.title : ""}
             </div> */}
-        {/* </div> */}
-        <div className="text-[10px] leading-tight">
-          <span className="font-bold text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>Subject:</span>
-          <div className="font-semibold text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
-            {event.subjectID.name ? event.subjectID.name : ""}
+          {/* </div> */}
+          <div className="text-[10px] leading-tight overflow-hidden">
+            <span className="font-normal text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>Subject:</span>
+            <div className="font-normal text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
+              {event.subjectID.name ? event.subjectID.name : ""}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div >
   );
 };
