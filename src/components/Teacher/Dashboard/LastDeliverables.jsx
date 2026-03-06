@@ -17,7 +17,7 @@ const LastDeliverables = () => {
         <div className="flex flex-col items-center justify-center w-24 h-24 md:flex-row">
           <Circle
             percent={(deliverable?.submissions?.length/deliverable?.classroomID?.students?.length)*100}
-            strokeColor={`#A41D30`}
+            strokeColor={`#0B1053`}
             strokeWidth={12}
             trailColor="#EAECF0"
             trailWidth={12}

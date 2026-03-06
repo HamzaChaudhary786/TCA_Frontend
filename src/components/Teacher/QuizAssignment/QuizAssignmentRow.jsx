@@ -13,7 +13,7 @@ const QuizAssignmentRow = (props) => {
         className={` border-b flex border-grey items-center`}
       >
         <div className=" flex flex-row w-[100%] space-x-3 py-[4px] ">
-          
+
           <p
             className={`w-full md:flex-[1] flex-[1] md:text-[14px] text-[11px] text-center md:text-left ${props.header ? "font-semibold" : ""
               }`}
@@ -75,7 +75,7 @@ const QuizAssignmentRow = (props) => {
             className={`w-full my-1 md:my-0 text-center md:text-center md:text-[20px] text-[14px] ${props.header ? "hidden" : ""
               }`}
           >
-            <BsThreeDotsVertical /> 
+            <BsThreeDotsVertical />
           </p>
         </div>
       </div>

@@ -33,7 +33,7 @@ const QuizAssignmentRow = (props) => {
 
         compareDateAndTime(formattedDateTimeString);
 
-        
+
         const intervalId = setInterval(() => {
             compareDateAndTime(formattedDateTimeString);
         }, 1000);
@@ -56,7 +56,9 @@ const QuizAssignmentRow = (props) => {
                     {props.header ? (
                         props.download
                     ) : (
-                        <img src={IMAGES[props.download]} alt='' className='md:w-[18px] md:h-[18px] mx-auto block w-[16px] h-[16px]' />
+                        <a href={props.download} download target='_blank' rel="noopener noreferrer">
+                            <img src={IMAGES.Download} alt='' className='md:w-[18px] md:h-[18px] mx-auto block w-[16px] h-[16px] cursor-pointer' />
+                        </a>
                     )}
                 </p>
                 {
@@ -97,7 +99,7 @@ const QuizAssignmentRow = (props) => {
                                 </div>
                             ) : (
                                 <div className='flex flex-row items-center justify-end'>
-                                    <div className='bg-[#A41D30]/10 rounded-xl flex items-center justify-center py-1 px-2 text-[#<div class="bg-[#<div class="bg-[#A41D30]/10 rounded-xl flex items-center justify-center py-1 px-2 text-[#d1d4fe] md:text-[10px] text-[8px]">Time Up!</div>]rounded-xl flex items-center justify-center py-1 px-2 text-[#0B1053] md:text-[10px] text-[8px]">Time Up!</div>] md:text-[10px] text-[8px]'>
+                                    <div className='bg-[#A41D30]/10 rounded-xl flex items-center justify-center py-1 px-2 text-[#0B1053] md:text-[10px] text-[8px]'>
                                         {timeLeft}
                                     </div>
                                 </div>

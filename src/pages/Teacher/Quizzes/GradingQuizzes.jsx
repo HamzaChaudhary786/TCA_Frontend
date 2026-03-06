@@ -58,7 +58,11 @@ const GradingQuizzes = () => {
   };
 
   const onSettingsClick = () => { };
-  const onLogoutClick = () => { };
+  const onLogoutClick = async () => {
+    localStorage.clear();
+    navigate("/");
+    await userLogout();
+  };
 
   const navigate = useNavigate();
 
@@ -73,8 +77,8 @@ const GradingQuizzes = () => {
     console.log("for submission arry is : ", gradingData);
     let objArray = [];
     let obj = {};
-    gradingData.map((item) => {
-      if (item.marks) {
+    gradingData.forEach((item) => {
+      if (item.marks !== "" || item.grade !== "" || item.feedback !== "") {
         obj = {
           grade: item.grade,
           marks: item.marks,
@@ -104,6 +108,14 @@ const GradingQuizzes = () => {
       return result;
     }, onSettled: () => {
       toast.success("Grades Added Successfully!");
+      // Invalidate all relevant queries for all roles to ensure reports "progress"
+      queryClient.invalidateQueries(["assignment"]);
+      queryClient.invalidateQueries(["quiz"]);
+      queryClient.invalidateQueries(["reports"]);
+      queryClient.invalidateQueries(["report"]);
+      queryClient.invalidateQueries(["studentReports"]);
+      queryClient.invalidateQueries(["teacherStudets"]);
+      queryClient.invalidateQueries(["student-assignments-quizes"]);
       navigate("/teacher/quizzes");
     }
   });

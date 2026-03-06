@@ -81,13 +81,13 @@ export const editQuiz = apiRequest(async (data, id) => {
 
 export const getMultipleQuizesForGrading = apiRequest(async (aId) => {
     const url = `${BACKEND_URL}/quiz/submissions/${aId}`
-    const response = axios.get(url);
+    const response = await axios.get(url);
     return response;
 })
 
 export const gradeQuizes = apiRequest(async (data, id) => {
     const url = `${BACKEND_URL}/quiz/grade/${id}`
-    const response = axios.post(url, data);
+    const response = await axios.post(url, data);
     return response;
 })
 

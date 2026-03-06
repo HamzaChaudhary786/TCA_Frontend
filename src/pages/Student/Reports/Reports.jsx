@@ -19,9 +19,8 @@ const Reports = () => {
   const { userData } = useUser();
 
   const handleFunctionClick = (report) => {
-    return () => {
+    console.log("i am click")
       navigate(`/reports/${report.subject.name}`, { state: report });
-    };
   };
 
   const subjectQuery = useQuery({

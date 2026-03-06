@@ -46,7 +46,7 @@ const SubjectReport = () => {
   ];
 
   const { data, isPending, isSuccess, isError, refetch, isRefetching } = useQuery({
-    queryKey: ["studetsReports"],
+    queryKey: ["studentReports", location.state._id, location.state.classroom._id, location.state.subject._id],
     queryFn: async () => {
       let result = await getStudentReport(location.state._id, location.state.classroom._id, location.state.subject._id);
       return result;

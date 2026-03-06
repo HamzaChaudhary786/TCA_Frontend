@@ -112,7 +112,7 @@ const SubjectsEnrolled = () => {
                 }
 
 
-                {/* {popup && <TeacherMessageDialog handleFeedback={handleFeedback} item={clickedItem} />} */}
+                {popup && <TeacherMessageDialog handleFeedback={handleFeedback} item={clickedItem} />}
 
               </tbody>
             </table>

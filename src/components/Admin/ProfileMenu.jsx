@@ -10,7 +10,7 @@ const ProfileMenu = ({ onProfileClick, onSettingsClick, onLogoutClick, dashboard
   const menuRef = useRef(null);
   useClickOutside(menuRef, onClose);
   return (
-    <div ref={menuRef} className={`fixed flex ${isSidebarOpen ? "-z-50" : "z-auto"} ${!dashboard ? "mt-10" : "mt-2"} bg-white rounded-md shadow-lg right-0 md:right-10 top-16 w-60 z-50`} >
+    <div ref={menuRef} className={`fixed flex ${isSidebarOpen ? "-z-50" : "z-50"} ${!dashboard ? "mt-10" : "mt-2"} bg-white rounded-md shadow-lg right-0 md:right-10 top-16 w-60 z-50`} >
       <div className="flex flex-col flex-1 gap-2 px-5 py-5">
         <div className="border-b-2 my-3 border-black">
 

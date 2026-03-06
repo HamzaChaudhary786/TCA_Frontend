@@ -132,6 +132,7 @@ const MyCalendar = ({ data, isPending, refetch }) => {
         max={new Date(0, 0, 0, 23, 59, 59)}
         view="week"
         views={{ week: true }}
+        onView={() => { }}
         localizer={localizer}
         events={events}
         startAccessor="start"

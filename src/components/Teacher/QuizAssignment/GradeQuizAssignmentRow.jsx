@@ -144,6 +144,7 @@ const GradeQuizAssignmentRow = React.memo((props) => {
                   type="text"
                   value={props.grade}
                   placeholder="Grade"
+                  onChange={handleChange('grade')}
                   className="w-20 px-2 py-2 border rounded-md outline-none border-black/20"
                 />
               ) : (

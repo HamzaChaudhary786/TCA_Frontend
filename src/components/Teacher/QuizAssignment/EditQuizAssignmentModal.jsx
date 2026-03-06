@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { FiUploadCloud } from "react-icons/fi";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { uploadFile } from "../../../utils/FileUpload";
+import { handleProfileImageUpdate } from "../../../utils/Admin/profileImageUtils";
 import { useBlur } from "../../../context/BlurContext";
 import { useUser } from "../../../context/UserContext";
 import { useTeacher } from "../../../context/TeacherContext";
@@ -10,6 +11,9 @@ import { editAssignment } from "../../../api/Teacher/Assignments";
 import { editQuiz } from "../../../api/Teacher/Quiz";
 import useClickOutside from "../../../hooks/useClickOutlise";
 import { getTeacherSubjectsOfClassroom } from "../../../api/Teacher/TeacherSubjectApi";
+import { FiEdit } from "react-icons/fi";
+import { IoCloseCircle } from "react-icons/io5";
+import IMAGES from "../../../assets/images";
 
 const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz }) => {
   const { toggleBlur } = useBlur();
@@ -31,6 +35,8 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
   const [selectedSubject, setSelectedSubject] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const modalRef = useRef(null);
@@ -54,6 +60,7 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
       setDueTime(formattedDueDate.toISOString().split("T")[1].slice(0, 5));
       setSelectedClassroom(classroomID);
       setSelectedSubject(subjectID?._id || "");
+      setUploadedFileUrl(files?.[0]?.url || "");
     }
   }, [isEditTrue, data]);
 
@@ -77,13 +84,31 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
   const formatDueDate = () => `${dueDate}T${dueTime}:00.000Z`;
 
   // Handle file upload
-  const handleFileUpload = async (file) => {
-    try {
-      return await uploadFile(file, "deliverable");
-    } catch (error) {
-      toast.error("File upload failed.");
-      return null;
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+
+    if (file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewUrl(reader.result);
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewUrl(null);
     }
+
+    // Start Cloudinary upload immediately
+    await handleProfileImageUpdate(file, (url) => {
+      console.log("Uploaded File URL:", url);
+      setUploadedFileUrl(url);
+    }, setIsLoading, 'auto');
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setUploadedFileUrl("");
   };
 
   // Handle form submission
@@ -91,16 +116,23 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
     setIsLoading(true);
 
     try {
-      const files = selectedFile
-        ? [await handleFileUpload(selectedFile)]
-        : (formData.files ? [formData.files] : []);
+      const finalDueDate = formatDueDate();
+      if (new Date(finalDueDate) < new Date()) {
+        toast.error("Due date should be greater than current date");
+        setIsLoading(false);
+        return;
+      }
+
+      const files = uploadedFileUrl
+        ? [{ name: selectedFile?.name || data?.files?.[0]?.name || "File", url: uploadedFileUrl }]
+        : [];
 
       const payload = {
         ...formData,
         subjectID: selectedSubject,
         classroomID: selectedClassroom?._id,
         files,
-        dueDate: formatDueDate(),
+        dueDate: finalDueDate,
       };
 
       const response = isQuiz
@@ -249,17 +281,47 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
         )}
 
         <FieldWithLabel label="Upload File">
-          <label htmlFor="assignmentFile" className="cursor-pointer">
-            <div className="flex items-center gap-2 border p-2 rounded-lg">
-              <FiUploadCloud size={24} /> <span>Click to upload</span>
-            </div>
-            <span className="text-sm text-gray-500">PNG, JPG, Word, or PDF</span>
-          </label>
+          <div className="flex flex-col gap-2">
+            {!uploadedFileUrl && !selectedFile && (
+              <label htmlFor="assignmentFile" className="cursor-pointer">
+                <div className="flex items-center gap-2 border p-2 rounded-lg hover:border-blue-400">
+                  <FiUploadCloud size={24} /> <span>Click to upload</span>
+                </div>
+                <span className="text-sm text-gray-500">PNG, JPG, Word, or PDF</span>
+              </label>
+            )}
+
+            {uploadedFileUrl && (
+              <div className="flex justify-between items-center p-3 border rounded-lg bg-gray-50 border-gray-200">
+                <div className="flex items-center gap-3">
+                  {previewUrl || (data?.files?.[0]?.url && data?.files?.[0]?.url.match(/\.(jpeg|jpg|gif|png)$/) != null) ? (
+                    <img src={previewUrl || uploadedFileUrl} alt="preview" className="w-12 h-12 rounded object-cover" />
+                  ) : (
+                    <img src={IMAGES.pdf} alt="file" className="w-8 h-8" />
+                  )}
+                  <div className="flex flex-col overflow-hidden max-w-[200px]">
+                    <span className="text-sm font-medium truncate">
+                      {selectedFile?.name || data?.files?.[0]?.name || "File"}
+                    </span>
+                    <span className="text-xs text-gray-500">Uploaded to Cloudinary</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label htmlFor="assignmentFile" className="cursor-pointer text-[#0B1053] hover:text-blue-600">
+                    <FiEdit size={18} />
+                  </label>
+                  <button onClick={handleRemoveFile} className="text-red-500 hover:text-red-700">
+                    <IoCloseCircle size={20} />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
           <input
             id="assignmentFile"
             type="file"
             className="hidden"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
+            onChange={handleFileChange}
           />
         </FieldWithLabel>
 
