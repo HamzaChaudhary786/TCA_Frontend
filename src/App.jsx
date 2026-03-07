@@ -77,7 +77,10 @@ import AttendenceReport from "./pages/Admin/AttendenceReport/AttendenceReport";
 import SuperAdminDashboard from "./pages/SuperAdmin/Dashboard";
 import ProtectedSuperAdmin from "./utils/ProtectedSuperAdmin";
 import SuperAdminLayout from "./layouts/SuperAdminLayout";
+import ChatBot from "./components/ChatBot/ChatBot";
+
 function App() {
+
   return (
     <>
       <Routes>
@@ -513,7 +516,9 @@ function App() {
         </Route>
       </Routes>
       <ToastContainer />
+      <ChatBot />
     </>
+
   );
 }
 

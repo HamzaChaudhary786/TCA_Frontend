@@ -7,6 +7,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --rbc-gutter-width: 130px;
+  --rbc-timeslot-width: 110px;
+  --rbc-header-height: 60px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --rbc-gutter-width: 130px;
+    --rbc-timeslot-width: 110px;
+    --rbc-header-height: 80px;
+  }
+}
+
 
 .blur {
   filter: blur(5px);
@@ -64,12 +78,14 @@
 }
 
 .rbc-calendar {
-  height: 90% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .rbc-time-content {
-  height: 90% !important;
-
+  flex: 1 1 0% !important;
+  overflow-y: auto !important;
 }
 
 .rbc-event {
@@ -89,69 +105,52 @@
   /* Allow dynamic height based on time interval */
 }
 
-.rbc-time-gutter {
-  display: none !important;
+/* Default mobile-first or compact styles */
+.rbc-time-header-cell,
+.rbc-header,
+.rbc-row {
+  height: var(--rbc-header-height) !important;
 }
-
-.rbc-time-header-cell {
-  display: flex !important;
-  height: 80px !important;
-}
-
-
 
 /*this is for the Date and Day row in header of timetable*/
 .rbc-header {
   display: flex !important;
-  height: 80px !important;
   justify-content: center !important;
   align-items: center !important;
   border-bottom: none !important;
 }
 
-/*this is for header lower border line height*/
-.rbc-row {
-  height: 80px !important;
-}
-
-
 /*for width of the first cell containing GTM+5*/
 .rbc-time-header-gutter {
-  min-width: 130px !important;
+  min-width: var(--rbc-gutter-width) !important;
+  width: var(--rbc-gutter-width) !important;
 }
-
-/* Removed duplicate rule - see below for the proper one */
-
-/* Consolidated in the rule below */
 
 .rbc-time-slot {
   border: none !important;
-  width: 50px !important;
+  width: var(--rbc-timeslot-width) !important;
   min-height: 30px !important;
-  /* Allow flexible height for time slots */
 }
 
-/*This is for the text in red boxes - rule moved below*/
-
-/* ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* for each timeslot background height*/
 .rbc-timeslot-group {
   min-height: 100px !important;
-  min-width: 100px !important;
-  /* Increased to 100px for better spacing */
+  min-width: var(--rbc-timeslot-width) !important;
 }
 
 /* Ensure events can properly size within time columns */
 .rbc-events-container {
   margin: 0 !important;
+  width: 100% !important;
 }
 
 
 
 
 .rbc-day-slot .rbc-events-container {
- width: auto !important;
+  width: auto !important;
 }
+
 .rbc-time-column {
   width: auto !important;
 }
