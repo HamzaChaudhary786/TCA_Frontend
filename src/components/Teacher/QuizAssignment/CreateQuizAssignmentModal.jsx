@@ -7,6 +7,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import { IoCloseCircle } from "react-icons/io5";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { uploadFile } from "../../../utils/FileUpload";
+import { handleProfileImageUpdate } from "../../../utils/Admin/profileImageUtils";
 import { useBlur } from "../../../context/BlurContext";
 import { useUser } from "../../../context/UserContext";
 import { useTeacher } from "../../../context/TeacherContext";
@@ -36,8 +37,8 @@ const CreateQuizAssignmentModal = ({
     }
   });
 
-  const [QADate, setQADate] = useState("");
-  const [QATime, setQATime] = useState("");
+  const [QADate, setQADate] = useState(isEditTrue && data?.dueDate ? data.dueDate.split("T")[0] : "");
+  const [QATime, setQATime] = useState(isEditTrue && data?.dueDate ? data.dueDate.split("T")[1]?.slice(0, 5) : "");
 
   const [loading, setLoading] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -45,7 +46,7 @@ const CreateQuizAssignmentModal = ({
   const [quizAssignmentDataObj, setQuizAssignmentDataObj] = useState({
     canSubmitAfterTime: false,
     title: isEditTrue ? data?.title : "",
-    text: isEditTrue ? data.text : "",
+    text: isEditTrue ? data?.text : "",
     dueDate: isEditTrue ? data?.dueDate : "",
     subjectID: isEditTrue ? data?.subjectID : "",
     totalMarks: isEditTrue ? data?.totalMarks : 0,
@@ -54,6 +55,7 @@ const CreateQuizAssignmentModal = ({
   })
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState(isEditTrue && data?.files?.[0]?.url ? data.files[0].url : "");
   const [selectedClassroom, setSelectedClassroom] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
 
@@ -72,7 +74,7 @@ const CreateQuizAssignmentModal = ({
     setLoading(true);
 
     const hasText = !!quizAssignmentDataObj?.text?.trim();
-    const hasFile = !!selectedFile?.name;
+    const hasFile = !!selectedFile?.name || !!uploadedFileUrl;
     if (!hasText && !hasFile) {
       toast.error("Please provide text or a file.");
       setLoading(false);
@@ -80,11 +82,22 @@ const CreateQuizAssignmentModal = ({
     }
 
     try {
-      // 1) upload file if needed
+      // 1) Use uploaded file URL from state
       let filesArr = [];
-      if (hasFile) {
-        const url = await uploadFile(selectedFile, "deliverable");
-        filesArr.push({ name: selectedFile.name, url });
+      if (uploadedFileUrl) {
+        filesArr.push({ name: selectedFile?.name || data?.files?.[0]?.name || "File", url: uploadedFileUrl });
+      }
+
+      if (isEditTrue) {
+        const payload = {
+          ...quizAssignmentDataObj,
+          dueDate: QADate && QATime
+            ? `${QADate}T${QATime}:00.000Z`
+            : data?.dueDate || new Date().toISOString(),
+          files: filesArr,
+        };
+        assignmentUpdateMutate.mutate(payload);
+        return;
       }
 
       // 2) compute dueDate
@@ -138,7 +151,7 @@ const CreateQuizAssignmentModal = ({
     setLoading(true);
 
     const hasText = !!quizAssignmentDataObj?.text?.trim();
-    const hasFile = !!selectedFile?.name;
+    const hasFile = !!selectedFile?.name || !!uploadedFileUrl;
 
     if (!hasText && !hasFile) {
       toast.error("Please provide either text or a file before creating the quiz.");
@@ -149,9 +162,8 @@ const CreateQuizAssignmentModal = ({
     try {
       let filesArr = [];
 
-      if (hasFile) {
-        const fileUrl = await uploadFile(selectedFile, "deliverable");
-        filesArr.push({ name: selectedFile.name, url: fileUrl });
+      if (uploadedFileUrl) {
+        filesArr.push({ name: selectedFile?.name || data?.files?.[0]?.name || "File", url: uploadedFileUrl });
       }
 
       const dueDate = QADate && QATime
@@ -281,22 +293,31 @@ const CreateQuizAssignmentModal = ({
 
 
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     setSelectedFile(file);
 
-    if (file && file.type.startsWith("image/")) {
+    if (file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => setPreviewUrl(reader.result);
       reader.readAsDataURL(file);
     } else {
       setPreviewUrl(null);
     }
+
+    // Start Cloudinary upload immediately for all file types
+    await handleProfileImageUpdate(file, (url) => {
+      console.log("Uploaded File URL:", url);
+      setUploadedFileUrl(url);
+    }, setLoading, 'auto');
   };
 
   const handleRemoveFile = () => {
     setSelectedFile(null);
     setPreviewUrl(null);
+    setUploadedFileUrl("");
   };
 
 
@@ -304,7 +325,7 @@ const CreateQuizAssignmentModal = ({
 
   return (
     <div
-      className={`fixed z-10 mt-10 bg-white max-h-[85vh] overflow-y-auto custom-scrollbar  p-8 w-full md:w-[600px] px-16 text-black rounded-xl ml-5 md:ml-96 ${open ? "" : "hidden"
+      className={`fixed z-10 mt-10 bg-white max-h-[85vh] overflow-y-auto custom-scrollbar  p-8 w-[90%] ml-[5%] md:w-[600px] px-5 sm:px-16 text-black rounded-xl md:ml-96 ${open ? "" : "hidden"
         }`}
 
       ref={ref}
@@ -337,7 +358,7 @@ const CreateQuizAssignmentModal = ({
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  padding: "4px 16px",
+                  // padding: "4px 16px",
                   borderRadius: "8px",
                   width: "100%",
                   alignItems: "center",
@@ -555,11 +576,16 @@ const CreateQuizAssignmentModal = ({
               {selectedFile && (
                 <div className="mt-2 text-center">
                   {previewUrl ? (
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg mx-auto"
-                    />
+                    <div className="relative inline-block">
+                      <img
+                        src={previewUrl}
+                        alt="Preview"
+                        className="w-32 h-32 object-cover rounded-lg mx-auto"
+                      />
+                      <label htmlFor="assignmentQuiz" className="absolute bottom-0 right-0 p-1 bg-white rounded-full shadow-md cursor-pointer hover:bg-gray-100">
+                        <FiEdit size={14} className="text-[#6A00FF]" />
+                      </label>
+                    </div>
                   ) : (
                     <p className="text-sm text-gray-600">{selectedFile?.name}</p>
                   )}
@@ -572,18 +598,21 @@ const CreateQuizAssignmentModal = ({
                 </div>
               )}
 
-              {/* Existing File for Edit */}
-              {isEditTrue && !selectedFile && (
+              {/* Existing File for Edit (if no new file selected) */}
+              {isEditTrue && !selectedFile && data?.files?.length > 0 && uploadedFileUrl && (
                 <div className="flex justify-between px-2 py-2 border rounded-lg w-60 border-black/20">
                   <div className="flex items-center gap-2">
                     <img src={IMAGES.pdf} alt="pdf icon" className="w-8 h-8" />
-                    <div className="text-xs">
-                      <p>Assignment 1.pdf</p>
-                      <p>200 KB</p>
+                    <div className="text-xs truncate">
+                      <p className="truncate w-32">{data.files[0].name}</p>
+                      <p>Existing File</p>
                     </div>
                   </div>
-                  <div>
-                    <p onClick={() => { }} className="cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <label htmlFor="assignmentQuiz" className="cursor-pointer hover:text-[#6A00FF]">
+                      <FiEdit size={16} />
+                    </label>
+                    <p onClick={handleRemoveFile} className="cursor-pointer text-red-500 hover:text-red-700">
                       <IoCloseCircle size={16} />
                     </p>
                   </div>
@@ -596,8 +625,11 @@ const CreateQuizAssignmentModal = ({
             (!loading && !quizCreateMutate.isPending && !quizEditMutate.isPending && !assignmentCreateMutate.isPending && !assignmentUpdateMutate.isPending) &&
             <div className="flex items-center gap-3">
               <div
-                onClick={() => { isQuiz ? handleCreateQuiz() : handleCreateAssignment() }}
-                className="flex items-center justify-center w-full py-2 text-center rounded-md cursor-pointer bg-[#6A00FF]"
+                onClick={() => {
+                  if (loading) return; // Prevent submission while uploading
+                  isQuiz ? handleCreateQuiz() : handleCreateAssignment()
+                }}
+                className={`flex items-center justify-center w-full py-2 text-center rounded-md cursor-pointer ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#6A00FF]"}`}
               >
                 <p className="text-sm text-white">{isEditTrue ? "Update" : "Create"}</p>
               </div>
@@ -605,7 +637,7 @@ const CreateQuizAssignmentModal = ({
           }
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

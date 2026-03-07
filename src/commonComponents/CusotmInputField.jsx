@@ -6,7 +6,7 @@ export const CusotmInputField = ({ valuesObj, value, type, name, status, title, 
                     {title}
                 </div>
                 <div
-                    className={`flex px-2 py-1 w-full flex-1 border justify-between rounded-md items-center border-grey/70 ${status ? "text-black" : "text-white"
+                    className={`flex px-2 py-1 w-full flex-1 border justify-between rounded-md items-center border-grey/70 ${status ? "text-black" : "text-grey/70"
                         }`}
                 >
                     <input

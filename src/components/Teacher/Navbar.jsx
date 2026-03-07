@@ -96,9 +96,9 @@ const Navbar = ({ heading }) => {
             <div className="flex items-center gap-2">
               <p className="font-medium">M. {userData.name}</p>
               <img
-                src={userData.profilePic || profile}
+                src={userData?.profilePic || profile}
                 alt="profile"
-                className="w-12 h-12 cursor-pointer rounded-full"
+                className="w-12 h-12 cursor-pointer rounded-full object-cover"
                 onClick={toggleProfielMenu}
               />
               <FaChevronDown

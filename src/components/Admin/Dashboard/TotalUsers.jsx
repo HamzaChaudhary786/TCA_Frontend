@@ -10,7 +10,7 @@ const TotalUsers = () => {
         return (
             <div className=" -z:40 px-4 md:px-10 sm:flex-1 flex-1 w-full py-4 md:py-7 shadow-md rounded-md flex flex-col justify-center items-center bg-white gap-2 md:gap-3">
 
-                <div className='h-full md:h-full w-full md:w-full flex-1 relative flex justify-center items-center'>
+                <div className='h-full md:h-full w-full md:w-full flex-1 flex justify-center items-center'>
                     <Circle percent={value< 100 ? value : (value/1000)*100}
                         strokeColor="#6A00FF"
                         strokeWidth={9}

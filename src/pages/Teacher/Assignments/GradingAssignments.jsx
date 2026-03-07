@@ -59,7 +59,11 @@ const GradingAssignments = () => {
   };
 
   const onSettingsClick = () => { };
-  const onLogoutClick = () => { };
+  const onLogoutClick = async () => {
+    localStorage.clear();
+    navigate("/");
+    await userLogout();
+  };
 
 
   const navigate = useNavigate();
@@ -72,9 +76,14 @@ const GradingAssignments = () => {
     console.log("for submission arry is : ", gradingData);
     let objArray = [];
     let obj = {};
-    gradingData.map((item) => {
-      if (item.marks) {
-        obj = { grade: item.grade, marks: item.marks, feedback: item.feedback, studentID: item.studentID._id }
+    gradingData.forEach((item) => {
+      if (item.marks !== "" || item.grade !== "" || item.feedback !== "") {
+        obj = {
+          grade: item.grade,
+          marks: item.marks,
+          feedback: item.feedback,
+          studentID: item.studentID._id
+        }
         objArray.push(obj);
       }
     })
@@ -101,6 +110,14 @@ const GradingAssignments = () => {
       return result;
     }, onSettled: () => {
       toast.success("Grades Added Successfully!");
+      // Invalidate all relevant queries for all roles to ensure reports "progress"
+      queryClient.invalidateQueries(["assignment"]);
+      queryClient.invalidateQueries(["quiz"]);
+      queryClient.invalidateQueries(["reports"]);
+      queryClient.invalidateQueries(["report"]);
+      queryClient.invalidateQueries(["studentReports"]);
+      queryClient.invalidateQueries(["teacherStudets"]);
+      queryClient.invalidateQueries(["student-assignments-quizes"]);
       navigate("/teacher/assignments");
     }
   });

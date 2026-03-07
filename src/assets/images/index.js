@@ -1,5 +1,6 @@
 const IMAGES = {
-    ProfilePic : new URL('./profilepic.svg', import.meta.url).href,
+    ProfilePic: new URL('./profilepic.svg', import.meta.url).href,
+    ProfileSvg: new URL('./profile.svg', import.meta.url).href,
     Notification: new URL('./notification-bing.svg', import.meta.url).href,
     SMS: new URL('./sms.svg', import.meta.url).href,
     ArrowLeft: new URL('./arrow-left.svg', import.meta.url).href,

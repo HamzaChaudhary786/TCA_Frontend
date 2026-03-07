@@ -70,7 +70,7 @@ const Sidebar = () => {
   const Menubar = () => (
     <>
 
-      <div className="w-full sm:w-72 shadow-lg bg-[#0B1053] text-white z-50 h-full px-4 md:px-8 overflow-y-auto custom-scrollbar">
+      <div className="w-full sm:w-72 shadow-lg bg-[#0B1053] text-white z-50 h-full px-4 md:px-8 overflow-y-auto no-scrollbar">
         <div className="py-5">
           <div className="text-white flex justify-end items-center ">
             <IoClose className="w-6 h-6 block sm:hidden hover:scale-105 cursor-pointer fixed" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
@@ -123,7 +123,7 @@ const Sidebar = () => {
       <div className={`lg:hidden fixed top-0 left-0 h-full z-50 bg-white transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <Menubar />
       </div>
-      <div className="max-lg:hidden">
+      <div className="max-lg:hidden h-full">
         <Menubar />
       </div>
     </div>

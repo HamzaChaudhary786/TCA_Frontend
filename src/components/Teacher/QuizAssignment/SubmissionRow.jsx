@@ -45,7 +45,7 @@ const SubmissionRow = (props) => {
           </p>
         </div>
         <div className="flex ml-3 mr-2 lg:mr-5 cursor-pointer">
-          <p
+          <div
             onClick={() => {
               console.log("download the resource");
             }}
@@ -56,15 +56,15 @@ const SubmissionRow = (props) => {
             } */}
             {!props.header ?
               props?.submissionData?.file ?
-                <p onClick={() => { }} className="px-4 py-2 text-sm text-white bg-[#0B1053] rounded-3xl">
-                  <a href={props?.submissionData?.file} download={`${props?.name}.pdf`} target="_blank" > Download</a>
+                <p className="px-4 py-2 text-sm text-white bg-[#0B1053] rounded-3xl">
+                  <a href={props?.submissionData?.file} download target="_blank" rel="noopener noreferrer"> Download</a>
                 </p>
                 :
                 <p onClick={() => { }} className="px-4 py-2 text-sm text-white bg-[#0B1053] rounded-3xl">
                   Pending
                 </p>
               : "Files"}
-          </p>
+          </div>
         </div>
       </div>
     </div>

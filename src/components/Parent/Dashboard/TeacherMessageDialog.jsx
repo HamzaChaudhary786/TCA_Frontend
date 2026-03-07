@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import profile from "../../../assets/profile.png"
+import IMAGES from '../../../assets/images';
 import { IoSend } from "react-icons/io5";
 import useClickOutside from '../../../hooks/useClickOutlise';
 
@@ -19,7 +19,7 @@ const TeacherMessageDialog = ({ handleFeedback, item }) => {
         <div ref={dialogRef} className='fixed z-10 flex py-4 bg-white rounded-lg shadow-lg top-40 w-72'>
             <div className='flex flex-col w-full'>
                 <div className='flex items-center gap-4 px-5 py-4 border-b border-b-black/30'>
-                    <img src={profile} alt="" className='w-16 h-16' />
+                    <img src={(item.profile && item.profile !== "null") ? item.profile : IMAGES.ProfileSvg} alt="" className='w-16 h-16' />
                     <div className='flex flex-col'>
                         <p className='font-medium text-black'>{item?.instructor}</p>
                         <p className='text-sm text-black/70'>Instructor</p>

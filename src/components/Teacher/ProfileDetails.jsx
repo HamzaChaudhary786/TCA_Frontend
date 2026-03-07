@@ -17,6 +17,8 @@ import { useMutation } from "@tanstack/react-query";
 import { RiGraduationCapLine } from "react-icons/ri";
 import { updateTeacher } from "../../api/Teacher/TeacherApi";
 import { uploadFile } from "../../utils/FileUpload";
+import { handleProfileImageUpdate } from "../../utils/Admin/profileImageUtils";
+
 import Loader from "../../utils/Loader";
 import { useBlur } from "../../context/BlurContext";
 import useClickOutside from "../../hooks/useClickOutlise";
@@ -56,6 +58,10 @@ const ProfileDetails = ({ onclose }) => {
   const [selectedProfile, setSelectedProfile] = useState(userData.profilePic || "");
   const [previewUrl, setPreviewUrl] = useState(null);
 
+  // State for profile picture URL (will be updated after Cloudinary upload)
+  const [profilePic, setProfilePic] = useState(userData.profilePic || "");
+  const [loading, setLoading] = useState(false);
+
   React.useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -64,12 +70,19 @@ const ProfileDetails = ({ onclose }) => {
     };
   }, [previewUrl]);
 
-  const handleProfileChange = (e) => {
+  const handleProfileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setSelectedProfile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+
+      // Use the separated utility to handle the upload to Cloudinary
+      await handleProfileImageUpdate(file, (url) => {
+        console.log("Uploaded Image URL:", url);
+        // UPDATED: Store the new Cloudinary URL in the local state variable
+        setProfilePic(url);
+      }, setLoading);
     }
   };
 
@@ -94,6 +107,8 @@ const ProfileDetails = ({ onclose }) => {
     experience: userData.experience,
     phoneNumber: userData.phoneNumber,
     qualification: userData.qualification,
+    // UPDATED: Added profilePic to the initial state object
+    profilePic: userData.profilePic || "",
   });
 
   const handleEditClick = () => {
@@ -101,14 +116,16 @@ const ProfileDetails = ({ onclose }) => {
   };
 
   const handleSaveDetails = async () => {
-    updateuserMutation.mutate(userDataObj);
+    // UPDATED: Ensure the most recent profilePic (from Cloudinary) is included in the update
+    const updatedData = { ...userDataObj, profilePic: profilePic };
+    updateuserMutation.mutate(updatedData);
     // onclose();
   };
 
   const updateuserMutation = useMutation({
     mutationFn: async (data) => {
-      let url = await uploadFile(selectedProfile, "teachers");
-      const result = await updateTeacher({ ...data, profilePic: url })
+      // UPDATED: Now sending the consolidated data object directly to the API
+      const result = await updateTeacher(data);
       return result;
     },
 
@@ -118,14 +135,14 @@ const ProfileDetails = ({ onclose }) => {
     },
 
     onSettled: (data, error) => {
-      setUserData({ ...data });
+      // UPDATED: Use spread operator to merge existing userData with updated fields
+      setUserData({ ...userData, ...data });
       onclose();
       if (!error) {
         toast.success("User Update successfully!");
       }
     }
-
-  })
+  });
 
   return (
     <div className=" relative w-full justify-end items-end" ref={ref}>

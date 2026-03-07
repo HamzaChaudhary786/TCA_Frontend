@@ -231,9 +231,9 @@
   border: 5px solid #f3f3f3;
   border-top: 10px solid #0B1053;
   border-radius: 100%;
-  position: fixed;   /* Change from relative to fixed */
-  top: 50%;          /* Center vertically */
-  left: 50%;         /* Center horizontally */
+  position: fixed;  
+  top: 50%;          
+  left: 50%;         
   transform: translate(-50%, -50%);
   animation: spin 1s linear infinite;
 }
@@ -244,9 +244,9 @@
   border: 2px solid #f3f3f3;
   border-top: 5px solid #0B1053;
   border-radius: 100%;
-  position: fixed;   /* Change from relative to fixed */
-  top: 50%;          /* Center vertically */
-  left: 50%;         /* Center horizontally */
+  position: fixed;  
+  top: 50%;          
+  left: 50%;         
   transform: translate(-50%, -50%);
   animation: spin-small 2s linear infinite;
 }

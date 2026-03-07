@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BACKEND_URL } from "../../constants/api";
 import apiRequest from "../../utils/ApiRequest";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 axios.defaults.withCredentials = true;
@@ -30,7 +30,7 @@ export const markAttendence = apiRequest(async (data, classID, classroomID, star
 export const markHeadAttendence = apiRequest(async (data, id, date) => {
 
     console.log(" dataand id is : ", data, id);
-    
+
     const url = `${BACKEND_URL}/classroom/attendence/add-classroom-attendence/${id}`;
     const response = await axios.post(url, { data, date });
     return response;
@@ -85,6 +85,7 @@ export const useUpdateAttandenceOfClassroom = () => {
     };
 
     // Using `useMutation` for the API call
+    const queryClient = useQueryClient();
     const { mutateAsync: updateAttandence, isLoading, isSuccess, error } = useMutation(
         {
             mutationKey: ["update-attendence",],
@@ -92,6 +93,15 @@ export const useUpdateAttandenceOfClassroom = () => {
 
             onSuccess: () => {
                 toast.success("Attendance Updated Successfully!");
+                // Invalidate all relevant queries for all roles to ensure reports "progress"
+                queryClient.invalidateQueries(["assignment"]);
+                queryClient.invalidateQueries(["quiz"]);
+                queryClient.invalidateQueries(["reports"]);
+                queryClient.invalidateQueries(["report"]);
+                queryClient.invalidateQueries(["studentReports"]);
+                queryClient.invalidateQueries(["teacherStudets"]);
+                queryClient.invalidateQueries(["student-assignments-quizes"]);
+                queryClient.invalidateQueries(["fetchAttandenceGet"]);
             },
             onError: (error) => {
                 toast.error(error.message);

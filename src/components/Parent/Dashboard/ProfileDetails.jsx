@@ -6,28 +6,38 @@ import { GoPerson } from "react-icons/go";
 import { useParent } from "../../../context/ParentContext";
 import { useBlur } from "../../../context/BlurContext";
 import useClickOutside from "../../../hooks/useClickOutlise";
+import { handleProfileImageUpdate } from "../../../utils/Admin/profileImageUtils";
+import Loader from "../../../utils/Loader";
 
 
 const ProfileDetails = ({ onclose }) => {
   const [allowedEdit, setAllowedEdit] = useState(false);
   // const { isBlurred, toggleBlur } = useBlur();
   const { allSubjects, setAllSubjects, selectedChild } = useParent();
-  
-const [profileImage, setProfileImage] = useState(IMAGES.Profile);
 
-const fileInputRef = useRef(null);
+  const [profileImage, setProfileImage] = useState(selectedChild?.profilePic || IMAGES.Profile);
+  const [loading, setLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
-const handleImageClick = () => {
-  fileInputRef.current.click(); // Opens the file dialog
-};
+  const fileInputRef = useRef(null);
 
-const handleImageChange = (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const imageURL = URL.createObjectURL(file);
-    setProfileImage(imageURL); // Updates the profile image
-  }
-};
+  const handleImageClick = () => {
+    fileInputRef.current.click(); // Opens the file dialog
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url); // Updates the preview
+
+      // Use the separated utility to handle the upload
+      await handleProfileImageUpdate(file, (uploadedUrl) => {
+        console.log("Uploaded Image URL:", uploadedUrl);
+        setProfileImage(uploadedUrl);
+      }, setLoading);
+    }
+  };
 
   const ref = useRef(null);
 
@@ -90,7 +100,7 @@ const handleImageChange = (e) => {
             </div>
             <div className="flex flex-col items-center justify-center text-center">
               <label htmlFor="profile" className="cursor-pointer">
-                <img src={profileImage} alt="" className="sm:w-28 sm:h-28 w-20 h-20" />
+                <img src={previewUrl || profileImage} alt="" className="sm:w-28 sm:h-28 w-20 h-20 rounded-full object-cover" />
               </label>
               <input id="profile" type="file" className="hidden" onChange={handleImageChange} accept="image/*" ref={fileInputRef} />
               <p>{selectedChild.name}</p>
@@ -149,7 +159,8 @@ const handleImageChange = (e) => {
                 status={allowedEdit}
                 icon={"phone"}
               />
-              {allowedEdit ? <div className="flex justify-center my-4">
+              {loading && <div className="flex justify-center my-2"><Loader /></div>}
+              {allowedEdit && !loading ? <div className="flex justify-center my-4">
                 <p onClick={handleSaveDetails} className="flex items-center justify-center w-1/2 px-1 py-2 text-center text-white cursor-pointer rounded-3xl bg-[#0B1053]">Save</p>
               </div> : ""}
             </div>

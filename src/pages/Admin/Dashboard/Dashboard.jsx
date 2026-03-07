@@ -109,7 +109,7 @@ const Dashboard = () => {
                 className={`flex flex-col md:px-10 lg:px-0 lg:flex-row flex-1 gap-5 py-6 ${isBlurred ? "blur" : ""
                   }`}
               >
-                <div className={`flex flex-1 relative ${isSidebarOpen ? "-z-10" : "z-auto"} lg:z-auto`}>
+                <div className={`flex flex-1 ${isSidebarOpen ? "-z-10" : "z-auto"} lg:z-auto`}>
                   <TotalUsers />
                 </div>
               </div>

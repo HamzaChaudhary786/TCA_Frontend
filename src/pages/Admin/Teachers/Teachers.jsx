@@ -135,7 +135,7 @@ const Teachers = () => {
                                   100
                               }
                               teacherProfile={
-                                item?.teacher?.profilePic || IMAGES.Profile
+                                item?.teacher?.profilePic || IMAGES?.Profile
                               }
                               bgColor={"#FFFFFF"}
                               header={false}

@@ -56,7 +56,11 @@ const Submissions = () => {
   };
 
   const onSettingsClick = () => { };
-  const onLogoutClick = () => { };
+  const onLogoutClick = async () => {
+    localStorage.clear();
+    navigate("/");
+    await userLogout();
+  };
 
   const submissions = [
     {
