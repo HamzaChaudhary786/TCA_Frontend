@@ -16,11 +16,21 @@ import { getUserFeedback } from "../../../api/Admin/FeedbackApi";
 const TeacherDetails = () => {
 
   const location = useLocation();
-  const [feedbackData, setFeedbackData] = useState([]);
   const [reportActive, setReportActive] = useState(true);
   const [feedbackActive, setFeedbackActive] = useState(false);
 
   console.log("location is : ", location.state);
+
+  const teacherId = location?.state?.teacher?._id;
+  console.log("Fetching feedback for teacherId:", teacherId);
+
+  const { data: feedbackData = [], isPending } = useQuery({
+    queryKey: ["feedback", teacherId],
+    queryFn: () => getUserFeedback(teacherId),
+    enabled: !!teacherId,
+  });
+
+  console.log("Feedback data received:", feedbackData);
 
   const onReportClick = () => {
     setReportActive(true);
@@ -30,16 +40,6 @@ const TeacherDetails = () => {
   const onFeedbackClick = () => {
     setReportActive(false);
     setFeedbackActive(true);
-  }
-
-  if (location.state) {
-    const { data, isPending, isSuccess } = useQuery({ queryKey: ["feedback"], queryFn: async () => { await getUserFeedback(location?.state?.teacher?._id) } });
-    if (!isPending && isSuccess) {
-      console.log("data for user feedback is : ", data);
-      if (data) {
-        setFeedbackData(data);
-      }
-    }
   }
 
   const attendanceData = [
@@ -138,14 +138,17 @@ const TeacherDetails = () => {
                       <p>Feedback</p>
                     </div>
                     <div className="flex flex-col gap-2">
-                      {feedbackData.map(() => (
-                        <FeedbackCard />
-                      ))}
-                      {feedbackData.length == 0 &&
-                        <div className="py-2 font-medium text-2xl">
+                      {isPending ? (
+                        <p>Loading feedbacks...</p>
+                      ) : feedbackData?.feedbacks?.length > 0 ? (
+                        feedbackData.feedbacks.map((feedback, index) => (
+                          <FeedbackCard key={index} feedback={feedback} />
+                        ))
+                      ) : (
+                        <div className="py-2 text-2xl font-medium">
                           <p>No feedbacks to display for this user</p>
                         </div>
-                      }
+                      )}
                     </div>
                   </div>
                 </div>

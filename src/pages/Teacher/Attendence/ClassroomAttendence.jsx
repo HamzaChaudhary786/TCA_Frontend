@@ -5,7 +5,7 @@ import DataRow from "../../../components/Teacher/Attendence/Submission/DataRow";
 import { BiSearch } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useBlur } from "../../../context/BlurContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   markHeadAttendence,
   useGetAttandenceOfClassroom,
@@ -73,12 +73,13 @@ const ClassroomAttendence = () => {
     );
     const filtered = searchText
       ? matchedStudents.filter((student) =>
-          student.name.toLowerCase().includes(searchText.toLowerCase())
-        )
+        student.name.toLowerCase().includes(searchText.toLowerCase())
+      )
       : matchedStudents;
     setFilteredStudents(filtered || []);
   }, [searchText, allData?.studentDetails, subjectId]);
 
+  const queryClient = useQueryClient();
   const attendenceMutation = useMutation({
     mutationKey: ["mark-attendence"],
     mutationFn: async () => {
@@ -97,6 +98,13 @@ const ClassroomAttendence = () => {
         navigate("/teacher/classroom/head-attendence");
       } else {
         toast.success("Attendance submitted successfully!");
+        // Invalidate all relevant queries for all roles to ensure reports "progress"
+        queryClient.invalidateQueries(["reports"]);
+        queryClient.invalidateQueries(["report"]);
+        queryClient.invalidateQueries(["studentReports"]);
+        queryClient.invalidateQueries(["student-assignments-quizes"]);
+        queryClient.invalidateQueries(["teacherStudets"]);
+        queryClient.invalidateQueries(["fetchAttandenceGet"]);
         navigate("/teacher/classroom/head-attendence");
       }
     }
@@ -108,7 +116,7 @@ const ClassroomAttendence = () => {
   const handleConfirmUpdate = () => {
     setShowPopup(false);
     try {
-      
+
       updateAttandence({
         data: attendenceData,
         classroomID: location?.state?._id,

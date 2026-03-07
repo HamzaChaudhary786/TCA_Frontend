@@ -1,5 +1,6 @@
 const IMAGES = {
     ProfilePic: new URL('./profilepic.svg', import.meta.url).href,
+    ProfileSvg: new URL('./profile.svg', import.meta.url).href,
     Notification: new URL('./notification-bing.svg', import.meta.url).href,
     SMS: new URL('./sms.svg', import.meta.url).href,
     ArrowLeft: new URL('./arrow-left.svg', import.meta.url).href,
@@ -14,7 +15,7 @@ const IMAGES = {
     DataReport: new URL('./datareport.svg', import.meta.url).href,
     Download: new URL('./download.png', import.meta.url).href,
     Search: new URL('./search.svg', import.meta.url).href,
-    Profile: new URL('./profilepic.png', import.meta.url).href,
+    Profile: new URL('./profile.svg', import.meta.url).href,
     CloseIcon: new URL('./close2.png', import.meta.url).href,
     CheckArrow: new URL('./check-arrow.svg', import.meta.url).href,
     MathIcon: new URL('./maths.png', import.meta.url).href,

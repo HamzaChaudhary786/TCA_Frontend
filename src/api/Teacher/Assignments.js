@@ -42,13 +42,13 @@ export const editAssignment = apiRequest(async (data, id) => {
 
 export const getMultipleAssignmentsForGrading = apiRequest(async (aId) => {
     const url = `${BACKEND_URL}/assignment/submissions/${aId}`
-    const response = axios.get(url);
+    const response = await axios.get(url);
     return response;
 })
 
 export const gradeAssignments = apiRequest(async (data, id) => {
     const url = `${BACKEND_URL}/assignment/grade/${id}`
-    const response = axios.post(url, data);
+    const response = await axios.post(url, data);
     return response;
 })
 

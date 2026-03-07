@@ -6,12 +6,13 @@ import DataRow from "../../../components/Teacher/Attendence/Submission/DataRow";
 import { BiSearch } from "react-icons/bi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useBlur } from "../../../context/BlurContext";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markAttendence } from "../../../api/Teacher/Attendence";
 import { toast } from "react-toastify";
 
 const MarkAttendence = () => {
 
+    const queryClient = useQueryClient();
     const location = useLocation();
     const { isBlurred, toggleBlur } = useBlur();
     const [classData, setClassData] = useState();
@@ -36,6 +37,15 @@ const MarkAttendence = () => {
             if (error) console.log(error, "error is accurs");
             if (!error) {
                 toast.success("Attendance submitted successfully!");
+                // Invalidate all relevant queries for all roles to ensure reports "progress"
+                queryClient.invalidateQueries(["assignment"]);
+                queryClient.invalidateQueries(["quiz"]);
+                queryClient.invalidateQueries(["reports"]);
+                queryClient.invalidateQueries(["report"]);
+                queryClient.invalidateQueries(["studentReports"]);
+                queryClient.invalidateQueries(["teacherStudets"]);
+                queryClient.invalidateQueries(["student-assignments-quizes"]);
+                queryClient.invalidateQueries(["fetchAttandenceGet"]);
                 navigate("/teacher/attendence");
                 console.log(" data is: ", data);
             } else {

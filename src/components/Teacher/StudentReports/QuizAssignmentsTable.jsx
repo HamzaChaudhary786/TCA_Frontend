@@ -46,7 +46,7 @@ const QuizAssignmentsTable = ({ data, type }) => {
                                     <tr style={{ cursor: "pointer" }} className="flex flex-1 text-xs border-t border-t-black/10">
                                         <td className="flex-[1] py-2 lg:py-3 flex justify-center">{index + 1}</td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {type == "a" ? `Assignment ${index + 1}` : type == "q" ? `Quiz ${index + 1}` : `Test ${index + 1}`}
+                                            {item.title}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
                                             {item.marksObtained}

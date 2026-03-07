@@ -1,5 +1,6 @@
+import { toast } from 'react-toastify';
 
-export const handleProfileImageUpdate = async (file, setImageUrl, setLoading) => {
+export const handleProfileImageUpdate = async (file, setImageUrl, setLoading, resourceType = 'image') => {
     if (!file) return;
 
     if (setLoading) setLoading(true);
@@ -11,7 +12,7 @@ export const handleProfileImageUpdate = async (file, setImageUrl, setLoading) =>
 
     try {
         const cloudinary_image_response = await fetch(
-            "https://api.cloudinary.com/v1_1/dsp3nipez/image/upload",
+            `https://api.cloudinary.com/v1_1/dsp3nipez/${resourceType}/upload`,
             {
                 method: "POST",
                 body: data
@@ -19,6 +20,12 @@ export const handleProfileImageUpdate = async (file, setImageUrl, setLoading) =>
         );
 
         const uploadImageUrl = await cloudinary_image_response.json();
+
+        if (!cloudinary_image_response.ok) {
+            console.error("Cloudinary Error Detailed:", uploadImageUrl);
+            throw new Error(uploadImageUrl.error?.message || "Cloudinary upload failed");
+        }
+
         console.log("Cloudinary Response:", uploadImageUrl);
 
         if (uploadImageUrl.secure_url) {
@@ -27,6 +34,7 @@ export const handleProfileImageUpdate = async (file, setImageUrl, setLoading) =>
         }
     } catch (error) {
         console.error("Cloudinary Upload Error:", error);
+        toast.error(`Upload failed: ${error.message}`);
     } finally {
         if (setLoading) setLoading(false);
     }

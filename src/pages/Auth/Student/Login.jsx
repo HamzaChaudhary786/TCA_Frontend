@@ -114,9 +114,9 @@ const Login = () => {
                 </div>
             </div>
             <div className='flex flex-1 sm:flex-[6] '>
-                <div className='relative hidden bottom-10 items-end lg:items-center sm:left-10 md:left-10 xl:left-11 2xl:left-14 lg:flex justify-center '>
+                {/* <div className='relative hidden bottom-10 items-end lg:items-center sm:left-10 md:left-10 xl:left-11 2xl:left-14 lg:flex justify-center '>
                     <div className='bg-cover ml-3 bg-center-img 2xl:w-80 2xl:h-72 xl:w-72 xl:h-64 h-44 w-52 absolute'></div>
-                </div>
+                </div> */}
                 <div className='flex flex-col flex-1 px-4 md:px-10 py-8 justify-center items-center text-center'>
                     <div className='flex flex-col bg-white h-full px-4 md:px-8 lg:px-12 xl:px-16 py-10 w-full md:w-4/5'>
                         <div className='py-3'>
