@@ -1,16 +1,15 @@
 import React from 'react'
 import Sidebar from '../components/Admin/Sidebar/Sidebar';
 
-const AdminLayout = ({children}) => {
+const AdminLayout = ({ children }) => {
   return (
     <>
-    <div className="flex">
-       <div className="fixed flex">
-         <Sidebar />
-         
-       </div>
-       {children}
-     </div>
+      <div className="flex max-w-full">
+        <div className="fixed flex">
+          <Sidebar />
+        </div>
+        {children}
+      </div>
     </>
   )
 }
