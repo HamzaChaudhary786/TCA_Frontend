@@ -171,7 +171,7 @@ const ManageUsers = () => {
                         const matchesRollNo =
                           searchText && usr.rollNo && usr.rollNo.includes(searchText);
                         const matchesUserType =
-                          selectText && usr.userType.toLocaleLowerCase() === selectText.toLocaleLowerCase();
+                          selectText && usr.userType === selectText.toLocaleLowerCase();
 
                         // Apply combined logic:
                         // If only `selectText` is provided, filter by userType
