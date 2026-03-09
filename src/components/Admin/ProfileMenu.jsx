@@ -21,10 +21,10 @@ const ProfileMenu = ({ onProfileClick, onSettingsClick, onLogoutClick, dashboard
             <GoPerson />
             <p>Profile</p>
           </div>
-          <div className="flex items-center gap-2 cursor-pointer text-grey hover:text-black" onClick={onSettingsClick}>
+          {/* <div className="flex items-center gap-2 cursor-pointer text-grey hover:text-black" onClick={onSettingsClick}>
             <LuSettings />
             <p>Settings</p>
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center gap-2 cursor-pointer text-[#0B1053] hover:text-#007EEA" onClick={onLogoutClick}>
           <IoIosLogOut />

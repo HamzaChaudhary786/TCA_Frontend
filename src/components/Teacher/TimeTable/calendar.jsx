@@ -125,21 +125,22 @@ const MyCalendar = ({ data, isPending, refetch }) => {
           )
         }
       </div>
-      <Calendar
-        style={{}}
-        formats={{ dayRangeHeaderFormat }}
-        min={new Date(0, 0, 0, 0, 0, 0)}
-        max={new Date(0, 0, 0, 23, 59, 59)}
-        view="week"
-        views={{ week: true }}
-        onView={() => { }}
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        onNavigate={handleNavigate}
-        className="w-[99%] h-[80vh] "
-        dayLayoutAlgorithm="no-overlap"
+      <div className="w-full h-[80vh] overflow-y-auto">
+        <Calendar
+          style={{}}
+          formats={{ dayRangeHeaderFormat }}
+          min={new Date(0, 0, 0, 0, 0, 0)}
+          max={new Date(0, 0, 0, 23, 59, 59)}
+          view="week"
+          views={{ week: true }}
+          onView={() => { }}
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          onNavigate={handleNavigate}
+          className="w-[99%]"
+          dayLayoutAlgorithm="no-overlap"
         step={60}
         timeslots={1}
         components={{
@@ -164,6 +165,7 @@ const MyCalendar = ({ data, isPending, refetch }) => {
           header: Header,
         }}
       />
+      </div>
     </div>
   );
 };

@@ -9,8 +9,10 @@ import SystemOverView from "../../../components/Admin/StudentReports/SystemOverv
 import { LuPhone } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import { IoMailOutline } from "react-icons/io5";
-import { useQuery } from "@tanstack/react-query";
-import { getUserFeedback } from "../../../api/Admin/FeedbackApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getUserFeedback, acceptFeedback, rejectFeedback, deleteFeedback } from "../../../api/Admin/FeedbackApi";
+import { toast } from "react-toastify";
+import ConfirmModal from "../../../components/Admin/TimeTable/ConfirmModal";
 
 
 const TeacherDetails = () => {
@@ -18,11 +20,15 @@ const TeacherDetails = () => {
   const location = useLocation();
   const [reportActive, setReportActive] = useState(true);
   const [feedbackActive, setFeedbackActive] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedFeedbackId, setSelectedFeedbackId] = useState(null);
 
   console.log("location is : ", location.state);
 
   const teacherId = location?.state?.teacher?._id;
-  console.log("Fetching feedback for teacherId:", teacherId);
+  console.log("--- FRONTEND DEBUG ---");
+  console.log("TeacherDetails teacherId:", teacherId);
+  console.log("location.state:", location.state);
 
   const { data: feedbackData = [], isPending } = useQuery({
     queryKey: ["feedback", teacherId],
@@ -30,7 +36,67 @@ const TeacherDetails = () => {
     enabled: !!teacherId,
   });
 
-  console.log("Feedback data received:", feedbackData);
+  const queryClient = useQueryClient();
+
+  const acceptMutation = useMutation({
+    mutationFn: acceptFeedback,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["feedback", teacherId]);
+      toast.success("Feedback accepted");
+    },
+    onError: () => {
+      toast.error("Failed to accept feedback");
+    },
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: rejectFeedback,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["feedback", teacherId]);
+      toast.success("Feedback rejected");
+    },
+    onError: () => {
+      toast.error("Failed to reject feedback");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteFeedback,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["feedback", teacherId]);
+      toast.success("Feedback deleted successfully");
+    },
+    onError: () => {
+      toast.error("Failed to delete feedback");
+    },
+  });
+
+  const handleAccept = (feedbackID) => {
+    acceptMutation.mutate(feedbackID);
+  };
+
+  const handleReject = (feedbackID) => {
+    setSelectedFeedbackId(feedbackID);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedFeedbackId) {
+      deleteMutation.mutate(selectedFeedbackId);
+      setIsDeleteModalOpen(false);
+      setSelectedFeedbackId(null);
+    }
+  };
+
+  const handleDelete = (feedbackID) => {
+    // This is now redundant as handleReject handles deletion, 
+    // but keeping it for compatibility with FeedbackCard props if needed.
+    setSelectedFeedbackId(feedbackID);
+    setIsDeleteModalOpen(true);
+  };
+
+  console.log("Feedback data from query:", feedbackData);
+  console.log("-----------------------");
 
   const onReportClick = () => {
     setReportActive(true);
@@ -137,12 +203,18 @@ const TeacherDetails = () => {
                     <div className="flex text-lg font-medium">
                       <p>Feedback</p>
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="grid sm:grid-cols-2 grid-cols-1 lg:gap-16 mt">
                       {isPending ? (
                         <p>Loading feedbacks...</p>
                       ) : feedbackData?.feedbacks?.length > 0 ? (
                         feedbackData.feedbacks.map((feedback, index) => (
-                          <FeedbackCard key={index} feedback={feedback} />
+                          <FeedbackCard
+                            key={index}
+                            feedback={feedback}
+                            onAccept={handleAccept}
+                            onReject={handleReject}
+                            onDelete={handleDelete}
+                          />
                         ))
                       ) : (
                         <div className="py-2 text-2xl font-medium">
@@ -158,6 +230,13 @@ const TeacherDetails = () => {
           </div>
         </div>
       </div>
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Feedback"
+        description="Are you want to delete this feedback?"
+        onconfirm={handleConfirmDelete}
+        onclose={() => setIsDeleteModalOpen(false)}
+      />
     </div>
   );
 };
