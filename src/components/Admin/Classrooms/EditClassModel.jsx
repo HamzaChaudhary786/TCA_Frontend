@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import IMAGES from "../../../assets/images";
+import { IoClose, IoPencil, IoCheckmarkCircle, IoBook } from "react-icons/io5";
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useBlur } from "../../../context/BlurContext";
@@ -7,121 +7,215 @@ import { useAdmin } from "../../../context/AdminContext";
 import { updateClassroom } from '../../../api/Admin/classroomApi';
 import { useGetAllStudentsWithLevel } from '../../../api/Admin/AdminApi';
 import { useGetAllSubjectsWithLevel } from '../../../api/Admin/SubjectsApi';
-import Loader from '../../../utils/Loader';
+import IMAGES from "../../../assets/images";
 
-// Multi-select field with checkbox
-const MultiSelectField = ({ options, placeholder, onSelect, editData, type }) => {
+// ─── Skeleton Loader ─────────────────────────────────────────────────────────
+const SkeletonRow = ({ count = 4, className = "" }) => (
+  <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 ${className}`}>
+    {Array.from({ length: count }).map((_, i) => (
+      <div
+        key={i}
+        className="h-10 rounded-lg bg-gradient-to-r from-gray-100 to-gray-200 animate-pulse"
+        style={{ animationDelay: `${i * 80}ms` }}
+      />
+    ))}
+  </div>
+);
+
+// ─── Select Dropdown ──────────────────────────────────────────────────────────
+const Selectable = ({ options = [], setSelectedOption, selectedOption }) => (
+  <div className="relative">
+    <select
+      value={selectedOption ? JSON.stringify(selectedOption) : ""}
+      onChange={(e) => {
+        if (!e.target.value) return setSelectedOption(null);
+        const parsed = JSON.parse(e.target.value);
+        // Toggle off if same item selected again
+        if (selectedOption?._id === parsed._id) return setSelectedOption(null);
+        setSelectedOption(parsed);
+      }}
+      className="w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-white border border-gray-200 rounded-xl
+                 appearance-none cursor-pointer transition-all duration-200
+                 hover:border-[#6A00FF] focus:outline-none focus:border-[#6A00FF] focus:ring-2 focus:ring-[#6A00FF]/15"
+    >
+      <option value="">— Select —</option>
+      {options.map((item) => (
+        <option key={item._id} value={JSON.stringify(item)}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </div>
+);
+
+// ─── Avatar ───────────────────────────────────────────────────────────────────
+const Avatar = ({ name = "", src }) => {
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  return src
+    ? <img src={src} alt={name} className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200" />
+    : (
+      <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#6A00FF] to-[#9B4DFF] flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
+        {initials}
+      </div>
+    );
+};
+
+// ─── Multi-Select Field ───────────────────────────────────────────────────────
+const MultiSelectField = ({ options = [], placeholder, onSelect, editData, type, isLoading }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [search, setSearch] = useState('');
+  const allSelected = selectedOptions.length === options.length && options.length > 0;
 
+  // Pre-populate from editData
   useEffect(() => {
-    if (editData && options) {
+    if (editData && options?.length) {
       const key = type === "teachers" ? "teachers" : "students";
-      const selectedData = options.filter(option =>
-        editData[key]?.some(item => (key === "teachers" ? item?.teacher?._id : item?._id) === option?._id)
+      const preselected = options.filter(option =>
+        editData[key]?.some(item =>
+          (key === "teachers" ? item?.teacher?._id : item?._id) === option?._id
+        )
       );
-      setSelectedOptions(selectedData);
-      onSelect(selectedData);
+      setSelectedOptions(preselected);
+      onSelect(preselected);
     }
-  }, [editData, options, type, onSelect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editData, options, type]);
 
-  const toggleOption = (option) => {
-    const updated = selectedOptions.some(o => o._id === option._id)
-      ? selectedOptions.filter(o => o._id !== option._id)
-      : [...selectedOptions, option];
-    setSelectedOptions(updated);
-    onSelect(updated);
+  const filtered = options.filter(o =>
+    o.name?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const toggle = useCallback((option) => {
+    setSelectedOptions(prev => {
+      const next = prev.some(o => o._id === option._id)
+        ? prev.filter(o => o._id !== option._id)
+        : [...prev, option];
+      onSelect(next);
+      return next;
+    });
+  }, [onSelect]);
+
+  const toggleAll = () => {
+    const next = allSelected ? [] : [...options];
+    setSelectedOptions(next);
+    onSelect(next);
   };
 
-  const toggleSelectAll = () => {
-    const updated = selectedOptions.length === options.length ? [] : [...options];
-    setSelectedOptions(updated);
-    onSelect(updated);
-  };
+  if (isLoading) return <SkeletonRow count={8} />;
 
   return (
-    <div className="w-full">
-      <p className="text-xs font-semibold text-grey_700">{placeholder}</p>
-      <div className="mb-4 flex items-center p-2">
-        <input
-          type="checkbox"
-          checked={selectedOptions.length === options.length}
-          onChange={toggleSelectAll}
-          className="form-checkbox"
-        />
-        <span className="ml-2 font-medium">Select All</span>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <div className="flex-1 relative">
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder={`Search ${placeholder}...`}
+            className="w-full pl-9 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 bg-white border border-gray-200
+                       rounded-xl focus:outline-none focus:border-[#6A00FF] focus:ring-2 focus:ring-[#6A00FF]/15 transition-all"
+          />
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <button
+          type="button"
+          onClick={toggleAll}
+          className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all whitespace-nowrap ${
+            allSelected
+              ? 'bg-[#6A00FF] border-[#6A00FF] text-white'
+              : 'border-gray-200 text-gray-500 hover:border-[#6A00FF] hover:text-[#6A00FF]'
+          }`}
+        >
+          {allSelected ? '✓ All' : 'Select All'}
+        </button>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-        {options.map(option => (
-          <label key={option._id} className="flex items-center gap-2 p-2 bg-[#00000005] rounded">
-            <input
-              type="checkbox"
-              checked={selectedOptions.some(o => o._id === option._id)}
-              onChange={() => toggleOption(option)}
-              className="form-checkbox"
-            />
-            <img
-              src={option.profilePic || IMAGES.ProfilePic}
-              alt=""
-              className="w-8 h-8 object-cover rounded-full"
-            />
-            <div>
-              <p className="text-sm font-medium">{option.name}</p>
-              {option.qualification && (
-                <span className="text-xs text-[#00000080]">{option.qualification}</span>
-              )}
+
+      {/* Selected chips */}
+      {selectedOptions.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {selectedOptions.map(opt => (
+            <span
+              key={opt._id}
+              onClick={() => toggle(opt)}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#6A00FF]/8 border border-[#6A00FF]/20
+                         text-xs text-[#6A00FF] cursor-pointer hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all group"
+            >
+              <Avatar name={opt.name} src={opt.profilePic} />
+              {opt.name}
+              <IoClose className="w-3 h-3 opacity-40 group-hover:opacity-100" />
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-44 overflow-y-auto custom-scrollbar pr-1">
+        {filtered.map(option => {
+          const checked = selectedOptions.some(o => o._id === option._id);
+          return (
+            <div
+              key={option._id}
+              onClick={() => toggle(option)}
+              className={`flex items-center gap-2 p-2 rounded-xl cursor-pointer transition-all border text-sm
+                ${checked
+                  ? 'bg-[#6A00FF]/8 border-[#6A00FF]/30 text-[#6A00FF]'
+                  : 'bg-gray-50 border-gray-100 text-gray-600 hover:border-[#6A00FF]/30 hover:bg-[#6A00FF]/5'
+                }`}
+            >
+              <div className={`w-4 h-4 rounded flex items-center justify-center border flex-shrink-0 transition-all ${
+                checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'
+              }`}>
+                {checked && (
+                  <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
+              <Avatar name={option.name} src={option.profilePic || IMAGES?.ProfilePic} />
+              <span className="truncate text-xs font-medium">{option.name}</span>
             </div>
-          </label>
-        ))}
+          );
+        })}
+        {filtered.length === 0 && (
+          <div className="col-span-3 py-6 text-center text-gray-400 text-sm">No results found</div>
+        )}
       </div>
     </div>
   );
 };
 
-// Dropdown select
-const Selectable = ({ label, options, setSelectedOption, selectedOption }) => {
-  const handleChange = (e) => {
-    const value = e.target.value;
-    if (!value) {
-      setSelectedOption(null);
-      return;
-    }
+// ─── Section Label ────────────────────────────────────────────────────────────
+const SectionLabel = ({ icon, text, badge }) => (
+  <div className="flex items-center justify-between mb-2.5">
+    <label className="text-xs font-semibold text-gray-500 uppercase tracking-widest flex items-center gap-1.5">
+      <span>{icon}</span>{text}
+    </label>
+    {badge != null && badge > 0 && (
+      <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#6A00FF]/10 text-[#6A00FF] border border-[#6A00FF]/20 font-semibold">
+        {badge} selected
+      </span>
+    )}
+  </div>
+);
 
-    const selected = JSON.parse(value);
-    // Toggle logic: if selected again, unselect it
-    if (selectedOption && selectedOption._id === selected._id) {
-      setSelectedOption(null);
-    } else {
-      setSelectedOption(selected);
-    }
-  };
+// ─── Divider ──────────────────────────────────────────────────────────────────
+const Divider = () => <div className="h-px bg-gray-100 my-1" />;
 
-  return (
-    <div className="flex flex-col text-start py-1">
-      <div className="font-medium">{label}</div>
-      <select
-        value={selectedOption ? JSON.stringify(selectedOption) : ""}
-        onChange={handleChange}
-        className="border outline-none rounded-sm border-black/20 px-4 w-full py-[4px]"
-      >
-        <option value="">Select Option</option>
-        {options.map(item => (
-          <option key={item._id} value={JSON.stringify(item)}>
-            {item.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
-
-const EditClassModel = ({ open, setopen, isEditTrue, refetch, editData }) => {
+// ─── Main Edit Modal ──────────────────────────────────────────────────────────
+const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
   const ref = useRef(null);
   const { adminUsersData, allLevels } = useAdmin();
-  const { isBlurred, toggleBlur } = useBlur();
+  const { toggleBlur } = useBlur();
 
   const [classroomName, setClassroomName] = useState(editData?.name || "");
   const [selectedLevel, setSelectedLevel] = useState(() =>
-    allLevels.find(level => level.name === editData?.level?.name) || null
+    allLevels.find(l => l.name === editData?.level?.name) || null
   );
   const [headTeacher, setHeadTeacher] = useState(() =>
     adminUsersData?.allTeachers?.find(t =>
@@ -129,247 +223,331 @@ const EditClassModel = ({ open, setopen, isEditTrue, refetch, editData }) => {
     ) || null
   );
 
-  const { studentWithLevel, isLoading } = useGetAllStudentsWithLevel(selectedLevel?._id);
-  const { subjectWithLevel } = useGetAllSubjectsWithLevel(selectedLevel?._id);
+  const { studentWithLevel = [], isLoading: studentsLoading } = useGetAllStudentsWithLevel(selectedLevel?._id);
+  const { subjectWithLevel = [], isLoading: subjectsLoading } = useGetAllSubjectsWithLevel(selectedLevel?._id);
 
   const [newSelectedTeachers, setNewSelectedTeachers] = useState([]);
   const [newSelectedStudents, setNewSelectedStudents] = useState([]);
   const [teacherArr, setTeachersArr] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState({});
 
-  // Initialize with edit data
+  // ── Init from editData ──────────────────────────────────────────────────────
   useEffect(() => {
-    if (editData) {
-      setClassroomName(editData.name || "");
-      setNewSelectedStudents(editData.students || []);
+    if (!editData) return;
+    setClassroomName(editData.name || "");
+    setNewSelectedStudents(editData.students || []);
 
-      const initialSubjects = {};
-      const initialTeachers = [];
-      const initialTeacherArr = [];
+    const initialSubjects = {};
+    const initialTeachers = [];
+    const initialTeacherArr = [];
 
-      editData.teachers?.forEach(item => {
-        const teacherId = item.teacher?._id;
-        const subjectId = item.subject?._id;
+    editData.teachers?.forEach(item => {
+      const teacherId = item.teacher?._id;
+      const subjectId = item.subject?._id;
+      if (!teacherId) return;
 
-        if (teacherId) {
-          if (!initialTeachers.some(t => t._id === teacherId)) {
-            initialTeachers.push(item.teacher);
-          }
-
-          if (subjectId) {
-            initialSubjects[teacherId] = initialSubjects[teacherId] || [];
-            if (!initialSubjects[teacherId].includes(subjectId)) {
-              initialSubjects[teacherId].push(subjectId);
-            }
-
-            initialTeacherArr.push({
-              teacher: teacherId,
-              subject: subjectId,
-              type: item.type,
-            });
-          }
+      if (!initialTeachers.some(t => t._id === teacherId)) {
+        initialTeachers.push(item.teacher);
+      }
+      if (subjectId) {
+        initialSubjects[teacherId] = initialSubjects[teacherId] || [];
+        if (!initialSubjects[teacherId].includes(subjectId)) {
+          initialSubjects[teacherId].push(subjectId);
         }
-      });
+        initialTeacherArr.push({ teacher: teacherId, subject: subjectId, type: item.type });
+      }
+    });
 
-      setSelectedSubjects(initialSubjects);
-      setNewSelectedTeachers(initialTeachers);
-      setTeachersArr(initialTeacherArr);
-    }
+    setSelectedSubjects(initialSubjects);
+    setNewSelectedTeachers(initialTeachers);
+    setTeachersArr(initialTeacherArr);
   }, [editData]);
+
+  // ── Sync head teacher type across teacherArr ───────────────────────────────
   useEffect(() => {
     setTeachersArr(prev =>
-      prev.map(entry => {
-        // If headTeacher is null, convert all "head" types to "teacher"
-        if (!headTeacher || !headTeacher._id) {
-          return { ...entry, type: "teacher" };
-        }
-
-        // If headTeacher is present and matches the entry.teacher, keep it "head", else "teacher"
-        const isHead =
-          entry.teacher?.toString() === headTeacher._id.toString();
-        return {
-          ...entry,
-          type: isHead ? "head" : "teacher"
-        };
-      })
+      prev.map(entry => ({
+        ...entry,
+        type: headTeacher?._id && entry.teacher?.toString() === headTeacher._id.toString()
+          ? "head"
+          : "teacher",
+      }))
     );
   }, [headTeacher]);
 
+  // ── Click outside ──────────────────────────────────────────────────────────
+  const handleClose = useCallback(() => {
+    setopen(false);
+    // toggleBlur();
+  }, [setopen, toggleBlur]);
 
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) handleClose(); };
+    if (open) document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open, handleClose]);
+
+  // ── Subject toggle ─────────────────────────────────────────────────────────
   const toggleSubject = useCallback((teacherId, subjectId) => {
-    console.log("i am working");
-
     setSelectedSubjects(prev => {
-      const currentSubjects = prev[teacherId] || [];
-      const updatedSubjects = currentSubjects.includes(subjectId)
-        ? currentSubjects.filter(s => s !== subjectId)
-        : [...currentSubjects, subjectId];
+      const curr = prev[teacherId] || [];
+      const updated = curr.includes(subjectId)
+        ? curr.filter(s => s !== subjectId)
+        : [...curr, subjectId];
 
       setTeachersArr(prevArr => {
-        const filtered = prevArr.filter(
-          item => item.teacher !== teacherId || item.type === "head"
-        );
-
-        const newPairs = updatedSubjects.map(s => {
-          const isHead =
-            headTeacher?._id &&
-            teacherId?.toString() === headTeacher._id.toString();
-
-          return {
-            teacher: teacherId,
-            subject: s,
-            type: isHead ? "head" : "teacher"
-          };
-        });
-
+        const filtered = prevArr.filter(item => item.teacher !== teacherId);
+        const newPairs = updated.map(s => ({
+          teacher: teacherId,
+          subject: s,
+          type: headTeacher?._id && teacherId?.toString() === headTeacher._id.toString()
+            ? "head" : "teacher",
+        }));
         return [...filtered, ...newPairs];
       });
 
-      return { ...prev, [teacherId]: updatedSubjects };
+      return { ...prev, [teacherId]: updated };
     });
-  }, [headTeacher]); // <- include headTeacher in dependencies
+  }, [headTeacher]);
 
-
+  // ── Mutation ───────────────────────────────────────────────────────────────
   const updateClassroomMutation = useMutation({
     mutationFn: updateClassroom,
     onSuccess: async () => {
       await refetch();
-      setopen(false);
-      toast.success("Classroom updated successfully!");
+      handleClose();
+      toast.success("Classroom updated successfully! 🎉");
     },
-    onError: () => toast.error("Failed to update classroom."),
+    onError: () => toast.error("Failed to update classroom. Please try again."),
   });
-  console.log(teacherArr, "teacher arayjjjjjjj hhhhhhhhh");
 
   const handleUpdateClass = useCallback(() => {
-    if (!classroomName || !selectedLevel || !newSelectedStudents.length || !newSelectedTeachers.length) {
-      toast.error("Please fill all required fields.");
-      return;
-    }
+    if (!classroomName.trim()) return toast.error("Enter a classroom name.");
+    if (!selectedLevel) return toast.error("Select a level.");
+    if (!newSelectedTeachers.length) return toast.error("Select at least one teacher.");
+    if (!newSelectedStudents.length) return toast.error("Select at least one student.");
 
-    // const regex = /^[a-zA-Z0-9\s]+$/;
-    // if (!regex.test(classroomName)) {
-    //   toast.error("Invalid classroom name (no special characters allowed).");
-    //   return;
-    // }
+    updateClassroomMutation.mutate({
+      data: {
+        name: classroomName.trim(),
+        levelID: selectedLevel._id,
+        students: newSelectedStudents.map(s => s._id),
+        teachers: teacherArr,
+      },
+      id: editData?._id,
+    });
+  }, [classroomName, selectedLevel, newSelectedStudents, newSelectedTeachers, teacherArr, updateClassroomMutation, editData]);
 
+  if (!open) return null;
 
-
-    const data = {
-      name: classroomName,
-      levelID: selectedLevel._id,
-      students: newSelectedStudents.map(s => s._id),
-      teachers: teacherArr,
-    };
-    updateClassroomMutation.mutate({ data, id: editData?._id });
-  }, [classroomName, selectedLevel, newSelectedStudents, newSelectedTeachers, headTeacher, teacherArr, updateClassroomMutation, editData]);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setopen(false);
-    };
-    if (open) {
-      toggleBlur();
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      if (open) toggleBlur();
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open, toggleBlur]);
-
-  if (isLoading) return <Loader />;
+  const isPending = updateClassroomMutation.isPending;
 
   return (
-    <div
-      ref={ref}
-      className={`fixed z-10 mt-10 bg-white p-4 md:p-8 w-[90%] md:w-[800px] lg:w-[60%] lg:ml-80 ml-7 border border-black/20 shadow-md rounded-xl ${open ? "" : "hidden"}`}
-    >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-semibold">{isEditTrue ? "Edit" : "Create"} Classroom</h2>
-        <img
-          src={IMAGES.CloseIcon}
-          className="w-4 h-4 cursor-pointer"
-          onClick={() => setopen(false)}
-        />
-      </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
 
-      <div className="flex flex-col gap-4 overflow-y-auto max-h-[80vh] custom-scrollbar">
-        <input
-          className="border py-2 px-4 rounded w-full"
-          placeholder="Enter classroom name"
-          value={classroomName}
-          onChange={(e) => setClassroomName(e.target.value)}
-        />
+      {/* Modal */}
+      <div
+        ref={ref}
+        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100"
+        style={{ boxShadow: '0 20px 60px rgba(106,0,255,0.10), 0 8px 24px rgba(0,0,0,0.10)' }}
+      >
+        {/* Purple top accent bar */}
+        <div className="h-1 w-full bg-gradient-to-r from-[#6A00FF] to-[#9B4DFF] flex-shrink-0" />
 
-        <Selectable
-          label="Select Level"
-          options={allLevels}
-          setSelectedOption={setSelectedLevel}
-          selectedOption={selectedLevel}
-        />
-
-        {selectedLevel && (
-          <>
-            <Selectable
-              label="Select Head Teacher (Optional)"
-              options={adminUsersData?.allTeachers}
-              setSelectedOption={setHeadTeacher}
-              selectedOption={headTeacher}
-            />
-
-            <MultiSelectField
-              placeholder="Select Teachers"
-              onSelect={setNewSelectedTeachers}
-              options={adminUsersData.allTeachers}
-              editData={editData}
-              type="teachers"
-            />
-
-            {newSelectedTeachers?.map(teacher => (
-              <div key={teacher._id}>
-                <p className="text-sm font-semibold text-grey_700 mb-1">
-                  Subjects for {teacher.name} {teacher._id === headTeacher?._id ? "(Head Teacher)" : ""}
-                </p>
-                <div className="flex flex-wrap gap-3 mb-4">
-                  {subjectWithLevel?.map(subject => (
-                    <label key={subject._id} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={selectedSubjects[teacher._id]?.includes(subject._id) || false}
-                        onChange={() => toggleSubject(teacher._id, subject._id)}
-                        className="form-checkbox"
-                        disabled={teacher._id === headTeacher?._id && selectedSubjects[teacher._id]?.includes(subject._id)}
-                      />
-                      <span className="text-sm">{subject.name}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            <MultiSelectField
-              placeholder="Select Students"
-              onSelect={setNewSelectedStudents}
-              options={studentWithLevel}
-              editData={editData}
-              type="students"
-            />
-          </>
-        )}
-
-        <div className="flex flex-col gap-2 mt-4 w-full">
+        {/* Header */}
+        <div className="flex items-center justify-between px-7 pt-5 pb-4 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-[#6A00FF]/10 flex items-center justify-center">
+              <IoPencil className="w-4 h-4 text-[#6A00FF]" />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-gray-800 leading-tight">Edit Classroom</h2>
+              <p className="text-xs text-gray-400 mt-0.5">Update the classroom details below</p>
+            </div>
+          </div>
           <button
-            className="px-6 py-2 rounded-lg bg-[#6A00FF] text-white"
-            onClick={() => setopen(false)}
+            onClick={handleClose}
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-all"
+          >
+            <IoClose className="w-5 h-5" />
+          </button>
+        </div>
+
+        <Divider />
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-y-auto px-7 py-5 space-y-5 custom-scrollbar">
+
+          {/* Classroom Name */}
+          <div>
+            <SectionLabel icon="✏️" text="Classroom Name" />
+            <input
+              value={classroomName}
+              onChange={e => setClassroomName(e.target.value)}
+              placeholder="e.g. Grade 10 Alpha"
+              className="w-full px-4 py-2.5 text-sm text-gray-700 placeholder-gray-300 bg-white border border-gray-200
+                         rounded-xl focus:outline-none focus:border-[#6A00FF] focus:ring-2 focus:ring-[#6A00FF]/15 transition-all"
+            />
+          </div>
+
+          <Divider />
+
+          {/* Level */}
+          <div>
+            <SectionLabel icon="🎓" text="Level" />
+            <Selectable
+              options={allLevels}
+              setSelectedOption={setSelectedLevel}
+              selectedOption={selectedLevel}
+            />
+          </div>
+
+          {selectedLevel && (
+            <>
+              <Divider />
+
+              {/* Head Teacher */}
+              <div>
+                <SectionLabel icon="👑" text="Head Teacher" />
+                <p className="text-[11px] text-gray-400 -mt-1.5 mb-2">Optional — assigns this teacher a head role</p>
+                <Selectable
+                  options={adminUsersData?.allTeachers || []}
+                  setSelectedOption={setHeadTeacher}
+                  selectedOption={headTeacher}
+                />
+              </div>
+
+              <Divider />
+
+              {/* Teachers */}
+              <div>
+                <SectionLabel icon="👨‍🏫" text="Teachers" badge={newSelectedTeachers.length} />
+                <MultiSelectField
+                  placeholder="teachers"
+                  onSelect={setNewSelectedTeachers}
+                  options={adminUsersData?.allTeachers || []}
+                  editData={editData}
+                  type="teachers"
+                />
+              </div>
+
+              {/* Subject assignment per teacher */}
+              {newSelectedTeachers.length > 0 && (
+                <>
+                  <Divider />
+                  <div>
+                    <SectionLabel icon="📚" text="Assign Subjects to Teachers" />
+                    <div className="space-y-3">
+                      {newSelectedTeachers.map(teacher => (
+                        <div key={teacher._id} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Avatar name={teacher.name} src={teacher.profilePic} />
+                            <span className="text-sm font-semibold text-gray-700">{teacher.name}</span>
+                            {headTeacher?._id === teacher._id && (
+                              <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-600 font-semibold">
+                                HEAD
+                              </span>
+                            )}
+                          </div>
+
+                          {subjectsLoading ? (
+                            <SkeletonRow count={4} />
+                          ) : subjectWithLevel.length === 0 ? (
+                            <p className="text-xs text-gray-400 italic">No subjects available for this level.</p>
+                          ) : (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                              {subjectWithLevel.map(subject => {
+                                const checked = selectedSubjects[teacher._id]?.includes(subject._id) ?? false;
+                                return (
+                                  <label
+                                    key={subject._id}
+                                    className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer border text-xs transition-all
+                                      ${checked
+                                        ? 'bg-[#6A00FF]/8 border-[#6A00FF]/30 text-[#6A00FF]'
+                                        : 'bg-white border-gray-200 text-gray-600 hover:border-[#6A00FF]/30 hover:bg-[#6A00FF]/5'
+                                      }`}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={() => toggleSubject(teacher._id, subject._id)}
+                                      className="sr-only"
+                                    />
+                                    <div className={`w-3.5 h-3.5 rounded flex-shrink-0 flex items-center justify-center border transition-all ${
+                                      checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'
+                                    }`}>
+                                      {checked && (
+                                        <svg className="w-2 h-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                      )}
+                                    </div>
+                                    <IoBook className="w-3 h-3 flex-shrink-0 text-current" />
+                                    <span className="truncate">{subject.name}</span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <Divider />
+
+              {/* Students */}
+              <div>
+                <SectionLabel icon="👩‍🎓" text="Students" badge={newSelectedStudents.length} />
+                <MultiSelectField
+                  placeholder="students"
+                  onSelect={setNewSelectedStudents}
+                  options={studentWithLevel}
+                  editData={editData}
+                  type="students"
+                  isLoading={studentsLoading}
+                />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        <Divider />
+        <div className="px-7 py-4 flex-shrink-0 bg-gray-50/80 flex gap-3">
+          <button
+            onClick={handleClose}
+            className="flex-1 py-3 rounded-xl font-semibold text-sm text-gray-600 bg-white border border-gray-200
+                       hover:border-gray-300 hover:bg-gray-50 transition-all"
           >
             Cancel
           </button>
           <button
-            className="px-6 py-2 rounded-lg bg-[blue] text-white"
             onClick={handleUpdateClass}
+            disabled={isPending}
+            className="flex-1 py-3 rounded-xl font-semibold text-sm text-white transition-all duration-200
+                       bg-gradient-to-r from-[#6A00FF] to-[#6A00FF]/80 hover:from-[#5800d4] hover:to-[#5800d4]/80
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       shadow-lg shadow-[#6A00FF]/25 hover:shadow-[#6A00FF]/35"
           >
-            {isEditTrue ? "Update" : "Create"}
+            {isPending ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Updating…
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                <IoCheckmarkCircle className="w-4 h-4" />
+                Update Classroom
+              </span>
+            )}
           </button>
         </div>
       </div>
@@ -377,4 +555,4 @@ const EditClassModel = ({ open, setopen, isEditTrue, refetch, editData }) => {
   );
 };
 
-export default EditClassModel;
+export default EditClassModal;

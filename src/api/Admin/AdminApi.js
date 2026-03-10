@@ -19,37 +19,23 @@ export const getAllUsers = apiRequest(async () => {
 
 
 export const useGetAllStudentsWithLevel = (levelId) => {
-
-
-    const getMyStudentWithLevelRequest = async () => {
-        const url = `${BACKEND_URL}/user/students-with-level/${levelId}`;
-        const response = await axios.get(url);
-
-        // Note: Axios does not use response.ok, so check the status code directly
-        if (response.status !== 200) {
-            throw new Error('Failed to get user');
-        }
-
-        return response.data; // Axios automatically parses the JSON response
-    };
-
-    // Updated useQuery call with object form
-    const { data: studentWithLevel, isLoading, error } = useQuery({
+    const { data: studentWithLevel = [], isLoading, isFetching } = useQuery({
         queryKey: ['fetchStudentsWithLevel', levelId],
-        queryFn: getMyStudentWithLevelRequest,
-        enabled: !!levelId, // Only run the query if levelId is truthy
+        queryFn: async () => {
+            const url = `${BACKEND_URL}/user/students-with-level/${levelId}`;
+            const { data, status } = await axios.get(url);
+            if (status !== 200) throw new Error('Failed to fetch students');
+            return data;
+        },
+        enabled: !!levelId,
+        staleTime: 5 * 60 * 1000,   // treat data fresh for 5 min (no refetch on re-focus)
+        gcTime: 10 * 60 * 1000,     // keep in cache for 10 min after unmount
+        placeholderData: [],         // show empty list instantly while loading
+        retry: 2,
     });
 
-    // if (error) {
-    //     toast.error(error.toString());
-    // }
-
-    return {
-        isLoading,
-        studentWithLevel,
-    };
+    return { studentWithLevel, isLoading, isFetching };
 };
-
 
 export const getAllTeachers = apiRequest(async () => {
     const url = `${BACKEND_URL}/user/admin/teachers`
