@@ -5,10 +5,11 @@ import profile from "../../../assets/profile.png";
 import { IoClose } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { useUser } from "../../../context/UserContext";
+import { useStudent } from "../../../context/StudentContext";
 import { useQuery } from "@tanstack/react-query";
 import { getMyChats } from "../../../api/UserApis";
 import { useGetAnnoucementByUserType } from "../../../api/Teacher/Annoucement";
-
+import { formatDate } from "../../../constants/formattedDate";
 
 const Notifications = ({ onclose, dashboard, data }) => {
 
@@ -17,6 +18,7 @@ const Notifications = ({ onclose, dashboard, data }) => {
 
   // TODO: ---^^
   const { socketContext } = useUser();
+  const { allAssignments } = useStudent();
 
   useEffect(() => {
     console.log("now rendering navbar")
@@ -27,40 +29,76 @@ const Notifications = ({ onclose, dashboard, data }) => {
   const chatquery = useQuery({ queryKey: ["chat"], queryFn: getMyChats })
   //console.log("chat query data is : ", chatquery.data);
 
-  const Notification = () => {
-
+  const Notification = ({ item, isAssignment = true }) => {
     const [moredetails, setMoredetails] = useState(false);
+
+    // Extract details based on whether it's an assignment or a generic notification
+    const teacherName = isAssignment 
+      ? (item?.createdBy?.name || "Teacher")
+      : (item?.userID?.name || "Teacher");
+    
+    const timeDisplay = isAssignment 
+      ? formatDate(item?.dueDate) 
+      : formatDate(item?.createdAt);
+      
+    const message = isAssignment 
+      ? "Added an Assignment" 
+      : (item?.message || "Notification");
+
+    const subjectName = isAssignment 
+      ? (item?.subjectID?.name || "Subject")
+      : (item?.subjectName || "");
+      
+    const className = isAssignment 
+      ? (item?.classroomID?.name || "Class")
+      : (item?.classroomName || "");
 
     return (
       <div className={`flex flex-col gap-2 py-2 `}>
         <div className="flex gap-2">
           <img src={profile} alt="" className="h-10 w-11" />
-          <div className="flex flex-col cursor-pointer" onClick={() => setMoredetails(!moredetails)}>
+          <div
+            className="flex flex-col cursor-pointer"
+            onClick={() => setMoredetails(!moredetails)}
+          >
             <div className="flex justify-between gap-2 text-grey_700">
               <div className="flex gap-2">
-                <p className="text-sm font-medium">Phonix Baker</p>
-                <p className="text-xs">Just Now</p>
+                <p className="text-sm font-medium">{teacherName}</p>
+                <p className="text-xs">{timeDisplay}</p>
               </div>
               <GoDotFill color={true ? "green" : "grey"} />
             </div>
             <div className="flex text-xs">
               <p>
-                Added an Assignment{" "}
-                <span className="text-[#007EEA]"> Physics class </span>
+                {message}{" "}
+                <span className="text-[#007EEA]">
+                  {" "}
+                  {subjectName} {className && `- ${className}`}{" "}
+                </span>
               </p>
             </div>
           </div>
         </div>
-        {moredetails ? (
+        {moredetails && isAssignment && item?.files?.length > 0 && (
           <div className="flex items-center gap-2 ml-10">
             <img src={pdf} alt="" className="w-12 h-12" />
             <div className="text-grey_700">
-              <p className="text-sm font-medium">Assignment 1.pdf</p>
-              <p className="text-xs">720 KB</p>
+              <p className="text-sm font-medium">
+                {item.files[0]?.name || "Assignment File"}
+              </p>
+              <p className="text-xs">{item.title}</p>
             </div>
           </div>
-        ) : (
-          ""
+        )}
+        {moredetails && !isAssignment && item?.file && (
+          <div className="flex items-center gap-2 ml-10">
+            <img src={pdf} alt="" className="w-12 h-12" />
+            <div className="text-grey_700">
+              <a href={item.file.url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:underline">
+                {item.file.name}
+              </a>
+            </div>
+          </div>
         )}
       </div>
     );
@@ -81,7 +119,7 @@ const Notifications = ({ onclose, dashboard, data }) => {
         <div className=" w-full ">
           <div className="space-y-6 p-3 bg-gray-50 rounded-lg shadow-lg max-w-4xl mx-auto"> {/* Container styles */}
             <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">📢 Announcements</h2>
-            {announcementByUsertype?.map((announcement) => (
+            {announcementByUsertype && announcementByUsertype.length > 0 ? announcementByUsertype?.map((announcement) => (
               <div
                 key={announcement._id}
                 className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300" // Card styles
@@ -105,7 +143,7 @@ const Notifications = ({ onclose, dashboard, data }) => {
                   </div>
                 )}
               </div>
-            ))}
+            )) : <p className="text-center text-gray-500 py-8">No announcements have been created</p>}
           </div>
         </div>
 
@@ -137,9 +175,32 @@ const Notifications = ({ onclose, dashboard, data }) => {
           <IoClose onClick={onclose} className="cursor-pointer" />
         </div>
         <div className="w-full">
-          {activeTab === "notification"
-            ? [...new Array(3)].map((_, index) => <Notification key={index} />)
-            : <Announcement />}
+          {activeTab === "notification" ? (
+            data && data.length > 0 ? (
+              data
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((not) => (
+                  <Notification key={not._id} item={not} isAssignment={false} />
+                ))
+            ) : allAssignments && allAssignments.length > 0 ? (
+              allAssignments
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 5)
+                .map((assignment) => (
+                  <Notification
+                    key={assignment._id}
+                    item={assignment}
+                    isAssignment={true}
+                  />
+                ))
+            ) : (
+              <p className="text-center text-gray-500 py-4">
+                No notifications yet
+              </p>
+            )
+          ) : (
+            <Announcement />
+          )}
         </div>
       </div>
     </div>

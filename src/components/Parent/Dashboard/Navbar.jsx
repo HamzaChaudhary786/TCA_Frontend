@@ -177,7 +177,7 @@ const Navbar = ({ heading }) => {
           }
         </div>
       </div>
-      {bell && <Notifications dashboard={true} onclose={togglebell} />}
+      {bell && <Notifications data={data} dashboard={true} onclose={togglebell} />}
       {mail && <RecentMessages dashboard={true} onclose={toggleMail} />}
       {isProfileDetails && <ProfileDetails onclose={toggleProfileDetails} />}
     </div>

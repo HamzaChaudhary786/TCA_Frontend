@@ -40,28 +40,19 @@ const QuizAssignmentsTable = ({ data, type }) => {
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
                                             {
-                                                (item.marksObtained / item.totalMarks) * 100 > 90
-                                                    ? "A"
-                                                    : (item.marksObtained / item.totalMarks) * 100 > 80
-                                                        ? "B"
-                                                        : (item.marksObtained / item.totalMarks) * 100 > 70
-                                                            ? "C"
-                                                            : (item.marksObtained / item.totalMarks) * 100 > 60
-                                                                ? "D"
-                                                                : "F"
+                                                (() => {
+                                                    const mod = (item.marksObtained / item.totalMarks) * 100;
+                                                    if (mod >= 90) return "A";
+                                                    if (mod >= 80) return "B";
+                                                    if (mod >= 70) return "C";
+                                                    if (mod >= 60) return "D";
+                                                    if (mod >= 50) return "E";
+                                                    return "F";
+                                                })()
                                             }
                                         </td>
-                                        <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {
-                                                item.feedback ? (
-                                                    <img src={IMAGES.Feedback} alt='' className='md:w-[22px] md:h-[22px] w-[20px] h-[20px]' />
-
-                                                ) : (
-                                                    <img src={IMAGES.NoFeedback} alt='' className='md:w-[22px] md:h-[22px] w-[20px] h-[20px]' />
-
-                                                )
-                                            }
-
+                                        <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center">
+                                            {item.feedback || "No Feedback"}
                                         </td>
                                     </tr>
                                 );

@@ -414,7 +414,7 @@ const CreateQuizAssignmentModal = ({
                         top: "100%",
                         left: 0,
                         width: "100%",
-                        maxHeight: "100px",
+                        maxHeight: "200px",
                         overflowY: "auto",
                         border: "1px solid #d1d5db",
                         borderRadius: "8px",

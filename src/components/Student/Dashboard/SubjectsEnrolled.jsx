@@ -37,13 +37,15 @@ const SubjectsEnrolled = () => {
       setAllSubjects(results);
       console.log("inside dashboard")
       return results
-    }, staleTime: 300000, enabled: studentLogedIn
+    }, 
+    refetchInterval: 10000, 
+    enabled: studentLogedIn
   });
 
+  const assignedSubjects = subjectQuery?.data?.assignedSubjects || userData.subjects;
   const filteredSubjects = subjectQuery?.data?.subjects?.filter((item) =>
-    userData.subjects.includes(item.subject._id)
+    !assignedSubjects || assignedSubjects.length === 0 || assignedSubjects.includes(item.subject._id)
   );
-  console.log(filteredSubjects, "filteredSubjects");
 
   //console.log(filteredSubjects, "Filtered Subjects for Student");
 
