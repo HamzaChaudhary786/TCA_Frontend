@@ -77,6 +77,7 @@ import AttendenceReport from "./pages/Admin/AttendenceReport/AttendenceReport";
 import SuperAdminDashboard from "./pages/SuperAdmin/Dashboard";
 import ProtectedSuperAdmin from "./utils/ProtectedSuperAdmin";
 import SuperAdminLayout from "./layouts/SuperAdminLayout";
+import BulkSubjectAssign from "./pages/Admin/BulkSubjectAssign/BulkSubjectAssign";
 import ChatBot from "./components/ChatBot/ChatBot";
 
 function App() {
@@ -236,6 +237,14 @@ function App() {
             element={
               <AdminLayout>
                 <AddCSVFile />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/bulk-subject-assign"
+            element={
+              <AdminLayout>
+                <BulkSubjectAssign />
               </AdminLayout>
             }
           />

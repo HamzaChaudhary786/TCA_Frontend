@@ -122,3 +122,19 @@ export const useGetAllSubjectOfStudent = (studentId) => {
     refetch
   };
 };
+
+export const useGetSubjectsOfLevel = (levelId) => {
+  const fetchSubjects = async () => {
+    const response = await axios.get(`${BACKEND_URL}/subject/${levelId}`);
+    if (response.status !== 200) throw new Error('Failed to fetch subjects');
+    return response.data;
+  };
+
+  const { data: subjects = [], isLoading: subjectsLoading } = useQuery({
+    queryKey: ['fetchSubjectsOfLevel', levelId],
+    queryFn: fetchSubjects,
+    enabled: !!levelId,
+  });
+
+  return { subjects, subjectsLoading };
+};

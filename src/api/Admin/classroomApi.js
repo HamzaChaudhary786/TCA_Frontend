@@ -1,6 +1,7 @@
 import axios from "axios";
 import apiRequest from "../../utils/ApiRequest";
 import { BACKEND_URL } from "../../constants/api";
+import { useQuery } from "@tanstack/react-query";
 
 axios.defaults.withCredentials = true;
 
@@ -42,8 +43,24 @@ export const fetchStudentAttendanceReport = async (params) => {
             // Request was made but no response received
             throw new Error('No response from server. Please check your connection.');
         } else {
-            // Something else happened
             throw new Error('An unexpected error occurred');
         }
     }
 }
+
+export const useGetClassroomsByLevel = (levelId) => {
+    const fetchClassrooms = async () => {
+        const response = await axios.get(`${BACKEND_URL}/classroom`);
+        if (response.status !== 200) throw new Error('Failed to fetch classrooms');
+        // Filter out locally since API may not have dedicated level endpoint
+        return response.data?.filter(c => c.levelID === levelId) || [];
+    };
+
+    const { data: classrooms = [], isLoading: classroomsLoading } = useQuery({
+        queryKey: ['fetchClassroomsByLevel', levelId],
+        queryFn: fetchClassrooms,
+        enabled: !!levelId,
+    });
+
+    return { classrooms, classroomsLoading };
+};

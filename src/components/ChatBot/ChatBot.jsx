@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ChatBot.css';
 import { BACKEND_URL } from '../../constants/api';
@@ -8,6 +9,13 @@ const INITIAL_GREETING = {
     content: 'Hi! I am your AI assistant. How can I help you today? You can also switch to the Image or Voice tabs above! 🎨🎤',
 };
 
+const FAQS = [
+    "What features are in this project?",
+    "How do I add a classroom?",
+    "Where do I view my timetable?",
+    "How do I manage attendance?",
+];
+
 // ─── small helpers ──────────────────────────────────────────────────────────
 const isSpeechAvailable = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window);
 const SpeechRecognitionAPI = isSpeechAvailable
@@ -16,6 +24,7 @@ const SpeechRecognitionAPI = isSpeechAvailable
 
 // ─── main component ──────────────────────────────────────────────────────────
 const ChatBot = () => {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'image' | 'voice'
 
@@ -52,24 +61,45 @@ const ChatBot = () => {
     useEffect(() => { scrollToBottom(chatEndRef); }, [chatHistory]);
     useEffect(() => { scrollToBottom(voiceChatEndRef); }, [voiceChatHistory]);
 
-    // ─── TEXT CHAT ────────────────────────────────────────────────────────────
-    const handleSendMessage = async (e) => {
-        e?.preventDefault();
-        if (!message.trim()) return;
+    // ─── AI Response Parser ──────────────────────────────────────────────────
+    const processAIResponse = useCallback((responseText) => {
+        let cleanText = responseText;
+        const navMatch = responseText.match(/NAVIGATION:\s*(\/\S+)/i);
 
-        const newHistory = [...chatHistory, { role: 'user', content: message }];
+        if (navMatch) {
+            const path = navMatch[1];
+            // Remove the navigation command from the visible text
+            cleanText = responseText.replace(/NAVIGATION:\s*(\/\S+)/i, '').trim();
+
+            // Execute navigation after a slight delay for better UX
+            setTimeout(() => {
+                navigate(path);
+            }, 1000);
+        }
+
+        return cleanText;
+    }, [navigate]);
+
+    // ─── TEXT CHAT ────────────────────────────────────────────────────────────
+    const handleSendMessage = async (e, textOverride = '') => {
+        e?.preventDefault();
+        const textToSend = textOverride || message;
+        if (!textToSend.trim()) return;
+
+        const newHistory = [...chatHistory, { role: 'user', content: textToSend }];
         setChatHistory(newHistory);
-        setMessage('');
+        if (!textOverride) setMessage('');
         setChatLoading(true);
 
         try {
             const historyToSend = chatHistory.filter(m => m !== INITIAL_GREETING);
             const { data } = await axios.post(`${BACKEND_URL}/chat`, {
-                message,
+                message: textToSend,
                 history: historyToSend,
             }, { withCredentials: true });
 
-            setChatHistory([...newHistory, { role: 'assistant', content: data.data }]);
+            const processedContent = processAIResponse(data.data);
+            setChatHistory([...newHistory, { role: 'assistant', content: processedContent }]);
         } catch {
             setChatHistory([...newHistory, { role: 'assistant', content: "Sorry, I'm having trouble connecting right now. Please try again." }]);
         } finally {
@@ -171,8 +201,9 @@ const ChatBot = () => {
                 history: historyToSend,
             }, { withCredentials: true });
 
-            setVoiceChatHistory([...newHistory, { role: 'assistant', content: data.data }]);
-            speak(data.data);
+            const processedContent = processAIResponse(data.data);
+            setVoiceChatHistory([...newHistory, { role: 'assistant', content: processedContent }]);
+            speak(processedContent);
         } catch {
             const errMsg = "Sorry, I couldn't process that. Please try again.";
             setVoiceChatHistory([...newHistory, { role: 'assistant', content: errMsg }]);
@@ -270,6 +301,18 @@ const ChatBot = () => {
                                     </div>
                                 )}
                                 <div ref={chatEndRef} />
+                            </div>
+                            <div className="chat-faqs">
+                                {FAQS.map((faq, index) => (
+                                    <button
+                                        key={index}
+                                        className="faq-chip"
+                                        onClick={(e) => handleSendMessage(e, faq)}
+                                        disabled={chatLoading}
+                                    >
+                                        {faq}
+                                    </button>
+                                ))}
                             </div>
                             <form className="chat-input-area" onSubmit={handleSendMessage}>
                                 <input
