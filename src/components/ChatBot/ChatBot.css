@@ -231,6 +231,38 @@
     }
 }
 
+/* ─── FAQs ───────────────────────────────────────────────────────────── */
+.chat-faqs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 14px 10px 14px;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.faq-chip {
+    background: #f0f4ff;
+    color: #4a6ee0;
+    border: 1px solid #d0defe;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.faq-chip:hover:not(:disabled) {
+    background: #e0e8ff;
+    transform: scale(1.02);
+}
+
+.faq-chip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* ─── Input area (shared) ────────────────────────────────────────────── */
 .chat-input-area {
     padding: 12px 14px;
