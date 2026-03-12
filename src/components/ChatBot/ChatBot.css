@@ -666,3 +666,121 @@
     text-align: center;
     padding: 0 10px;
 }
+
+/* ─── Responsiveness ─────────────────────────────────────────────────── */
+
+/* Medium Screens (Tablets, up to 1024px) */
+@media screen and (max-width: 1024px) {
+    .chat-window {
+        width: 380px;
+        height: 520px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .chatbot-container {
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* Small Screens (Mobile, up to 480px) */
+@media screen and (max-width: 480px) {
+    .chatbot-container {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .chat-toggle-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+
+    .chat-window {
+        width: calc(100vw - 30px);
+        height: calc(100vh - 120px);
+        max-height: 550px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .chat-header {
+        padding: 12px 15px;
+    }
+
+    .chat-messages {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .message {
+        max-width: 90%;
+        font-size: 0.85rem;
+    }
+
+    .chat-input-area {
+        padding: 10px;
+    }
+
+    .img-mode-toggle {
+        padding: 10px 10px 4px;
+    }
+
+    .img-panel {
+        padding: 8px 10px 10px;
+    }
+
+    .voice-messages {
+        max-height: 200px;
+    }
+
+    .mic-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+}
+
+/* Extra Small Screens (Compact Mobile, 320px and below) */
+@media screen and (max-width: 320px) {
+    .chatbot-container {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .chat-window {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 100px);
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .chat-header h3 {
+        font-size: 0.9rem;
+    }
+
+    .tab-btn {
+        font-size: 0.72rem;
+    }
+
+    .message {
+        font-size: 0.82rem;
+        padding: 8px 12px;
+    }
+
+    .faq-chip {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+    }
+
+    .chat-input-area input {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+    }
+
+    .send-btn {
+        width: 36px;
+        height: 36px;
+    }
+}
