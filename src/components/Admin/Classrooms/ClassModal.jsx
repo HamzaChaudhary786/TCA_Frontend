@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { IoClose, IoSchool, IoPencil, IoCheckmarkCircle, IoBook } from "react-icons/io5";
+import { IoClose, IoSchool, IoPencil, IoCheckmarkCircle, IoBook, IoText, IoGrid, IoStar, IoPeople } from "react-icons/io5";
 import { useMutation } from '@tanstack/react-query';
 import { useBlur } from "../../../context/BlurContext";
 import { useAdmin } from "../../../context/AdminContext";
@@ -109,11 +109,10 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, isLoading }) =>
         <button
           type="button"
           onClick={toggleAll}
-          className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all whitespace-nowrap ${
-            allSelected
+          className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all whitespace-nowrap ${allSelected
               ? 'bg-[#6A00FF] border-[#6A00FF] text-white'
               : 'border-gray-200 text-gray-500 hover:border-[#6A00FF] hover:text-[#6A00FF]'
-          }`}
+            }`}
         >
           {allSelected ? '✓ All' : 'Select All'}
         </button>
@@ -148,9 +147,8 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, isLoading }) =>
                   : 'bg-gray-50 border-gray-100 text-gray-600 hover:border-[#6A00FF]/30 hover:bg-[#6A00FF]/5'
                 }`}
             >
-              <div className={`w-4 h-4 rounded flex items-center justify-center border flex-shrink-0 transition-all ${
-                checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'
-              }`}>
+              <div className={`w-4 h-4 rounded flex items-center justify-center border flex-shrink-0 transition-all ${checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'
+                }`}>
                 {checked && <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>}
@@ -285,7 +283,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
       {/* Modal */}
       <div
         ref={ref}
-        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100"
+        className="relative w-full max-w-2xl h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100"
         style={{ boxShadow: '0 20px 60px rgba(106,0,255,0.10), 0 8px 24px rgba(0,0,0,0.10)' }}
       >
         {/* Purple top accent bar */}
@@ -322,7 +320,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
           {/* Classroom Name */}
           <div>
-            <SectionLabel icon="✏️" text="Classroom Name" />
+            <SectionLabel icon={<IoText className="w-4 h-4 text-[#6A00FF]" />} text="Classroom Name" />
             <input
               value={classroomName}
               onChange={e => setClassroomName(e.target.value)}
@@ -336,7 +334,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
           {/* Level */}
           <div>
-            <SectionLabel icon="🎓" text="Level" />
+            <SectionLabel icon={<IoGrid className="w-4 h-4 text-[#6A00FF]" />} text="Level" />
             <Selectable
               options={allLevels}
               setSelectedOption={setSelectedLevel}
@@ -350,7 +348,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
               {/* Head Teacher */}
               <div>
-                <SectionLabel icon="👑" text="Head Teacher" />
+                <SectionLabel icon={<IoStar className="w-4 h-4 text-amber-500" />} text="Head Teacher" />
                 <p className="text-[11px] text-gray-400 -mt-1.5 mb-2">Optional — assigns this teacher a head role</p>
                 <Selectable
                   options={adminUsersData.allTeachers}
@@ -363,7 +361,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
               {/* Teachers */}
               <div>
-                <SectionLabel icon="👨‍🏫" text="Teachers" badge={selectedTeachers.length} />
+                <SectionLabel icon={<IoPeople className="w-4 h-4 text-[#6A00FF]" />} text="Teachers" badge={selectedTeachers.length} />
                 <MultiSelectField
                   placeholder="teachers"
                   onSelect={setSelectedTeachers}
@@ -376,7 +374,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                 <>
                   <Divider />
                   <div>
-                    <SectionLabel icon="📚" text="Assign Subjects to Teachers" />
+                    <SectionLabel icon={<IoBook className="w-4 h-4 text-[#6A00FF]" />} text="Assign Subjects to Teachers" />
                     <div className="space-y-3">
                       {selectedTeachers.map(teacher => (
                         <div key={teacher._id} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
@@ -412,9 +410,8 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                                       onChange={e => handleSubjectCheckboxChange(teacher._id, subject, e.target.checked)}
                                       className="sr-only"
                                     />
-                                    <div className={`w-3.5 h-3.5 rounded flex-shrink-0 flex items-center justify-center border transition-all ${
-                                      checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'
-                                    }`}>
+                                    <div className={`w-3.5 h-3.5 rounded flex-shrink-0 flex items-center justify-center border transition-all ${checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'
+                                      }`}>
                                       {checked && <svg className="w-2 h-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                       </svg>}
@@ -437,7 +434,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
               {/* Students */}
               <div>
-                <SectionLabel icon="👩‍🎓" text="Students" badge={selectedStudents.length} />
+                <SectionLabel icon={<IoSchool className="w-4 h-4 text-[#6A00FF]" />} text="Students" badge={selectedStudents.length} />
                 <MultiSelectField
                   placeholder="students"
                   onSelect={setSelectedStudents}

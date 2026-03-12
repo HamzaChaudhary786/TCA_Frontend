@@ -232,9 +232,8 @@ const GradingAssignments = () => {
             </div>
             <div className="py-4">
               <div className="flex items-center justify-between">
-                <div className="">
-                  <p className="text-black/60">Total Marks: {location.state.totalMarks} </p>
-                </div>
+                <p className="text-black/60 font-medium">Total Submissions: {gradingData.filter(s => s.submission).length} / {gradingData.length}</p>
+                <p className="text-black/60">Total Marks: {location.state.totalMarks} </p>
                 <div className="flex gap-2">
                   <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-3xl">
                     <BiSearch />

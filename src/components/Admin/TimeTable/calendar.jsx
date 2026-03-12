@@ -118,14 +118,15 @@ const MyCalendar = ({ data, isPending, refetch, isRefetching }) => {
           addModalOpen && (
             <>
 
-              <div className={`absolute top-0 right-0 lg:-right-5 flex-1 z-10 flex py-4 bg-white rounded-md shadow-sm shadow-grey/25 max-h-[80vh] overflow-y-auto`}
-              >
-                <FilterClassesModal
-                  setaddModalOpen={setaddEventModalOpen}
-                  classData={data}
-                  addModalOpen={addModalOpen}
-                  setAddModalOpen={setAddModalOpen}
-                />
+              <div className="fixed inset-0 z-50 flex justify-end bg-black/30">
+                <div className="bg-white w-96 h-full overflow-y-auto shadow-lg">
+                  <FilterClassesModal
+                    setaddModalOpen={setaddEventModalOpen}
+                    classData={data}
+                    addModalOpen={addModalOpen}
+                    setAddModalOpen={setAddModalOpen}
+                  />
+                </div>
               </div>
             </>
           )
@@ -133,29 +134,29 @@ const MyCalendar = ({ data, isPending, refetch, isRefetching }) => {
       </div>
 
       <div>
-  {addScheduleModalOpen && (
-    <div
-      className={`fixed inset-0 z-50 flex justify-center items-start p-4 sm:p-6 overflow-y-auto bg-black/30`}
-      onClick={() => setAddScheduleModalOpen(false)} // click outside closes modal
-    >
-      <div
-        className="bg-white rounded-md shadow-lg max-w-md w-full mt-16 overflow-y-auto max-h-[80vh]"
-        onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
-      >
-        <SchedualClasses
-          data={teacherData}
-          isPending={isPendingTeacher}
-          refetch={refetch}
-          addScheduleModalOpen={addScheduleModalOpen}
-          setAddScheduleModalOpen={setAddScheduleModalOpen}
-        />
+        {addScheduleModalOpen && (
+          <div
+            className={`fixed inset-0 z-50 flex justify-center items-start p-4 sm:p-6 overflow-y-auto bg-black/30`}
+            onClick={() => setAddScheduleModalOpen(false)} // click outside closes modal
+          >
+            <div
+              className="bg-white rounded-md shadow-lg max-w-md w-full mt-16 overflow-y-auto max-h-[80vh]"
+              onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+            >
+              <SchedualClasses
+                data={teacherData}
+                isPending={isPendingTeacher}
+                refetch={refetch}
+                addScheduleModalOpen={addScheduleModalOpen}
+                setAddScheduleModalOpen={setAddScheduleModalOpen}
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  )}
-</div>
 
       {!isPending && (
-        <div className="w-full h-[100vh] lg:h-[80vh] overflow-y-auto">
+        <div className="w-full min-h-[100vh] lg:h-[80vh] overflow-y-auto">
           <Calendar
             style={{}}
             formats={{ dayRangeHeaderFormat }}
@@ -169,23 +170,23 @@ const MyCalendar = ({ data, isPending, refetch, isRefetching }) => {
             startAccessor="start"
             endAccessor="end"
             className="w-full"
-          step={60}
-          timeslots={1}
-          components={{
-            toolbar: (props) => <CustomToolbar
-              {...props}
-              onTeacherSelect={handleTeacherID}
-              addModalOpen={addModalOpen}
-              setAddModalOpen={setAddModalOpen}
-              addScheduleModalOpen={addScheduleModalOpen}
-              setAddScheduleModalOpen={setAddScheduleModalOpen}
-            />,
-            event: renderCustomEvent,
-            timeGutterHeader: SideTimeHeader,
-            timeGutterWrapper: SideTime,
-            header: Header,
-          }}
-          dayLayoutAlgorithm="no-overlap"
+            step={60}
+            timeslots={1}
+            components={{
+              toolbar: (props) => <CustomToolbar
+                {...props}
+                onTeacherSelect={handleTeacherID}
+                addModalOpen={addModalOpen}
+                setAddModalOpen={setAddModalOpen}
+                addScheduleModalOpen={addScheduleModalOpen}
+                setAddScheduleModalOpen={setAddScheduleModalOpen}
+              />,
+              event: renderCustomEvent,
+              timeGutterHeader: SideTimeHeader,
+              timeGutterWrapper: SideTime,
+              header: Header,
+            }}
+            dayLayoutAlgorithm="no-overlap"
           />
         </div>
       )}

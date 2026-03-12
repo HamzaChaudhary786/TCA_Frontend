@@ -45,7 +45,7 @@ const FilterClassesModal = ({ addModalOpen, setAddModalOpen, classData, isPendin
           <div className="flex flex-col justify-between">
             <div className="flex justify-between">
               <p className="text-sm font-semibold">{item.subjectID.name}</p>
-              <p className="text-maroon">{item.classroom.name}</p>
+              <p className="text-[#0B1053]">{item.classroom.name}</p>
             </div>
             <div className="flex gap-2 text-[10px] font-light">
               <p className="flex items-center gap-1">

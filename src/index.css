@@ -44,28 +44,41 @@
 }
 
 .rbc-time-view {
-  /* border: none !important; */
   height: 100% !important;
-  /* overflow: hidden !important; */
-  overflow-y: auto !important;
+  /* overflow-y: auto !important; */
+  /* background-color: black; */
 }
 
-/* Small screens (mobile) */
-.rbc-calendar {
-  height: 160vh !important;
+
+/* .rbc-calendar {
+  height: 100vh !important;
 }
 
-/* Large screens */
+
 @media (min-width: 768px) {
   .rbc-calendar {
-    height: 120vh !important;
+    height: 200vh !important;
     min-height: unset;
+  }
+} */
+.rbc-calendar {
+  height: 100vh !important;
+  min-height: unset !important;
+}
+/* mobile only */
+@media (max-width: 640px) {
+  .rbc-calendar {
+    height: 160vh !important;
+  }
+
+  .rbc-time-content {
+    height: 150vh !important;
   }
 }
 
 .rbc-time-content {
-  height: 80vh !important;
- overflow-y: auto !important;
+  height: 120vh !important;
+ /* overflow-y: auto !important; */
 }
 
 .rbc-event {
@@ -77,6 +90,17 @@
 
 .rbc-event .rbc-event-label {
   display: none !important;
+}
+.rbc-calendar {
+  height: 100% !important;
+}
+
+.rbc-time-view {
+  height: 100% !important;
+}
+
+.rbc-time-content {
+  min-height: 100% !important;
 }
 
 .rbc-time-slot {
@@ -106,7 +130,6 @@
 /*this is for header lower border line height*/
 .rbc-row {
   height: 80px !important;
-
 }
 
 /*for width of the first cell containing GTM+5*/

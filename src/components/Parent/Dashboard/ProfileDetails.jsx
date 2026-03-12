@@ -92,7 +92,7 @@ const ProfileDetails = ({ onclose }) => {
           <IoClose onClick={onclose} className="cursor-pointer" />
         </div>
         <div className="flex flex-col">
-          <div className="flex flex-col justify-center px-10 ">
+          <div className="flex flex-col justify-center px-4 ">
             <div className="flex justify-end mt-3">
               <div className="p-2 border-grey/10">
                 <FiEdit onClick={handleEditClick} className="cursor-pointer" />

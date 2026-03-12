@@ -60,55 +60,69 @@ const Classroom = () => {
 
   const { data, isPending, refetch, isRefetching } = useQuery({ queryKey: ["classroom"], queryFn: getAllClassroom });
 
-  return (
-    isPending || isRefetching ? <div className="flex flex-1"> <Loader /> </div> :
-      <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
-            <div
-              className={`w-full h-screen lg:px-10 sm:px-10 px-3 flex-grow lg:ml-72`}
-            >
-              <div className="min-h-screenn md:pt-6">
-                <Navbar heading={"Classroom"} />
-                <div className={`${isBlurred ? "blur" : ""}`}>
-                  <div className="py-2">
-                    <div className="flex items-center justify-between">
-                      <div className="">
-                        <p className="text-black/60"></p>
+ return (
+  isPending || isRefetching ? (
+    <div className="flex flex-1 justify-center items-center min-h-screen">
+      <Loader />
+    </div>
+  ) : (
+    <>
+      <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-h-screen">
+        <div className="flex flex-1">
+          <div className="w-full h-screen lg:px-10 sm:px-8 px-4 flex-grow lg:ml-72">
+            <div className="min-h-screen md:pt-6">
+              <Navbar heading={"Classroom"} />
+
+              <div className={`${isBlurred ? "blur" : ""}`}>
+                {/* Search & Add Classroom Section */}
+                <div className="py-4">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    {/* Left Section */}
+                    <div>
+                      <p className="text-black/60 text-sm">Manage your classrooms efficiently</p>
+                    </div>
+
+                    {/* Right Section */}
+                    <div className="flex flex-wrap md:flex-row gap-3 w-full md:w-auto">
+                      {/* Search Input */}
+                      <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-full w-full md:w-72 shadow-sm hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-purple-400">
+                        <BiSearch className="text-gray-400" />
+                        <input
+                          className="outline-none w-full text-gray-700 placeholder-gray-400 bg-transparent"
+                          type="text"
+                          placeholder="Search"
+                          value={searchText}
+                          onChange={(e) => setSearchText(e.target.value)}
+                        />
                       </div>
-                      <div className="flex gap-2 flex-wrap md:flex space-y-5 md:space-y-0 w-full md:w-auto">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-3xl w-full md:w-auto">
-                          <BiSearch />
-                          <input
-                            className="outline-none b"
-                            type="text"
-                            placeholder="Search"
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                          />
-                        </div>
-                        <p onClick={onAddClass} className="flex items-center justify-center px-4 py-2 text-sm text-white cursor-pointer bg-[#6A00FF] rounded-3xl">
-                          Add Classroom
-                        </p>
-                      </div>
+
+                      {/* Add Classroom Button */}
+                      <button
+                        onClick={onAddClass}
+                        className="px-6 py-2 text-sm font-medium text-white bg-[#6A00FF] rounded-full shadow-md hover:shadow-lg transition-all"
+                      >
+                        Add Classroom
+                      </button>
                     </div>
                   </div>
+                </div>
 
-                  <div className="py-2 h-[80%] overflow-auto">
+                {/* Data Table */}
+                <div className="py-4 h-[80%] overflow-auto bg-white rounded-xl shadow-sm border border-black/10">
+                  <DataRow
+                    header={true}
+                    isQuiz={true}
+                    index={"Sr. No"}
+                    bgColor={"#F9F9F9"}
+                    students={"Students"}
+                    teachers={"Teachers"}
+                    createdBy={"Created By"}
+                    classname={"Classroom"}
+                    classesSchedualled={"Classes Scheduled"}
+                  />
 
-                    <DataRow
-                      header={true}
-                      isQuiz={true}
-                      index={"Sr. No"}
-                      bgColor={"#F9F9F9"}
-                      students={"Students"}
-                      teachers={"Teachers"}
-                      createdBy={"Created By"}
-                      classname={"Classroom"}
-                      classesSchedualled={"Classes Scheduled"}
-                    />
-
-                    {searchText == "" && data.map((cls, index) => (
+                  {searchText === "" &&
+                    data.map((cls, index) => (
                       <DataRow
                         data={cls}
                         key={cls._id}
@@ -124,74 +138,83 @@ const Classroom = () => {
                       />
                     ))}
 
-                    {searchText && data.map((cls, index) => {
-                      if ((cls.name.toLocaleLowerCase()).includes(searchText.toLocaleLowerCase()) || (cls.createdBy.userType.toLocaleLowerCase()).includes(searchText.toLocaleLowerCase())) {
-                        return <DataRow
-                          data={cls}
-                          key={cls._id}
-                          header={false}
-                          index={index + 1}
-                          bgColor={"#FFFFFF"}
-                          classname={cls.name}
-                          students={cls.students.length}
-                          teachers={cls.teachers.length}
-                          createdBy={cls.createdBy.userType}
-                          toggleClassMenu={toggleClassMenuOpen}
-                          classesSchedualled={cls.classes.length}
-                        />
+                  {searchText &&
+                    data.map((cls, index) => {
+                      if (
+                        cls.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                        cls.createdBy.userType.toLowerCase().includes(searchText.toLowerCase())
+                      ) {
+                        return (
+                          <DataRow
+                            data={cls}
+                            key={cls._id}
+                            header={false}
+                            index={index + 1}
+                            bgColor={"#FFFFFF"}
+                            classname={cls.name}
+                            students={cls.students.length}
+                            teachers={cls.teachers.length}
+                            createdBy={cls.createdBy.userType}
+                            toggleClassMenu={toggleClassMenuOpen}
+                            classesSchedualled={cls.classes.length}
+                          />
+                        );
                       }
                     })}
 
-                    {data.length == 0 && <div className="text-center py-4 text-3xl font-medium">No classrooms to display!</div>}
-
-                  </div>
+                  {data.length === 0 && (
+                    <div className="text-center py-8 text-xl font-medium text-gray-400">
+                      No classrooms to display!
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {createClassModal &&
-          <ClassModal
-            refetch={refetch}
-            isEditTrue={false}
-            open={createClassModal}
-            setopen={setCreateClassModal}
-          />
-        }
-
-        {editModal &&
-          <EditClassModel
-            open={editModal}
-            refetch={refetch}
-            isEditTrue={true}
-            setopen={setEditModal}
-            editData={editClassData}
-          />
-        }
-
-        <ClassMenu
-          isopen={isClassMenuOpen}
-          setIsOpen={setIsClassMenuOpen}
-          editClassRoom={handleEditClass}
-          deleteClassRoom={handleDeleteClass}
-          promoteStudentsPopup={handlePromoteStudents}
+      {/* Create Classroom Modal */}
+      {createClassModal && (
+        <ClassModal
+          refetch={refetch}
+          isEditTrue={false}
+          open={createClassModal}
+          setopen={setCreateClassModal}
         />
+      )}
 
-        <div>
-          {
-            promotePopupMenu && (
-              <>
-                <PromoteModal
-                  classrooms={data}
-                  setPromotePopupMenu={handlePromoteStudents}
-                  classroomStudents={classroomData} />
-              </>
-            )
-          }
-        </div>
-      </>
-  );
+      {/* Edit Classroom Modal */}
+      {editModal && (
+        <EditClassModel
+          open={editModal}
+          refetch={refetch}
+          isEditTrue={true}
+          setopen={setEditModal}
+          editData={editClassData}
+        />
+      )}
+
+      {/* Classroom Menu */}
+      <ClassMenu
+        isopen={isClassMenuOpen}
+        setIsOpen={setIsClassMenuOpen}
+        editClassRoom={handleEditClass}
+        deleteClassRoom={handleDeleteClass}
+        promoteStudentsPopup={handlePromoteStudents}
+      />
+
+      {/* Promote Students Modal */}
+      {promotePopupMenu && (
+        <PromoteModal
+          classrooms={data}
+          setPromotePopupMenu={handlePromoteStudents}
+          classroomStudents={classroomData}
+        />
+      )}
+    </>
+  )
+);
 };
 
 export default Classroom;

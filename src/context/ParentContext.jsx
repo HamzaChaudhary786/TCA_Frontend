@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import { getAllQiuzes } from '../api/Student/Quiz';
-import { getAllAssignments } from '../api/Student/Assignments';
+import { getChildAssignments } from '../api/Parent/ParentApi';
 import { getAllAnnouncements, getAllClasses } from '../api/ForAllAPIs';
 
 const ParentContext = createContext();
@@ -28,26 +28,28 @@ export const ParentProvider = ({ children }) => {
     //     }, staleTime: 300000, enabled: parentLogedIn
     // });
 
-    // const assignmentQuery = useQuery({
-    //     queryKey: ["assignment"], queryFn: async () => {
-    //         const results = await getAllAssignments();
-    //         setAllAssignments(results);
-    //         return results
-    //     }, staleTime: 300000, enabled: parentLogedIn
-    // });
+    const assignmentQuery = useQuery({
+        queryKey: ["assignment", selectedChild?._id], queryFn: async () => {
+            const results = await getChildAssignments(selectedChild?._id);
+            if (results?.assignments) setAllAssignments(results.assignments);
+            if (results?.quizzes) setAllQuizes(results.quizzes);
+            return results;
+        }, staleTime: 300000, enabled: parentLogedIn && !!selectedChild?._id
+    });
 
-    // const quizQuery = useQuery({
-    //     queryKey: ["quiz"], queryFn: async () => {
-    //         const results = await getAllQiuzes();
-    //         return results;
-    //     }, staleTime: 300000, enabled: parentLogedIn
-    // });
+    const quizQuery = useQuery({
+        queryKey: ["quiz"], queryFn: async () => {
+            const results = await getAllQiuzes();
+            return results;
+        }, staleTime: 300000, enabled: parentLogedIn
+    });
 
-    // useEffect(() => {
-    //     if (assignmentQuery.isSuccess) {
-    //         setAllAssignments(assignmentQuery.data);
-    //     }
-    // }, [assignmentQuery.isSuccess, assignmentQuery.data]);
+    useEffect(() => {
+        if (assignmentQuery.isSuccess) {
+            if (assignmentQuery.data?.assignments) setAllAssignments(assignmentQuery.data.assignments);
+            if (assignmentQuery.data?.quizzes) setAllQuizes(assignmentQuery.data.quizzes);
+        }
+    }, [assignmentQuery.isSuccess, assignmentQuery.data]);
 
     // useEffect(() => {
     //     if (quizQuery.isSuccess) {
@@ -80,6 +82,13 @@ export const ParentProvider = ({ children }) => {
             
             allSubjects, 
             setAllSubjects,
+            
+            allAssignments,
+            setAllAssignments,
+            allQuizes,
+            setAllQuizes,
+            assignmentRefetch: assignmentQuery.refetch,
+            assignmentIsPending: assignmentQuery.isPending,
 
             selectedChild,
             setSelectedChild

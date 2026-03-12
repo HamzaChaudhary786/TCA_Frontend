@@ -98,38 +98,45 @@ const Quizzes = () => {
                     actions={"Actions"}
                   />
 
-                  {data?.map((assignment, index) => (
-                    <QuizAssignmentRow
-                      key={index}
-                      index={index + 1}
-                      toggleAssignmentMenu={(e) => toggleAssignmentMenuOpen(e)}
-                      isQuiz={true}
-                      data={assignment}
-                      assignedOn={assignment.createdAt}
-                      title={assignment.title}
-                      deadline={assignment.dueDate}
-                      bgColor={"#FFFFFF"}
-                      header={false}
-                      submissions={assignment.submissions.length}
-                      actions={
-                        <div className="flex gap-1 lg:gap-3 justify-center items-center">
-                          <span className="text-[blue] cursor-pointer" onClick={() => {
-                            setSelectedAssignments(assignment);
-                            setIsEdit(true)
-                            toggleBlur();
-                          }}><MdEdit className="w-6 h-6" /></span>
-                          <span className="text-[blue] cursor-pointer" onClick={() => {
-                            setSelectedAssignments(assignment);
-                            setIsShow(true)
-                            toggleBlur();
-                          }}><FaEye className="w-6 h-6" /></span>
-                          <span className="text-red cursor-pointer " onClick={() => {
-                            quizDellMutate.mutate(assignment?._id);
-                          }}><MdDelete className="w-6 h-6" /></span>
-                        </div>
-                      }
-                    />
-                  ))}
+                  {data?.map((assignment, index) => {
+                    const expectedCount = assignment?.classroomID?.students?.filter(student => (
+                      (!student?.subjects || student?.subjects?.length === 0) ||
+                      student?.subjects?.some(sub => (sub?._id || sub)?.toString() === (assignment?.subjectID?._id || assignment?.subjectID)?.toString())
+                    )).length || 0;
+
+                    return (
+                      <QuizAssignmentRow
+                        key={index}
+                        index={index + 1}
+                        toggleAssignmentMenu={(e) => toggleAssignmentMenuOpen(e)}
+                        isQuiz={true}
+                        data={assignment}
+                        assignedOn={assignment.createdAt}
+                        title={assignment.title}
+                        deadline={assignment.dueDate}
+                        bgColor={"#FFFFFF"}
+                        header={false}
+                        submissions={`${assignment.submissions.length} / ${expectedCount}`}
+                        actions={
+                          <div className="flex gap-1 lg:gap-3 justify-center items-center">
+                            <span className="text-[blue] cursor-pointer" onClick={() => {
+                              setSelectedAssignments(assignment);
+                              setIsEdit(true)
+                              toggleBlur();
+                            }}><MdEdit className="w-6 h-6" /></span>
+                            <span className="text-[blue] cursor-pointer" onClick={() => {
+                              setSelectedAssignments(assignment);
+                              setIsShow(true)
+                              toggleBlur();
+                            }}><FaEye className="w-6 h-6" /></span>
+                            <span className="text-red cursor-pointer " onClick={() => {
+                              quizDellMutate.mutate(assignment?._id);
+                            }}><MdDelete className="w-6 h-6" /></span>
+                          </div>
+                        }
+                      />
+                    );
+                  })}
 
                   {data.length == 0 && <div className="text-center py-4 text-3xl font-medium">No quizes to display!</div>}
 
