@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
 import moment from "moment/moment";
 import Loader from "../../../utils/Loader";
-import profile from "../../../assets/images/ProfilePic.png";
-
 import { IoClose } from "react-icons/io5";
 import { useQuery } from "@tanstack/react-query";
 import { getAllChatrooms, getChatroomData } from "../../../api/Admin/ChatroomApi";
@@ -108,7 +106,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
     return (
       <div className={`flex flex-col gap-2 py-2 `} onClick={onpress}>
         <div className="flex gap-2">
-          <img src={profile} alt="" className="h-10 w-11" />
+          <img src={IMAGES?.Profile} alt="" className="h-10 w-11" />
           <div
             className="flex flex-col flex-1 cursor-pointer"
           >
@@ -132,7 +130,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
       <div className="px-10 py-5">
         <div className="flex items-start gap-4 py-2">
           <div className="h-10 w-10 rounded-full">
-            <img src={msg?.sentBy?.profilePic || IMAGES.ProfilePic} alt="alt" className="rounded-full object-cover" />
+            <img src={msg?.sentBy?.profilePic || IMAGES?.Profile} alt="alt" className="rounded-full object-cover" />
           </div>
           <div className="flex flex-col gap-1 w-72">
             <div className="flex justify-between items-center text-sm">
@@ -156,7 +154,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
           <div className="shadow-xl">
             <div className="flex justify-between px-10 py-5 items-center">
               <div className="flex gap-2 items-center">
-                <img src={IMAGES.ProfilePic} alt="" className="h-10 w-10 rounded-full object-cover" />
+                <img src={IMAGES.Profile} alt="" className="h-10 w-10 rounded-full object-cover" />
                 <p>{data.name} </p>
               </div>
               <IoClose onClick={onclose} className="cursor-pointer" />
