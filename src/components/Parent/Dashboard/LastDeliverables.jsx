@@ -83,7 +83,7 @@ const LastDeliverables = () => {
           <Circle
             className=""
             percent={stats.percentage}
-            strokeColor="#A41D30"
+            strokeColor="#0B1053"
             strokeWidth={12}
             trailColor="#EAECF0"
             trailWidth={12}

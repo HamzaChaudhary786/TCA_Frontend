@@ -181,12 +181,16 @@ const Submissions = () => {
                 ) : (
                   ""
                 )}
-                {isProfileDetails && <ProfileDetails onclose={toggleProfileDetails} />}
+                {isProfileDetails && (
+                  <div className="fixed top-0 right-0 w-96 overflow-y-auto h-full z-50">
+                    <ProfileDetails onclose={toggleProfileDetails} />
+                  </div>
+                )}
               </div>
               <div className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="">
-                    <p className="text-black/60">Total Submissions: {data?.submissions.length}</p>
+                    <p className="text-black/60">Total Submissions: {data?.submissions.filter(s => s.submission).length} / {data?.submissions.length}</p>
                   </div>
                   <div className="flex gap-2">
                     <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-3xl">
@@ -215,35 +219,22 @@ const Submissions = () => {
                   submission={"Submission"}
                   downloads={"Downloads"}
                 />
-                {isSuccess && searchText == "" && data?.submissions.map((submission, index) => {
-                  return <SubmissionRow
-                    isQuiz={false}
-                    header={false}
-                    index={index + 1}
-                    bgColor={"#FFFFFF"}
-                    key={JSON.stringify(submission)}
-                    name={submission?.studentID?.name}
-                    submissionData={submission?.submission}
-                    submission={submission?.submission?.submittedAt}
-                    profileLink={submission?.studentID?.profilePic || IMAGES.ProfilePic}
-                  />
-                })}
-
-                {isSuccess && searchText !== "" && data?.submissions?.map((submission, index) => {
-                  if (submission.studentID.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                    return <SubmissionRow
+                {isSuccess && data?.submissions?.length > 0 && data.submissions
+                  .filter(submission => searchText === "" || submission?.studentID?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
+                  .map((submission, index) => (
+                    <SubmissionRow
                       isQuiz={false}
                       header={false}
                       index={index + 1}
                       bgColor={"#FFFFFF"}
-                      key={JSON.stringify(submission)}
-                      profileLink={submission?.studentID?.profilePic || IMAGES.ProfilePic || "http://bit.ly/4gcOBHl"}
-                      submission={submission?.submission?.submittedAt}
+                      key={submission.studentID._id}
                       name={submission?.studentID?.name}
                       submissionData={submission?.submission}
+                      submission={submission?.submission?.submittedAt}
+                      profileLink={submission?.studentID?.profilePic || IMAGES.ProfilePic || "http://bit.ly/4gcOBHl"}
                     />
-                  }
-                })}
+                  ))
+                }
 
                 {data?.submissions?.length == 0 && <div className="text-center py-4 text-3xl font-medium">No submissions right now!</div>}
 

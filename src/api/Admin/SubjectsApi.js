@@ -14,37 +14,24 @@ export const getAllSubjects = apiRequest(async () => {
 
 
 export const useGetAllSubjectsWithLevel = (levelId) => {
-
-
-  const getMySubjectWithLevelRequest = async () => {
-    const url = `${BACKEND_URL}/subject/${levelId}`;
-    const response = await axios.get(url);
-
-    // Note: Axios does not use response.ok, so check the status code directly
-    if (response.status !== 200) {
-      throw new Error('Failed to get user');
-    }
-
-    return response.data; // Axios automatically parses the JSON response
-  };
-
-  // Updated useQuery call with object form
-  const { data: subjectWithLevel, isLoading, error } = useQuery({
+  const { data: subjectWithLevel = [], isLoading, isFetching } = useQuery({
     queryKey: ['fetchSubjectWithLevel', levelId],
-    queryFn: getMySubjectWithLevelRequest,
-    enabled: !!levelId, // Only run the query if levelId is truthy
-
+    queryFn: async () => {
+      const url = `${BACKEND_URL}/subject/${levelId}`;
+      const { data, status } = await axios.get(url);
+      if (status !== 200) throw new Error('Failed to fetch subjects');
+      return data;
+    },
+    enabled: !!levelId,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    placeholderData: [],
+    retry: 2,
   });
 
-  // if (error) {
-  //   toast.error(error.toString());
-  // }
-
-  return {
-    isLoading,
-    subjectWithLevel,
-  };
+  return { subjectWithLevel, isLoading, isFetching };
 };
+
 
 
 
@@ -134,4 +121,20 @@ export const useGetAllSubjectOfStudent = (studentId) => {
     studentSubject,
     refetch
   };
+};
+
+export const useGetSubjectsOfLevel = (levelId) => {
+  const fetchSubjects = async () => {
+    const response = await axios.get(`${BACKEND_URL}/subject/${levelId}`);
+    if (response.status !== 200) throw new Error('Failed to fetch subjects');
+    return response.data;
+  };
+
+  const { data: subjects = [], isLoading: subjectsLoading } = useQuery({
+    queryKey: ['fetchSubjectsOfLevel', levelId],
+    queryFn: fetchSubjects,
+    enabled: !!levelId,
+  });
+
+  return { subjects, subjectsLoading };
 };

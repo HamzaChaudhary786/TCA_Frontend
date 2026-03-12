@@ -25,7 +25,9 @@ export const getAllClasses = apiRequest(async (teacherID) => {
     let startDate = new Date(Date.now());
     startDate.setDate(startDate.getDate() + 15);
 
-    const url = `${BACKEND_URL}/class?startDate=${endDate}&endDate=${startDate}${teacherID ? `&teacherID=${teacherID}` : ''}`;
+    // const url = `${BACKEND_URL}/class?startDate=${endDate}&endDate=${startDate}${teacherID ? `&teacherID=${teacherID}` : ''}`;
+    const id = typeof teacherID === 'object' ? teacherID?._id : teacherID;
+    const url = `${BACKEND_URL}/class?startDate=${endDate}&endDate=${startDate}${id ? `&teacherID=${id}` : ''}`;
     const response = await axios.get(url);
     return response
 

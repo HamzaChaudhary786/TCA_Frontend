@@ -17,7 +17,7 @@ const Assignments = () => {
 
 
   const studentAssignments = allAssignments.filter(assignment =>
-    userData.subjects.includes(assignment.subjectID._id)
+    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(assignment.subjectID._id)
   );
   //console.log("Filtered Assignments:", studentAssignments);
   return (

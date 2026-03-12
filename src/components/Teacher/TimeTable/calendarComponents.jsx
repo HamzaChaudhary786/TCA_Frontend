@@ -27,7 +27,7 @@ export const CustomEvent = ({ event, setevents, refetch }) => {
   };
 
   return (
-    <div className="relative flex flex-1 w-full overflow-visible ">
+    <div className="flex flex-1 w-full overflow-visible ">
       <ViewEventDetailsModal
         event={event}
         setevents={setevents}

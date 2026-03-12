@@ -49,7 +49,7 @@ const QuoteCard = ({ quote, deleteQuote, editQuote, refetch }) => {
                 <div className='flex flex-col flex-1 gap-2'>
                     <div className='flex justify-between items-center'>
                         <p className='text-xl font-medium flex-[2]'>{quote.title} </p>
-                        <div className='relative flex-1 justify-end flex gap-3'>
+                        <div className='flex-1 justify-end flex gap-3'>
                             {showMenu && <DotsMenu />}
                             <PiDotsThreeOutlineVerticalLight onClick={toggleMenu} size={20} className='cursor-pointer' />
                         </div>
