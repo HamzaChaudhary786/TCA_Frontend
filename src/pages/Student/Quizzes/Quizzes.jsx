@@ -15,7 +15,7 @@ const Quizzes = () => {
 
 
     const studentQuiz = allQuizes?.filter(quiz =>
-        userData.subjects.includes(quiz.subjectID._id)
+        !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(quiz.subjectID._id)
     );
     //console.log("Filtered Assignments:", studentQuiz);
     const { isBlurred } = useBlur();

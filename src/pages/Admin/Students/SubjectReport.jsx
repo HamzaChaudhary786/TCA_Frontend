@@ -6,6 +6,7 @@ import Navbar from "../../../components/Admin/Navbar";
 import Card from "../../../components/Admin/StudentReports/Card";
 import ActivityCard from "../../../components/Admin/StudentReports/ActivityCard";
 import SystemOverview from "../../../components/Admin/StudentReports/SystemOverview"
+import QuizAssignmentsTable from "../../../components/Admin/StudentReports/QuizAssignmentsTable";
 import { X } from "lucide-react";
 import { LuPhone } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
@@ -192,6 +193,27 @@ const SubjectReport = () => {
                     </div>
                   </div>
                 </div>
+
+                {selectedSubject !== "" && !studentAssignmentsQuizes.isPending && studentAssignmentsQuizes.data && (
+                  <>
+                    <div className="mt-7">
+                      <div className="flex flex-col gap-2">
+                        <p className="md:text-[20px]">Assignments</p>
+                        <div className="flex flex-row items-center gap-2">
+                          <QuizAssignmentsTable data={studentAssignmentsQuizes.data.assignments.data || []} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-7">
+                      <div className="flex flex-col gap-2">
+                        <p className="md:text-[20px]">Quizzes</p>
+                        <div className="flex flex-row items-center gap-2">
+                          <QuizAssignmentsTable data={studentAssignmentsQuizes.data.quizes.data || []} />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
                 <div className="mt-7">
                   <SystemOverview />
                 </div>

@@ -17,7 +17,7 @@ const AssignmentMenu = ({
   useClickOutside(ref, () => {
     if (isopen) {
       setIsOpen(false);
-      toggleBlur()
+      // toggleBlur()
     }
   });
 

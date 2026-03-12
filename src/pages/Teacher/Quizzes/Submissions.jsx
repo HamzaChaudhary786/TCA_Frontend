@@ -187,7 +187,12 @@ const Submissions = () => {
                   ) : (
                     ""
                   )}
-                  {isProfileDetails && <ProfileDetails onclose={toggleProfileDetails} />}
+                  {/* {isProfileDetails && <ProfileDetails onclose={toggleProfileDetails} />} */}
+                  {isProfileDetails && (
+                    <div className="fixed top-0 right-0 w-96 overflow-y-auto h-full z-50">
+                      <ProfileDetails onclose={toggleProfileDetails} />
+                    </div>
+                  )}
                   {isProfileMenu ? (
                     <ProfileMenu
                       onProfileClick={onProfileClick}
@@ -202,7 +207,7 @@ const Submissions = () => {
                 <div className="py-4">
                   <div className="flex items-center justify-between">
                     <div className="">
-                      <p className="text-black/60">Total Submissions: {data?.submissions.length}</p>
+                      <p className="text-black/60">Total Submissions: {data?.submissions.filter(s => s.submission).length} / {data?.submissions.length}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-3xl">

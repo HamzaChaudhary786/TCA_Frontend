@@ -54,8 +54,11 @@ const StudentReports = () => {
                       <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl">
                         <select value={classFilter} onChange={(e) => setClassFilter(e.target.value)} className="bg-transparent outline-none w-full md:w-52">
                           <option value="">Select Class</option>
-                          {allLevels.map((item) => {
+                          {/* {allLevels.map((item) => {
                             return <option className="text-black" value={JSON.stringify(item)}>{item.name}</option>
+                          })} */}
+                          {allLevels.map((item) => {
+                            return <option key={item._id} className="text-black" value={JSON.stringify(item)}>{item.name}</option>
                           })}
                         </select>
                       </div>

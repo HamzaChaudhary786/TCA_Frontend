@@ -56,7 +56,7 @@ const RequestModal = ({ refetch, data, onclose }) => {
             <div className='border-b border-black/10'>
                 <div className='flex items-center justify-center gap-4 py-4 px-4'>
                     <div>
-                        <img src={IMAGES.ProfilePic} alt="" className='h-10 w-10 rounded-3xl' />
+                        <img src={IMAGES.ProfileSvg} alt="" className='h-10 w-10 rounded-3xl' />
                     </div>
                     <div className='flex flex-col gap-1 text-xs'>
                         <div className='flex items-center gap-2'>

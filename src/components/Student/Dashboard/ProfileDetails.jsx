@@ -106,33 +106,33 @@ const ProfileDetails = ({ onclose }) => {
 
   return (
     <div className="relative justify-end items-end" ref={ref}>
-      <div className="absolute top-0 right-0 z-10 flex bg-white rounded-md shadow-lg sm:w-96 w-72 ">
-        <div className="flex flex-col w-full">
-          <div className="flex justify-between px-5 py-5 border-b border-b-black/10">
+      {/* <div className="absolute top-0 right-0 z-10 flex bg-white rounded-md shadow-lg sm:w-96 w-72 "> */}
+      <div className="fixed top-0 right-0 z-50 w-96 h-screen bg-white shadow-lg flex flex-col">
+        <div className="flex flex-col w-full h-full">
+          <div className="flex justify-between px-5 py-5 border-b border-b-black/10 flex-shrink-0">
             <p className="text-xl font-medium">My Profile</p>
             <IoClose onClick={onclose} className="cursor-pointer" />
           </div>
-          <div className="flex flex-col">
-            <div className="flex flex-col justify-center px-10 ">
-              <div className="flex justify-end mt-3">
-                <div className="p-2 border-grey/10">
-                  <FiEdit onClick={handleEditClick} className="cursor-pointer" />
-                </div>
-              </div>
-              <div className="flex flex-col items-center justify-center text-center">
-                <label htmlFor="profile" className="cursor-pointer">
-                  <img src={previewUrl || userData.profilePic || profile} alt="" className="w-28 h-28 rounded-full" />
-                </label>
-                <input id="profile" type="file" onChange={handleProfileChange} className="hidden" />
-                <p>{userData?.name}</p>
-                {/* <p>Bio</p> */}
-                <p>
-                  {userData.bio ? userData.bio :
-                    "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime, sint?"
-                  }
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 px-5 py-10 overflow-y-auto h-96 no-scrollbar">
+          <div className="flex justify-end mt-3 px-4 flex-shrink-0">
+            <div className="p-2 border-grey/10">
+              <FiEdit onClick={handleEditClick} className="cursor-pointer" />
+            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center text-center px-4 flex-shrink-0">
+            <label htmlFor="profile" className="cursor-pointer">
+              <img src={previewUrl || userData.profilePic || profile} alt="" className="w-28 h-28 rounded-full" />
+            </label>
+            <input id="profile" type="file" onChange={handleProfileChange} className="hidden" />
+            <p>{userData?.name}</p>
+            {/* <p>Bio</p> */}
+            <p>
+              {userData.bio ? userData.bio :
+                "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime, sint?"
+              }
+            </p>
+          </div>
+          {/* <div className="flex flex-col gap-2 px-2 py-10 overflow-y-auto h-96 no-scrollbar"> */}
+          <div className="flex-1 overflow-y-auto pr-2 px-5 py-4 scrollbar-hide">
                 {allowedEdit &&
                   <CusotmInput
                     value={bio}
@@ -203,8 +203,6 @@ const ProfileDetails = ({ onclose }) => {
                   <p onClick={handleSaveDetails} className="flex items-center justify-center w-1/2 px-1 py-2 text-center text-white cursor-pointer rounded-3xl bg-[#007EEA]">Save</p>
                 </div>}
               </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

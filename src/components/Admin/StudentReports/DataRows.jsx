@@ -2,7 +2,6 @@ import React from "react";
 import { SlArrowRight } from "react-icons/sl";
 import IMAGES from "../../../assets/images";
 
-
 const DataRows = ({
   index,
   subject,
@@ -20,50 +19,46 @@ const DataRows = ({
       <div
         style={{ backgroundColor: bgColor, cursor: "pointer" }}
         onClick={onClickFunction}
-        className={`p-[0.5] w-full space-x-5 py-1 md:pl-5 md:pr-10 flex flex-row items-center justify-around border-b border-grey mt-1`}
+        className="w-full py-1 pl-2 pr-4 md:pl-5 md:pr-10 flex flex-row items-center border-b border-grey mt-1 gap-1 md:gap-2"
       >
+        {/* Index */}
         <p
-          className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${header ? "font-semibold" : ""
-            }`}
+          className={`w-5 shrink-0 md:flex-[1] text-xs md:text-sm text-center md:text-left ${
+            header ? "font-semibold" : ""
+          }`}
         >
           {index + "."}
         </p>
+
+        {/* Profile — fixed placeholder keeps columns aligned on both header and data rows */}
+        <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 flex items-center justify-center md:flex-[1]">
+          {!header && (
+            <img
+              className="rounded-full w-8 h-8 md:w-10 md:h-10 object-cover"
+              src={studentProfile || IMAGES.ProfileSvg}
+              alt="Student Profile"
+            />
+          )}
+        </div>
+
+        {/* Student Name */}
         <p
-          className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${header ? "hidden" : "flex"
-            }`}
-        >
-          <img
-            className=" rounded-full h-10 w-10 object-cover "
-            src={studentProfile || IMAGES.Profile}
-            alt="Student Profile"
-          />
-        </p>
-        <p
-          className={`w-full md:flex-[3] my-1 md:my-0 text-center text-sm md:text-left ${header ? "font-semibold md:ml-14  text-center" : ""
-            }`}
+          className={`flex-[2] md:flex-[3] text-xs md:text-sm text-left truncate ${
+            header ? "font-semibold" : ""
+          }`}
         >
           {studentName}
         </p>
-        {/* <p
-          className={`w-full md:flex-[3] text-sm my-1 md:my-0 text-center md:text-left ${
+
+        {/* Contact + Arrow */}
+        <div
+          className={`flex-[2] md:flex-[3] flex items-center justify-between text-xs md:text-sm ${
             header ? "font-semibold" : ""
           }`}
         >
-          {studentRollno}
-        </p>
-        <p
-          className={`w-full md:flex-[3] text-sm my-1 md:my-0 text-center md:text-left ${
-            header ? "font-semibold" : ""
-          }`}
-        >
-          {studentClass}
-        </p> */}
-        <p
-          className={`w-full flex md:flex-[3] justify-between items-center my-1 md:my-0 text-center text-sm md:text-left ${header ? "font-semibold" : ""
-            }`}
-        >
-          {contact}  {!header && <SlArrowRight size={20} />}
-        </p>
+          <span className="truncate">{contact}</span>
+          {!header && <SlArrowRight size={14} className="shrink-0 md:w-5 md:h-5 ml-1" />}
+        </div>
       </div>
     </div>
   );

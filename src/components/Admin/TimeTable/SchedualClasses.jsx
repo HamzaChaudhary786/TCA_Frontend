@@ -147,12 +147,12 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
 
     return (
       <div
-        className={`absolute top-0 right-0 flex-1 z-10 flex bg-white rounded-md shadow-lg w-96 ${isOpen ? "" : "hidden"
+        className={`absolute top-0 right-0 flex-1 z-10 flex bg-white rounded-md shadow-lg w-96 sm:w-96 ${isOpen ? "" : "hidden"
           } `}
         ref={ref}
       >
         <div className="flex flex-col flex-1 w-full">
-          <div className="flex justify-between px-5 py-5 border-b border-b-black/10">
+          <div className="flex justify-between sm:px-5 px-2 py-5 border-b border-b-black/10">
             <p className="text-xl font-medium">Schedule Class</p>
             <IoClose
               onClick={() => {
@@ -170,7 +170,7 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
               <div className="flex flex-col items-center justify-center text-center">
                 <img src={IMAGES.classModal} alt="" className="w-28 h-28" />
               </div>
-              <div className="flex flex-col w-full flex-1 gap-1 px-2 py-1 overflow-y-auto custom-scrollbar">
+              <div className="flex flex-col w-full  flex-1 gap-1 px-2 py-1 overflow-y-auto custom-scrollbar">
 
                 <CustomSelectableField
                   label={"Select Teacher"}
@@ -249,7 +249,7 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
 
 
 
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <CusotmInputField
                     type={"time"}
                     icon={"calendar"}
@@ -288,14 +288,14 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
                 />
 
 
-                <div className="py-8 border-t border-black/20">
-                  <div className="flex items-center gap-2">
-                    <div className="flex justify-between gap-4 px-4 py-2">
+                <div className="py-4 w-full border-t border-black/20">
+                  <div className="flex w-full items-center gap-2">
+                    <div className="flex w-full sm:flex-row flex-col justify-between gap-4 py-2">
                       {classCreateMutate.isPending && <div className="flex justify-center items-center"><Loader /></div>}
                       {!classCreateMutate.isPending &&
                         <>
-                          <FilterButton text={"Schedule Class"} className={"px-4 text-sm"} clickHandler={() => handleSchedualClass()} />
-                          <FilterButton text={"Cancel"} className={"px-8 text-sm bg-white border !text-white"} clickHandler={() => {
+                          <FilterButton text={"Schedule Class"} className={"px-2 py-2 text-sm"} clickHandler={() => handleSchedualClass()} />
+                          <FilterButton text={"Cancel"} className={"px-2 text-sm py-2 bg-[#0B1053] border w-full !text-white"} clickHandler={() => {
                             setaddEventModalOpen(false)
                             onclose();
                             setAddScheduleModalOpen(false);

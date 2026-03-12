@@ -89,21 +89,22 @@ const MyCalendar = () => {
           addModalOpen={addModalOpen}
           setaddModalOpen={setaddModalOpen}
         />}
-      <Calendar
-        style={{}}
-        formats={{
-          dayRangeHeaderFormat,
-        }}
-        min={new Date(0, 0, 0, 0, 0, 0)}
-        max={new Date(0, 0, 0, 23, 59, 59)}
-        onNavigate={handleNavigate}
-        defaultView="week"
-        views={{ week: true }}
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        className="w-[100%] h-[350vh]"
+      <div className="w-full h-[350vh] overflow-y-auto">
+        <Calendar
+          style={{}}
+          formats={{
+            dayRangeHeaderFormat,
+          }}
+          min={new Date(0, 0, 0, 0, 0, 0)}
+          max={new Date(0, 0, 0, 23, 59, 59)}
+          onNavigate={handleNavigate}
+          defaultView="week"
+          views={{ week: true }}
+          localizer={localizer}
+          events={events}
+          startAccessor="start"
+          endAccessor="end"
+          className="w-full"
         step={60}
         timeslots={1}
         components={{
@@ -129,6 +130,7 @@ const MyCalendar = () => {
         }}
         dayLayoutAlgorithm={"no-overlap"}
       />
+      </div>
     </>
   );
 };

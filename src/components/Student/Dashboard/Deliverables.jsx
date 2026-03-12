@@ -16,11 +16,11 @@ const Deliverables = () => {
 
 
   const matchedAssignments = allAssignments?.filter(assignment =>
-    userData.subjects.includes(assignment.subjectID._id)
+    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(assignment.subjectID._id)
   );
 
   const matchedAQuizes = allQuizes?.filter(quiz =>
-    userData.subjects.includes(quiz.subjectID._id)
+    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(quiz.subjectID._id)
   );
 
 
