@@ -36,23 +36,23 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
           setdetailsModalOpen(true);
         }}
       >
-        <div className="flex flex-col h-full justify-start items-start p-1 space-y-1">
+        <div className="flex flex-col h-[20px] justify-start items-start p-1 space-y-1">
           <div className="text-[10px] leading-tight">
             <span className="font-normal text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>T.Name:</span>
             <div className="font-normal text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
               {event.teacher ? event.teacher.teacherID.name : ""}
             </div>
           </div>
-          {/* <div className="text-[10px] leading-tight">
+          <div className="text-[10px] leading-tight">
             <span className="font-bold text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>Title:</span>
             <div className="font-semibold text-slate-900" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
               {event.title ? event.title : ""}
-            </div> */}
-          {/* </div> */}
+            </div>
+          </div>
           <div className="text-[10px] leading-tight overflow-hidden">
             <span className="font-normal text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>Subject:</span>
             <div className="font-normal text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
-              {event.subjectID.name ? event.subjectID.name : ""}
+              {event.subjectID?.name ?? ""}
             </div>
           </div>
         </div>

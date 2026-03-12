@@ -46,25 +46,26 @@
 .rbc-time-view {
   /* border: none !important; */
   height: 100% !important;
-  overflow: hidden !important;
+  /* overflow: hidden !important; */
+  overflow-y: auto !important;
 }
 
 /* Small screens (mobile) */
 .rbc-calendar {
-  height: 120vh !important;
+  height: 160vh !important;
 }
 
 /* Large screens */
 @media (min-width: 768px) {
   .rbc-calendar {
-    height: 80vh !important;
+    height: 120vh !important;
     min-height: unset;
   }
 }
 
 .rbc-time-content {
   height: 80vh !important;
-
+ overflow-y: auto !important;
 }
 
 .rbc-event {

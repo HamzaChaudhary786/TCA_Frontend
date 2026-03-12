@@ -123,6 +123,18 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
         return;
       }
 
+      if (!selectedSubject) {
+        toast.error("Please select a subject");
+        setIsLoading(false);
+        return;
+      }
+
+      if (!selectedClassroom?._id) {
+        toast.error("Please select a classroom");
+        setIsLoading(false);
+        return;
+      }
+
       const files = uploadedFileUrl
         ? [{ name: selectedFile?.name || data?.files?.[0]?.name || "File", url: uploadedFileUrl }]
         : [];
@@ -130,7 +142,7 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
       const payload = {
         ...formData,
         subjectID: selectedSubject,
-        classroomID: selectedClassroom?._id,
+        classroomID: selectedClassroom._id,
         files,
         dueDate: finalDueDate,
       };
@@ -139,12 +151,15 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
         ? await editQuiz(payload, data?._id)
         : await editAssignment(payload, data?._id);
 
+      // Wait for refetch to complete before closing modal
+      await refetch();
+      
       toast.success(`${isQuiz ? "Quiz" : "Assignment"} updated successfully!`);
-      refetch();
       setIsEdit(false);
       toggleBlur();
     } catch (error) {
-      toast.error("Failed to update. Please try again.");
+      console.error("Error updating assignment/quiz:", error);
+      toast.error(error?.message || "Failed to update. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import moment from "moment/moment";
 import Loader from "../../../utils/Loader";
-import profile from "../../../assets/profile.png";
+import profile from "../../../assets/images/ProfilePic.png";
 
 import { IoClose } from "react-icons/io5";
 import { useQuery } from "@tanstack/react-query";

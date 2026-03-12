@@ -70,8 +70,12 @@ export default function ViewEventDetailsModal({
     JSON.stringify(event.subjectID)
   );
 
-  const parsedTeacher = selectedTeacher ? JSON.parse(selectedTeacher) : null;
-  const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
+  // const parsedTeacher = selectedTeacher ? JSON.parse(selectedTeacher) : null;
+  // const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
+  const parsedTeacher = selectedTeacher 
+  ? (typeof selectedTeacher === 'string' ? JSON.parse(selectedTeacher) : selectedTeacher) 
+  : null;
+const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
 
   useClickOutside(ref, () => setopen(false));
 
