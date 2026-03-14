@@ -64,10 +64,10 @@ const SubjectsEnrolled = () => {
 
               <thead className="flex gap-5 px-2 py-3 border-t-4 rounded-tl-lg rounded-tr-lg border-t-[#0B1053] bg-[#ECEEF0]">
                 <tr className="flex flex-1 font-medium">
-                  <td className="flex-[1] flex justify-center">Sr No.</td>
-                  <td className="flex-[3] flex justify-center">Subject Name</td>
-                  <td className="flex-[3] flex justify-center">Instructor</td>
-                  <td className="flex-[3] flex justify-center">Attendence</td>
+                  <td className="text-sm sm:text-lg flex-[1] flex justify-center">Sr No.</td>
+                  <td className="text-sm sm:text-lg flex-[3] flex justify-center">Subject Name</td>
+                  <td className="text-sm sm:text-lg flex-[3] flex justify-center">Instructor</td>
+                  <td className="text-sm sm:text-lg flex-[3] flex justify-center">Attendence</td>
                 </tr>
               </thead>
 
@@ -98,8 +98,11 @@ const SubjectsEnrolled = () => {
                               <div
                                 style={{ width: `${item.avgAttendancePer}%` }}
                                 className={`text-xs h-4 bg-gradient-to-r from-[#0B1053] to-[#007EEA] rounded-3xl flex justify-center text-white`}
-                              >
-                                {item.avgAttendancePer} %
+                              >  
+                              <span className=" ml-[1.26rem]">
+                                {item.avgAttendancePer} 
+%
+                                </span>
                               </div>
                             </div>
                           </td>

@@ -124,7 +124,7 @@ const QuizAssignmentRow = (props) => {
         <>
             <div className='min-w-full'>
                 <div className='border-b border-grey md:py-5 py-2 md:pl-3 md:pr-5  '>
-                    <div style={{ backgroundColor: props.bgColor, }} className={`flex flex-row items-center  mt-2 space-x-3`}>
+                    <div style={{ backgroundColor: props.bgColor, }} className={`flex flex-row items-center px-1 mt-2 space-x-3`}>
                         <p className={`w-full md:flex-[1] flex-[1] md:text-[14px] sm:text-[11px] text-[9px] text-center md:text-left ${props.header ? 'font-semibold' : ''}`}>{props.index + "."}</p>
                         <p className={`w-full md:flex-[3] my-1 md:my-0  md:text-[14px] text-[11px] md:text-center ${props.header ? 'font-semibold' : ''}`}>{props.subject}</p>
                         <p className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>{props.title}</p>
@@ -157,15 +157,15 @@ const QuizAssignmentRow = (props) => {
                                     <div className={`w-full md:flex-[2] my-1 md:my-0 text-center md:text-center`}>
                                         {(quizAssignmentMutation.isPending || isUploading) && <div><Loader /></div>}
                                         {!quizAssignmentMutation.isPending && !isUploading &&
-                                            <label htmlFor={`upload-${props.id}`} className='bg-[#6A00FF] cursor-pointer rounded-xl flex items-center justify-center py-1 text-white md:text-[14px] text-[11px] p-4'>
+                                            <label htmlFor={`upload-${props.id}`} className='bg-[#6A00FF] cursor-pointer rounded-xl flex items-center justify-center py-1 text-white md:text-[14px] text-[11px] px-2 sm:px-4'>
                                                 Upload
                                                 <input id={`upload-${props.id}`} onChange={handleFileChange} type="file" className='hidden' />
                                             </label>
                                         }
                                     </div>
                                 ) : (
-                                    <div className={`w-full md:flex-[2] my-1 md:my-0 text-center md:text-center flex justify-center items-center gap-2`}>
-                                        <div className='bg-[#91919133] rounded-3xl flex items-center justify-center py-2 px-3 text-black md:text-[14px]  text-[11px]'>
+                                    <div className={`w-full md:flex-[2] my-1 md:my-0 text-center md:text-center flex justify-center items-center gap-1 sm:gap-2`}>
+                                        <div className='bg-[#91919133] rounded-3xl flex items-center justify-center sm:py-2 sm:px-3 py-1 px-2 text-black md:text-[14px]  text-[11px]'>
                                             Uploaded
                                         </div>
                                         <label htmlFor={`upload-${props.id}`} className="cursor-pointer text-[#6A00FF] hover:text-blue-600">

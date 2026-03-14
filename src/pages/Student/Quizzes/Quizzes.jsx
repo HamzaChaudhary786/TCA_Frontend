@@ -27,12 +27,14 @@ const Quizzes = () => {
     return (
         <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
             <div className="flex flex-1">
-                <div className={`w-full h-screen lg:px-20 sm:px-10  flex-grow lg:ml-72`}
+                {/* h-screen */}
+                <div className={`w-full  lg:px-20 sm:px-10  flex-grow lg:ml-72`}
                 >
-                    <div className='h-screen pt-1'>
+                    {/* h-screen */}
+                    <div className=' pt-1'>
                         <Navbar heading={"Quizes"} />
-                        <div className={` px-3 ${isBlurred ? "blur" : ""}`}>
-                            <div className='mt-8 h-[80%] overflow-auto'>
+                        <div className={`px-2 sm:px-3 ${isBlurred ? "blur" : ""}`}>
+                            <div className='mt-4 sm:mt-8 h-[80%] overflow-auto'>
                                 <QuizAssignmentRow
                                     index={"Sr. No"}
                                     subject={"Subject"}

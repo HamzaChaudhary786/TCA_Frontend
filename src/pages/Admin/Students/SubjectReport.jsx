@@ -198,7 +198,7 @@ const SubjectReport = () => {
                   <>
                     <div className="mt-7">
                       <div className="flex flex-col gap-2">
-                        <p className="md:text-[20px]">Assignments</p>
+                        <p className="md:text-[20px]">Assignments </p>
                         <div className="flex flex-row items-center gap-2">
                           <QuizAssignmentsTable data={studentAssignmentsQuizes.data.assignments.data || []} />
                         </div>

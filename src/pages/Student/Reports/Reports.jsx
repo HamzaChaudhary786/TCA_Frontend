@@ -34,12 +34,12 @@ const Reports = () => {
   return (
     <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
       <div className="flex flex-1">
-        <div className={`w-full h-screen px-3 lg:px-20 sm:px-10  flex-grow lg:ml-72`}
+        <div className={`w-full h-screen px-2 lg:px-20 sm:px-10  flex-grow lg:ml-72`}
         >
           <div className='h-screen pt-1'>
             <Navbar heading={"Reports"} />
             <div className={` ${isBlurred ? "blur" : ""}`}>
-              <div className='mt-8 h-[80%] overflow-auto'>
+              <div className='mt-4 sm:mt-8 h-[80%] overflow-auto'>
                 <DataRows index={"Sr. No"}
                   subject={"Subject"}
                   instructor={"Instructor"}

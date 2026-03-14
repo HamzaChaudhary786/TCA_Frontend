@@ -35,7 +35,7 @@ const Announcements = () => {
   return (
     <div className="flex flex-col flex-1 gap-2">
       <div className="flex w-full">
-        <p className="flex text-lg font-medium">📢Announcemnets</p>
+        <p className="flex text-lg font-medium mt-[0.25rem] sm:mt-[0rem]">📢Announcemnets</p>
       </div>
       <div className="flex flex-col w-full px-6 bg-white h-80 overflow-y-auto register-scrollbar border-t-4 rounded-lg md:py-4 border-t-[#0B1053">
 

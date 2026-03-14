@@ -63,7 +63,7 @@ const Deliverables = () => {
                 </div>
               </div>
               <div className="">
-                <p className="text-base font-medium">{item.title}</p>
+                <p className="sm:text-base text-sm font-medium">{item.title}</p>
                 <p className="text-xs text-black/50">Due date {formatDate(item.dueDate)} </p>
               </div>
             </div>
