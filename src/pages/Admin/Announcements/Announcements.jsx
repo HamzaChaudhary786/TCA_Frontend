@@ -100,15 +100,15 @@ const Announcements = () => {
     return (
         isPending || isRefetching || announceDellMutate?.isPending ? <div className="flex flex-1"> <Loader /> </div> :
             <div className='flex flex-1 bg-[#f9f9f9]/50 font-poppins'>
-                <div className={`flex-grow sm:w-full w-screen px-5 lg:px-10 sm:px-10 lg:ml-72`}>
+                <div className={`flex-grow sm:w-full w-screen px-4 lg:px-10 sm:px-10 lg:ml-72`}>
                     <div className=''>
                         <div className='flex'>
                             <Navbar heading={"Announcements"} />
                         </div>
                         <div className={`flex ${isBlurred ? "blur" : ""} `}>
-                            <div className='flex flex-col gap-4 flex-1'>
+                            <div className='flex flex-col gap-4 flex-1 relative'>
                                 <div className='flex justify-between flex-wrap space-y-5 lg:space-y-0  items-center'>
-                                    <div className='flex gap-2'>
+                                    <div className='flex gap-2 text-xs lg:text-base'>
                                         <p onClick={announceClick} className={`cursor-pointer py-2 font-medium px-2 ${annouce ? "border-b-2 border-[#6A00FF]" : "text-black/50"} `}>Announcements</p>
                                         <p onClick={quoteClick} className={`cursor-pointer py-2 font-medium px-2 ${annouce ? "text-black/50" : "border-b-2 border-[#6A00FF]"} `}>Motivational Quotes</p>
                                     </div>

@@ -115,7 +115,7 @@ const ManageUsers = () => {
                 <div className={`${isBlurred ? "blur" : ""}`}>
                   <div className="flex flex-row-reverse my-4">
                     <div className="flex items-center flex-wrap gap-4">
-                      <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl">
+                      <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl w-full lg:w-fit">
                         <IoSearch />
                         <input
                           type="text"
@@ -126,7 +126,7 @@ const ManageUsers = () => {
                         />
                       </div>
 
-                      <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-xl">
+                      <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-xl w-full lg:w-fit">
                         <select name="" id="" className="px-2 " onChange={(e) => setSelectText(e.target.value)}  >
                           <option value="student" className="px-2 py-1">Student</option>
                           <option value="teacher" className="px-2 py-1">Teacher</option>

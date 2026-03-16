@@ -63,11 +63,11 @@ const TimeTable = () => {
                 <Navbar heading={"Time Table"} />
               </div>
               <div
-                className={`flex px-2 sm:px-4 flex-col md:px-10 lg:px-0 w-full gap-3 sm:gap-5 py-2 flex-1 ${isBlurred ? "blur" : ""
+                className={`flex flex-col md:px-10 lg:px-0 w-full gap-3 sm:gap-5 py-2 flex-1 ${isBlurred ? "blur" : ""
                   }`}
               >
                 <div className={`flex flex-1 gap-2 sm:gap-4 bg-white w-full relative ${isSidebarOpen ? "-z-10" : "z-auto"} lg:z-auto`}>
-                  <div className="border p-2 sm:p-3 lg:px-2 lg:py-5  border-grey/30 rounded-md shadow-lg w-full lg:w-auto overflow-auto min-h-[100vh] sm:min-h-auto">
+                  <div className="border p-2 sm:p-3 lg:px-2 lg:py-5  border-grey/30 rounded-md shadow-lg w-full  overflow-auto min-h-[100vh] sm:min-h-auto">
                     <MyCalendar data={data} isPending={isPending} refetch={refetch} isRefetching={isRefetching} />
                   </div>
                   {/* <div className="flex-1 p-5 border rounded-md shadow-lg border-grey/30">
