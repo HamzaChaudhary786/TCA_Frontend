@@ -30,7 +30,7 @@ const Assignments = () => {
           {/* h-screen */}
           <div className=" pt-1">
             <Navbar heading={"Assignments"} />
-            <div className={`px-2 sm:px-3 ${isBlurred ? "blur" : ""} relative ${isSidebarOpen ? "-z-10" : "z-auto"} lg:z-auto `}>
+            <div className={`px-[2px] sm:px-3 ${isBlurred ? "blur" : ""} relative ${isSidebarOpen ? "-z-10" : "z-auto"} lg:z-auto `}>
               <div className="mt-4 sm:mt-8 h-[80%] overflow-auto">
 
                 <QuizAssignmentRow

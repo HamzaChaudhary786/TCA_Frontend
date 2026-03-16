@@ -54,9 +54,9 @@ const ScheduledClasses = () => {
           <div className="flex items-center justify-between">
             <p className="text-green">Class has started...</p>
             <a href={item?.meetingUrl} target="_blank" rel="noopener noreferrer">
-              <div className="flex items-center px-2 py-1 bg-green text-white rounded-3xl cursor-pointer">
+              <div className="flex items-center px-2 sm:pr-4 py-2 bg-green text-white rounded-3xl cursor-pointer">
                 <img src={meet} alt="Join" className="w-8 h-3" />
-                <p className="text-xs">Join class</p>
+                <p className="text-xs whitespace-nowrap">Join class</p>
               </div>
             </a>
           </div>

@@ -117,8 +117,9 @@ const LastDeliverables = () => {
   };
 
   return (
-    <div className={`flex flex-1 ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
-      <div className="flex flex-col flex-1 gap-2">
+    // <div className={`flex  flex-1 ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
+    <div className={`flex w-full ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
+      <div className="flex flex-col flex-1 gap-2 w-full">
         <div className="flex">
           <p className="flex text-xl font-medium">Last Deliverable</p>
         </div>

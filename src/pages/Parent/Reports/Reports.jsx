@@ -119,7 +119,7 @@ const Reports = () => {
     <>
       <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
         <div className="flex flex-1">
-          <div className={`w-full h-screen lg:px-20 sm:px-10 px-3  flex-grow lg:ml-72`}>
+          <div className={`w-full h-screen lg:px-20 sm:px-10 px-2  flex-grow lg:ml-72`}>
             <div className='h-screen'>
               <Navbar heading={"Reports"} />
               <div className=' mt-4 sm:mt-8 h-[80%] overflow-auto'>

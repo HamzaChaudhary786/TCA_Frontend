@@ -67,8 +67,8 @@ const SubjectReport = () => {
     <>
       <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
         <div className="flex flex-1">
-          <div className="flex-grow w-full px-5 lg:px-20 sm:px-10 lg:ml-72">
-            <div className="pt-16 ">
+          <div className="flex-grow w-full px-2 lg:px-20 sm:px-10 lg:ml-72">
+            <div className="lg:pt-16 ">
               <Navbar heading={"Subject Reports"} />
               <div className="mt-7">
                 <div className="flex flex-col gap-2">
