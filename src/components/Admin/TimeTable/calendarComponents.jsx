@@ -182,9 +182,9 @@ export const CustomToolbar = (props) => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-between gap-6 lg:gap-3 mb-4">
+      <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-between gap-6 lg:gap-3 my-4">
         <div className="w-full flex flex-1 justify-center">
-          <div className="flex items-center justify-center w-full gap-2 mt-4">
+          <div className="flex items-center justify-center w-full gap-2 lg:gap-1">
             {/* <button
               className="px-3 py-1 rounded-md bg-custom-light-1"
               onClick={goToCurrent}
@@ -198,9 +198,9 @@ export const CustomToolbar = (props) => {
               <MdKeyboardArrowLeft />
             </button>
 
-            <p className="mx-2 text-2xl lg:text-[16px] font-semibold text-[#6A00FF]">
+            <p className="mx-2 text-2xl lg:text-[14px] 2xl:text-[16px] font-semibold text-[#6A00FF]">
               {moment.utc(Date.now()).format("DD MMMM, YYYY")}
-              <span className="ml-2 text-xs font-normal text-grey/70">Today</span>
+              <span className="ml-2 text-lg lg:text-[10px] 2xl:text-[12px] font-normal text-grey/70">Today</span>
             </p>
 
             <button
@@ -229,16 +229,16 @@ export const CustomToolbar = (props) => {
                 ))}
               </select>
             </div>
-            <div className="py-1 mt-3 text-xs text-black/70 flex-wrap w-[75%]">
+            {/* <div className=" text-lg md:text-auto py-1 mt-3 text-xs text-black/70 flex-wrap w-[75%]">
               <p>Selcet the time table you want to view</p>
-            </div>
+            </div> */}
           </div>
 
         </div>
         <div className="flex flex-2 flex-row flex-wrap items-center justify-center gap-6 lg:gap-2 mb-6 lg:mb-0">
           <div>
             <FilterButton
-              className={"px-4 py-1"}
+              className={"px-4 py-2"}
               icon={true}
               text={"Filter Classes"}
               clickHandler={() => {
@@ -249,7 +249,7 @@ export const CustomToolbar = (props) => {
           </div>
           <div>
             <FilterButton
-              className={"px-4 py-1"}
+              className={"px-4 py-2"}
               text={"Schedule Classes"}
               clickHandler={() => {
                 setAddScheduleModalOpen(!addScheduleModalOpen);

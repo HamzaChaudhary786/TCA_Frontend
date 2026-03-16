@@ -131,8 +131,8 @@ const SubjectReport = () => {
       <>
         <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
           <div className="flex flex-1">
-            <div className="flex-grow w-full px-2 lg:px-20 sm:px-10 lg:ml-72">
-              <div className="pt-6">
+            <div className="flex-grow w-full px-5 lg:px-20 sm:px-10 lg:ml-72">
+              <div className="">
                 <Navbar heading={"Subjects Report"} />
                 <div className="mt-7">
                   <div className="flex flex-col items-center justify-center gap-1">
@@ -150,7 +150,7 @@ const SubjectReport = () => {
                 </div>
 
                 <div className="w-full justify-end items-center flex">
-                  <button className="mt-5 sm:auto sm:py-3 sm:px-4 py-2 px-2 bg-[#0B1053] text-white rounded-full" onClick={() => {
+                  <button className="mt-5 py-2 px-4 sm:py-2 sm:px-4 bg-[#0B1053] text-white rounded-full" onClick={() => {
                     // Refetch student subjects before opening modal
                     refetchStudentSubjects();
                     setEditSubject(!editSubject);

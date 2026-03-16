@@ -72,6 +72,7 @@ const Teachers = () => {
                 <div className="mt-4 h-[70%] overflow-auto">
                   <DataRows
                     index={"Sr No."}
+                    teacherProfile={"Image"}
                     teacherName={"Name"}
                     teacherId={"Classroom"}
                     subject={"Subject"}

@@ -41,9 +41,9 @@ const AnnouncementCard = ({announcement, deleteAnnouncement, editAnnouncement, r
     return (
         <div className='py-4 px-4 bg-white border border-black/20 rounded-md shadow-sm'>
             <div className='flex flex-col gap-2'>
-                <div className='flex justify-between items-center'>
+                <div className='flex flex-col-reverse lg:flex-row flex-wrap justify-between items-center'>
                     <p className='text-xl font-semibold'>{announcement.title}</p>
-                    <div className={`flex gap-4 items-center text-xs relative text-black/50 ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
+                    <div className={`flex flex-wrap gap-4 items-center text-xs relative text-black/50 ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
                         <div className='flex gap-2 items-center'>
                             <p><MdOutlinePerson2 size={16} /> </p>
                             <p>{announcement?.date?.split("T")[0]} { /*{moment.utc(announcement.date).format("hh:mm A")} */} </p>

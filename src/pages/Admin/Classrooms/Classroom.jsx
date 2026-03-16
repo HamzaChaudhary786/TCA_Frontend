@@ -60,91 +60,71 @@ const Classroom = () => {
 
   const { data, isPending, refetch, isRefetching } = useQuery({ queryKey: ["classroom"], queryFn: getAllClassroom });
 
- return (
-  isPending || isRefetching ? (
-    <div className="flex flex-1 justify-center items-center min-h-screen">
-      <Loader />
-    </div>
-  ) : (
-    <>
-      <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-h-screen">
-        <div className="flex flex-1">
-          <div className="w-full h-screen lg:px-10 sm:px-8 px-4 flex-grow lg:ml-72">
-            <div className="min-h-screen md:pt-6">
-              <Navbar heading={"Classroom"} />
+  return (
+    isPending || isRefetching ? (
+      <div className="flex flex-1 justify-center items-center min-h-screen">
+        <Loader />
+      </div>
+    ) : (
+      <>
+        <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-h-screen">
+          <div className="flex flex-1">
+            <div className="w-full h-screen lg:px-10 sm:px-8 px-4 flex-grow lg:ml-72">
+              <div className="min-h-screen md:pt-6">
+                <Navbar heading={"Classroom"} />
 
-              <div className={`${isBlurred ? "blur" : ""}`}>
-                {/* Search & Add Classroom Section */}
-                <div className="py-4">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    {/* Left Section */}
-                    <div>
-                      <p className="text-black/60 text-sm">Manage your classrooms efficiently</p>
-                    </div>
-
-                    {/* Right Section */}
-                    <div className="flex flex-wrap md:flex-row gap-3 w-full md:w-auto">
-                      {/* Search Input */}
-                      <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-full w-full md:w-72 shadow-sm hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-purple-400">
-                        <BiSearch className="text-gray-400" />
-                        <input
-                          className="outline-none w-full text-gray-700 placeholder-gray-400 bg-transparent"
-                          type="text"
-                          placeholder="Search"
-                          value={searchText}
-                          onChange={(e) => setSearchText(e.target.value)}
-                        />
+                <div className={`${isBlurred ? "blur" : ""}`}>
+                  {/* Search & Add Classroom Section */}
+                  <div className="py-4">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                      {/* Left Section */}
+                      <div>
+                        <p className="text-black/60 text-sm">Manage your classrooms efficiently</p>
                       </div>
 
-                      {/* Add Classroom Button */}
-                      <button
-                        onClick={onAddClass}
-                        className="px-6 py-2 text-sm font-medium text-white bg-[#6A00FF] rounded-full shadow-md hover:shadow-lg transition-all"
-                      >
-                        Add Classroom
-                      </button>
+                      {/* Right Section */}
+                      <div className="flex flex-wrap md:flex-row gap-3 w-full md:w-auto">
+                        {/* Search Input */}
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-full w-full md:w-72 shadow-sm hover:shadow-md transition-shadow focus-within:ring-2 focus-within:ring-purple-400">
+                          <BiSearch className="text-gray-400" />
+                          <input
+                            className="outline-none w-full text-gray-700 placeholder-gray-400 bg-transparent"
+                            type="text"
+                            placeholder="Search"
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                          />
+                        </div>
+
+                        {/* Add Classroom Button */}
+                        <button
+                          onClick={onAddClass}
+                          className="px-6 py-2 text-sm font-medium text-white bg-[#6A00FF] rounded-full shadow-md hover:shadow-lg transition-all"
+                        >
+                          Add Classroom
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Data Table */}
-                <div className="py-4 h-[80%] overflow-auto bg-white rounded-xl shadow-sm border border-black/10">
-                  <DataRow
-                    header={true}
-                    isQuiz={true}
-                    index={"Sr. No"}
-                    bgColor={"#F9F9F9"}
-                    students={"Students"}
-                    teachers={"Teachers"}
-                    createdBy={"Created By"}
-                    classname={"Classroom"}
-                    classesSchedualled={"Classes Scheduled"}
-                  />
-
-                  {searchText === "" &&
-                    data.map((cls, index) => (
+                  {/* Data Table */}
+                  {/* Data Table */}
+                  <div className="py-4 w-full overflow-auto bg-white rounded-xl shadow-sm border border-black/10">
+                    <div className="min-w-[700px]">
                       <DataRow
-                        data={cls}
-                        key={cls._id}
-                        header={false}
-                        index={index + 1}
-                        bgColor={"#FFFFFF"}
-                        classname={cls.name}
-                        students={cls.students.length}
-                        teachers={cls.teachers.length}
-                        createdBy={cls.createdBy.userType}
-                        toggleClassMenu={toggleClassMenuOpen}
-                        classesSchedualled={cls?.classes?.length}
+                        header={true}
+                        isQuiz={true}
+                        index={"Sr. No"}
+                        bgColor={"#F9F9F9"}
+                        students={"Students"}
+                        teachers={"Teachers"}
+                        createdBy={"Created By"}
+                        classname={"Classroom"}
+                        classesSchedualled={"Classes Scheduled"}
                       />
-                    ))}
 
-                  {searchText &&
-                    data.map((cls, index) => {
-                      if (
-                        cls.name.toLowerCase().includes(searchText.toLowerCase()) ||
-                        cls.createdBy.userType.toLowerCase().includes(searchText.toLowerCase())
-                      ) {
-                        return (
+                      {searchText === "" &&
+                        data.map((cls, index) => (
                           <DataRow
                             data={cls}
                             key={cls._id}
@@ -156,65 +136,88 @@ const Classroom = () => {
                             teachers={cls.teachers.length}
                             createdBy={cls.createdBy.userType}
                             toggleClassMenu={toggleClassMenuOpen}
-                            classesSchedualled={cls.classes.length}
+                            classesSchedualled={cls?.classes?.length}
                           />
-                        );
-                      }
-                    })}
+                        ))}
 
-                  {data.length === 0 && (
-                    <div className="text-center py-8 text-xl font-medium text-gray-400">
-                      No classrooms to display!
+                      {searchText &&
+                        data.map((cls, index) => {
+                          if (
+                            cls.name.toLowerCase().includes(searchText.toLowerCase()) ||
+                            cls.createdBy.userType.toLowerCase().includes(searchText.toLowerCase())
+                          ) {
+                            return (
+                              <DataRow
+                                data={cls}
+                                key={cls._id}
+                                header={false}
+                                index={index + 1}
+                                bgColor={"#FFFFFF"}
+                                classname={cls.name}
+                                students={cls.students.length}
+                                teachers={cls.teachers.length}
+                                createdBy={cls.createdBy.userType}
+                                toggleClassMenu={toggleClassMenuOpen}
+                                classesSchedualled={cls.classes.length}
+                              />
+                            );
+                          }
+                        })}
+
+                      {data.length === 0 && (
+                        <div className="text-center py-8 text-xl font-medium text-gray-400">
+                          No classrooms to display!
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Create Classroom Modal */}
-      {createClassModal && (
-        <ClassModal
-          refetch={refetch}
-          isEditTrue={false}
-          open={createClassModal}
-          setopen={setCreateClassModal}
+        {/* Create Classroom Modal */}
+        {createClassModal && (
+          <ClassModal
+            refetch={refetch}
+            isEditTrue={false}
+            open={createClassModal}
+            setopen={setCreateClassModal}
+          />
+        )}
+
+        {/* Edit Classroom Modal */}
+        {editModal && (
+          <EditClassModel
+            open={editModal}
+            refetch={refetch}
+            isEditTrue={true}
+            setopen={setEditModal}
+            editData={editClassData}
+          />
+        )}
+
+        {/* Classroom Menu */}
+        <ClassMenu
+          isopen={isClassMenuOpen}
+          setIsOpen={setIsClassMenuOpen}
+          editClassRoom={handleEditClass}
+          deleteClassRoom={handleDeleteClass}
+          promoteStudentsPopup={handlePromoteStudents}
         />
-      )}
 
-      {/* Edit Classroom Modal */}
-      {editModal && (
-        <EditClassModel
-          open={editModal}
-          refetch={refetch}
-          isEditTrue={true}
-          setopen={setEditModal}
-          editData={editClassData}
-        />
-      )}
-
-      {/* Classroom Menu */}
-      <ClassMenu
-        isopen={isClassMenuOpen}
-        setIsOpen={setIsClassMenuOpen}
-        editClassRoom={handleEditClass}
-        deleteClassRoom={handleDeleteClass}
-        promoteStudentsPopup={handlePromoteStudents}
-      />
-
-      {/* Promote Students Modal */}
-      {promotePopupMenu && (
-        <PromoteModal
-          classrooms={data}
-          setPromotePopupMenu={handlePromoteStudents}
-          classroomStudents={classroomData}
-        />
-      )}
-    </>
-  )
-);
+        {/* Promote Students Modal */}
+        {promotePopupMenu && (
+          <PromoteModal
+            classrooms={data}
+            setPromotePopupMenu={handlePromoteStudents}
+            classroomStudents={classroomData}
+          />
+        )}
+      </>
+    )
+  );
 };
 
 export default Classroom;

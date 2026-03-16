@@ -190,7 +190,7 @@ export const CustomToolbar = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-between gap-6 lg:gap-3 mb-4">
+      <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-between gap-6 lg:gap-3 my-4">
         <div className="w-full flex flex-1 justify-center">
           <div className="flex items-center w-full justify-center gap-2 mt-4">
             {/* <button

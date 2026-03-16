@@ -11,15 +11,15 @@ const QuoteCard = ({ quote, deleteQuote, editQuote, refetch }) => {
     const DotsMenu = () => {
         return (
             <>
-                <div className='shadow-md absolute z-10 bg-white rounded-md top-1 right-5'>
+                <div className='shadow-md absolute z-10 bg-white rounded-md top-36 right-5'>
                     <div className='py-2 px-2'>
                         <div className='py-2 px-2'>
-                            <div onClick={() =>  {editQuote(quote); refetch(); toggleMenu();}} className='cursor-pointer flex gap-2 items-center py-2 px-2'>
+                            <div onClick={() => { editQuote(quote); refetch(); toggleMenu(); }} className='cursor-pointer flex gap-2 items-center py-2 px-2'>
                                 <FiEdit size={20} />
                                 <p>Edit</p>
                             </div>
                             <div className='border-b border-b-black/10'></div>
-                            <div onClick={() => {deleteQuote(quote._id); refetch(); toggleMenu();}} className='cursor-pointer flex gap-2 items-center py-2 px-2 text-maroon'>
+                            <div onClick={() => { deleteQuote(quote._id); refetch(); toggleMenu(); }} className='cursor-pointer flex gap-2 items-center py-2 px-2 text-maroon'>
                                 <RiDeleteBin6Line size={20} />
                                 <p>Delete</p>
                             </div>
@@ -36,30 +36,27 @@ const QuoteCard = ({ quote, deleteQuote, editQuote, refetch }) => {
     }
 
     const getDateTimeFormat = (dateStr, type) => {
-        if(type == "d"){
+        if (type == "d") {
             console.log("date str for d is : ", dateStr)
-        }else{
+        } else {
             console.log("date str for t is : ", dateStr)
         }
     }
 
     return (
         <div className='px-2 py-2 flex flex-1 bg-white rounded-md border border-black/20'>
-            <div className='flex p-8 flex-1' >
-                <div className='flex flex-col flex-1 gap-2'>
-                    <div className='flex justify-between items-center'>
+            <div className='flex p-2 flex-1' >
+                <div className='flex flex-col-reverse lg:flex-row lg:justify-between flex-1 gap-2'>
+                    <div className='flex flex-col justify-between items-center'>
                         <p className='text-xl font-medium flex-[2]'>{quote.title} </p>
-                        <div className='flex-1 justify-end flex gap-3'>
-                            {showMenu && <DotsMenu />}
-                            <PiDotsThreeOutlineVerticalLight onClick={toggleMenu} size={20} className='cursor-pointer' />
+                        <div className='flex text-sm mt-4'>
+                            <p className='flex  flex-wrap'>{quote.description}</p>
                         </div>
                     </div>
-                    <div className='flex flex-col gap-2 text-xs text-wrap flex-wrap'>
-                        <div className='flex text-sm'>
-                            <p className='flex flex-wrap'>{quote.description}</p>
-                        </div>
+                    <div className='flex flex-row justify-center items-center gap-2 text-xs flex-wrap'>
+
                         <div className='flex'>
-                            <div className='flex items-center gap-4'>
+                            <div className='flex items-center gap-2 lg:gap-4'>
                                 <div className='flex gap-2 items-center'>
                                     <p> <IoCalendarOutline size={16} /> </p>
                                     <p>{quote.visibility}</p>
@@ -74,7 +71,12 @@ const QuoteCard = ({ quote, deleteQuote, editQuote, refetch }) => {
                                 </div>
                             </div>
                         </div>
+                        <div className='flex-1 justify-end flex gap-3'>
+                            {showMenu && <DotsMenu />}
+                            <PiDotsThreeOutlineVerticalLight onClick={toggleMenu} size={20} className='cursor-pointer' />
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
