@@ -83,17 +83,24 @@ const Submissions = () => {
   console.log("all submissions are are : ", data);
 
 
-  const handleDownloadAll = async () => {
+  const handleDownloadAll = () => {
     if (data?.submissions) {
-      for (const submission of data.submissions) {
-        if (submission?.submission?.file) {
-          console.log("Opening file URL:", submission.submission.file);
-          await new Promise((resolve) => {
-            window.open(submission.submission.file, "_blank");
-            setTimeout(resolve, 500); // Wait 500ms before opening the next file
-          });
-        }
-      }
+      const filteredSubmissions = data.submissions.filter(submission =>
+        (searchText === "" || submission?.studentID?.name?.toLowerCase().includes(searchText.toLowerCase())) &&
+        submission?.submission?.file
+      );
+
+      filteredSubmissions.forEach((submission, index) => {
+        setTimeout(() => {
+          const link = document.createElement("a");
+          link.href = submission.submission.file;
+          link.setAttribute("download", "");
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }, index * 500); 
+      });
     }
   };
 
@@ -220,14 +227,14 @@ const Submissions = () => {
                   downloads={"Downloads"}
                 />
                 {isSuccess && data?.submissions?.length > 0 && data.submissions
-                  .filter(submission => searchText === "" || submission?.studentID?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
+                  .filter(submission => searchText === "" || submission?.studentID?.name?.toLowerCase().includes(searchText.toLowerCase()))
                   .map((submission, index) => (
                     <SubmissionRow
                       isQuiz={false}
                       header={false}
                       index={index + 1}
                       bgColor={"#FFFFFF"}
-                      key={submission.studentID._id}
+                      key={submission?.studentID?._id || index}
                       name={submission?.studentID?.name}
                       submissionData={submission?.submission}
                       submission={submission?.submission?.submittedAt}

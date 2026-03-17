@@ -44,17 +44,17 @@ const SubjectReport = () => {
   const stats = [
     {
       type: "Assignments",
-      percentage: parseInt(reportQuery?.data?.averageAssignmentMarks?.percentage),
-      grade: `Grade ${reportQuery?.data?.averageAssignmentMarks?.grade}`,
+      percentage: parseInt(reportQuery?.data?.averageAssignmentMarks?.percentage) || 0,
+      grade: reportQuery?.data?.averageAssignmentMarks?.grade ? `Grade ${reportQuery?.data?.averageAssignmentMarks?.grade}` : "—",
     },
     {
       type: "Quizzes",
-      percentage: parseInt(reportQuery?.data?.averageQuizMarks?.percentage),
-      grade: `Grade ${reportQuery?.data?.averageAssignmentMarks?.grade}`,
+      percentage: parseInt(reportQuery?.data?.averageQuizMarks?.percentage) || 0,
+      grade: reportQuery?.data?.averageQuizMarks?.grade ? `Grade ${reportQuery?.data?.averageQuizMarks?.grade}` : "—",
     },
     {
       type: "Attendance",
-      percentage: parseInt(reportQuery?.data?.avgAttendancePer),
+      percentage: parseInt(reportQuery?.data?.avgAttendancePer) || 0,
       grade: "",
     },
   ];

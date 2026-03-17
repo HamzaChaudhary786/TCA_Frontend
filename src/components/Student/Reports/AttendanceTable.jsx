@@ -18,17 +18,24 @@ const AttendanceTable = ({ data }) => {
                         </thead>
                         <tbody className="flex flex-col">
                             {data?.map((item, index) => {
+                                const attStatus = item?.matchedAttendance?.[0];
+                                if (!attStatus) return null;
+
+                                const status = attStatus.late ? "Late" : (attStatus.isPresent ? "Present" : "Absent");
+                                const dateDisplay = moment.utc(item.startTime).format("Do MMM YYYY");
+                                const timeDisplay = `${moment.utc(item.startTime).format("hh:mm a")} - ${moment.utc(item.endTime).format("hh:mm a")}`;
+
                                 return (
-                                    <tr className="flex flex-1 text-xs border-t border-t-black/10">
+                                    <tr key={index} className="flex flex-1 text-xs border-t border-t-black/10">
                                         <td className="flex-[1] py-2 lg:py-3 flex justify-center">{index + 1}</td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {item?.matchedAttendance[0]?.isPresent ? "Present" : "Absent"}
+                                            {status}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {moment.utc(item.startTime).format("Do MMM YYYY")}
+                                            {dateDisplay}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {moment.utc(item.startTime).format("hh:mm a")} - {moment.utc(item.endTime).format("hh:mm a")}
+                                            {timeDisplay}
                                         </td>
                                     </tr>
                                 );

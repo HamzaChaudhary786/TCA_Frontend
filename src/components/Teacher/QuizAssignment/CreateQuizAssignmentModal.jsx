@@ -3,7 +3,7 @@ import Loader from "../../../utils/Loader";
 import IMAGES from "../../../assets/images";
 
 import { toast } from "react-toastify";
-import { FiUploadCloud } from "react-icons/fi";
+import { FiUploadCloud, FiEdit } from "react-icons/fi";
 import { IoCloseCircle } from "react-icons/io5";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { uploadFile } from "../../../utils/FileUpload";
@@ -92,7 +92,7 @@ const CreateQuizAssignmentModal = ({
         const payload = {
           ...quizAssignmentDataObj,
           dueDate: QADate && QATime
-            ? `${QADate}T${QATime}:00.000Z`
+            ? new Date(`${QADate}T${QATime}`).toISOString()
             : data?.dueDate || new Date().toISOString(),
           files: filesArr,
           id: data?._id,
@@ -103,7 +103,7 @@ const CreateQuizAssignmentModal = ({
 
       // 2) compute dueDate
       const dueDate = QADate && QATime
-        ? `${QADate}T${QATime}:00.000Z`
+        ? new Date(`${QADate}T${QATime}`).toISOString()
         : new Date().toISOString();
 
       // 3) loop sequentially
@@ -168,7 +168,7 @@ const CreateQuizAssignmentModal = ({
       }
 
       const dueDate = QADate && QATime
-        ? `${QADate}T${QATime}:00.000Z`
+        ? new Date(`${QADate}T${QATime}`).toISOString()
         : new Date().toISOString();
 
       if (isEditTrue) {

@@ -102,7 +102,7 @@ const Quizzes = () => {
                     const expectedCount = assignment?.classroomID?.students?.filter(student => (
                       (!student?.subjects || student?.subjects?.length === 0) ||
                       student?.subjects?.some(sub => (sub?._id || sub)?.toString() === (assignment?.subjectID?._id || assignment?.subjectID)?.toString())
-                    )).length || 0;
+                    ))?.length || 0;
 
                     return (
                       <QuizAssignmentRow
@@ -138,7 +138,7 @@ const Quizzes = () => {
                     );
                   })}
 
-                  {data.length == 0 && <div className="text-center py-4 text-3xl font-medium">No quizes to display!</div>}
+                  {data?.length === 0 && <div className="text-center py-4 text-3xl font-medium">No quizes to display!</div>}
 
                 </div>
               </div>

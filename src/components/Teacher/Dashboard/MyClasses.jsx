@@ -7,6 +7,8 @@ const MyClasses = () => {
   console.log("All Classes room in dashboard are : ", allClassrooms);
 
   const SubjectComponent = ({ data }) => {
+    const { allSubjects } = useTeacher();
+     const subjectName = allSubjects.find(s => s._id === data.teachers?.[0]?.subject)?.name || "No Subject";
     console.log("data", data);
 
     return (
@@ -16,16 +18,16 @@ const MyClasses = () => {
             <img
               className="w-10 h-10 rounded-md"
               src={
-                data.subject == "Maths"
+                subjectName == "Maths"
                   ? IMAGES.MathIcon
-                  : data.subject == "Chemistry"
+                  : subjectName == "Chemistry"
                     ? IMAGES.ChemistryIcon
                     : IMAGES.MathIcon
               }
               alt="math icon"
             />
             <div>
-              <p>{data.subject} sub name</p>
+              <p>{subjectName}</p>
               <p className="text-xs text-black/50">
                 {data.classes.length} lectures
               </p>

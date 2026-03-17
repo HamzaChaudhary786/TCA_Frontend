@@ -83,9 +83,14 @@ const Notifications = ({ onclose, dashboard, data }) => {
           <div className="flex items-center gap-2 ml-10">
             <img src={pdf} alt="" className="w-12 h-12" />
             <div className="text-grey_700">
-              <p className="text-sm font-medium">
+              <a 
+                href={item.files[0]?.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-sm font-medium hover:underline"
+              >
                 {item.files[0]?.name || "Assignment File"}
-              </p>
+              </a>
               <p className="text-xs">{item.title}</p>
             </div>
           </div>

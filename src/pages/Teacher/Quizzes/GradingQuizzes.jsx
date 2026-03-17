@@ -130,16 +130,26 @@ const GradingQuizzes = () => {
   });
 
   useEffect(() => {
-    let myobj = {};
     if (allQuizQuery.isSuccess) {
       console.log("all Query data ", allQuizQuery.data);
       let dataObjArr = allQuizQuery?.data?.submissions.map(item => {
-        return myobj = { ...item, grade: "", feedback: "", marks: "" }
+        return {
+          ...item,
+          grade: item.submission?.grade || "",
+          feedback: item.submission?.feedback || "",
+          marks: item.submission?.marks !== null && item.submission?.marks !== undefined ? item.submission.marks : ""
+        }
       })
       console.log("data after useeffect is : ", dataObjArr)
       setGradingData(dataObjArr)
     }
   }, [allQuizQuery.data, allQuizQuery.isSuccess]);
+
+  const filteredData = gradingData?.filter((submission) =>
+    submission?.studentID?.name
+      ?.toLowerCase()
+      .includes(searchText.toLowerCase())
+  );
 
   return (
     <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
@@ -249,9 +259,9 @@ const GradingQuizzes = () => {
                 marksObtained={"Marks Obtained"}
                 grade={"Grade"}
               />
-              {!gradingData.isPending && searchText == "" && gradingData?.map((submission, index) => (
+              {filteredData?.map((submission, index) => (
                 <GradeQuizAssignmentRow
-                  isQuiz={false}
+                  isQuiz={true}
                   header={false}
                   index={index + 1}
                   bgColor={"#FFFFFF"}
@@ -267,26 +277,7 @@ const GradingQuizzes = () => {
                 />
               ))}
 
-              {!gradingData.isPending && searchText !== "" && gradingData?.map((submission, index) => {
-                if (submission?.studentID?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                  return <GradeQuizAssignmentRow
-                    isQuiz={false}
-                    header={false}
-                    index={index + 1}
-                    bgColor={"#FFFFFF"}
-                    grade={submission?.grade}
-                    marks={submission?.marks}
-                    profileLink={submission.studentID.profilePic || IMAGES.Profile}
-                    setInputField={setInputField}
-                    id={submission?.studentID?._id}
-                    feedback={submission?.feedback}
-                    name={submission?.studentID?.name}
-                    marksObtained={submission?.marksObtained}
-                    submission={submission?.submission?.submittedAt || "Not Submitted Yet"}
-                  />
-                }
-              }
-              )}
+              {/* Removed redundant and buggy search mapping */}
             </div>
 
             {gradeMutation.isPending && <div> <Loader /> </div>}

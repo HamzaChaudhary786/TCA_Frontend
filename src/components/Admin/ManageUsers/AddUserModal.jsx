@@ -14,137 +14,161 @@ import { emailPattern, namePattern, passwordPattern } from '../../../constants/p
 import useClickOutside from '../../../hooks/useClickOutlise';
 import { useBlur } from '../../../context/BlurContext';
 
+const CustomInput = ({ label, placeholder, type, required = false, name, defaultValue }) => {
+    return (
+        <div className="flex flex-col text-start py-1">
+            <div className="flex flex-col gap-1">
+                <div className="font-medium flex gap-1">
+                    <p>{label}</p>
+                    {required && (
+                        <p className="font-normal">
+                            <FaAsterisk size={6} color="red" className="mt-1" />
+                        </p>
+                    )}
+                </div>
+                <div>
+                    <input
+                        className="border outline-none rounded-md border-black/20 px-4 w-full py-[8px]"
+                        required={required}
+                        type={type}
+                        placeholder={placeholder}
+                        name={name}
+                        defaultValue={defaultValue}
+                        onChange={(e) => {
+                            const formData = JSON.parse(localStorage.getItem('addUserFormData') || '{}');
+                            formData[name] = e.target.value;
+                            localStorage.setItem('addUserFormData', JSON.stringify(formData));
+                        }}
+                    />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+const Selectable = ({ label, role, setRole }) => {
+    return (
+        <div className='flex flex-col text-start py-1'>
+            <div className='flex flex-col gap-1'>
+                <div className='font-medium '>
+                    {label}
+                </div>
+                <div>
+                    <select value={role} onChange={(e) => {
+                        setRole(e.target.value);
+                        const formData = JSON.parse(localStorage.getItem('addUserFormData') || '{}');
+                        formData['role'] = e.target.value;
+                        localStorage.setItem('addUserFormData', JSON.stringify(formData));
+                    }} className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
+                        <option value="student">Student</option>
+                        {/* <option value="parent">Parent</option> */}
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const LevelSelectable = ({ label, alllevels, defaultValue }) => {
+    return (
+        <div className='flex flex-col text-start py-1'>
+            <div className='flex flex-col gap-1'>
+                <div className='font-medium flex gap-1'>
+                    <p>
+                        {label}
+                    </p>
+                    <p className='font-normal'>
+                        <FaAsterisk size={6} color='red' className='mt-1' />
+                    </p>
+                </div>
+                <div>
+                    <select
+                        defaultValue={defaultValue}
+                        onChange={(e) => {
+                            const formData = JSON.parse(localStorage.getItem('addUserFormData') || '{}');
+                            formData['levelID'] = e.target.value;
+                            localStorage.setItem('addUserFormData', JSON.stringify(formData));
+                        }}
+                        className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
+                        <option value="">Enroll in</option>
+                        {alllevels.map((item) => {
+                            return <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
+                        })}
+                    </select>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const CustomSelectable = ({ label, options }) => {
+    return (
+        <div className='flex flex-col text-start py-1'>
+            <div className='flex flex-col gap-1'>
+                <div className='font-medium flex gap-1'>
+                    <p>
+                        {label}
+                    </p>
+                    <p className='font-normal'>
+                        <FaAsterisk size={6} color='red' className='mt-1' />
+                    </p>
+                </div>
+                <div>
+                    <select className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
+                        <option value="">Select {label} </option>
+                        {options.map((item) => {
+                            return <option key={item} value={item}>{item}</option>
+                        })}
+                    </select>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+
+const CustomFileSelector = ({ label }) => {
+    return <div className="flex flex-col gap-2">
+        <div className='flex gap-2 items-center'>
+
+            <p className="font-semibold">{label}</p>
+            <p className='font-normal'>
+                <FaAsterisk size={6} color='red' className='mt-1' />
+            </p>
+        </div>
+        <div className="flex border border-black/20 rounded-lg px-6 py-4 flex-col text-xs justify-center items-center">
+            <input
+                type="file"
+                className="hidden"
+                id="cv"
+            />
+            <label htmlFor="cv">
+                <img
+                    src={IMAGES.upload}
+                    className="w-8 h-8 cursor-pointer"
+                />
+            </label>
+            <p className="text-[#6A00FF] font-medium text-[10px] text-center">Click to Upload <span className='text-black font-normal'>drag and drop you CV</span> </p>
+            <p className='text-[10px]'>PNG, JPG, Word or PDF</p>
+        </div>
+    </div>
+}
+
+
 const AddUserModal = ({ closeModal, refetch }) => {
 
 
-
-
-    const CustomInput = ({ label, placeholder, type, required = false }) => {
-        return (
-            <div className="flex flex-col text-start py-1">
-                <div className="flex flex-col gap-1">
-                    <div className="font-medium flex gap-1">
-                        <p>{label}</p>
-                        {required && (
-                            <p className="font-normal">
-                                <FaAsterisk size={6} color="red" className="mt-1" />
-                            </p>
-                        )}
-                    </div>
-                    <div>
-                        <input
-                            className="border outline-none rounded-md border-black/20 px-4 w-full py-[8px]"
-                            required={required}
-                            type={type}
-                            placeholder={placeholder}
-                        />
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-
-    const Selectable = ({ label }) => {
-        return (
-            <div className='flex flex-col text-start py-1'>
-                <div className='flex flex-col gap-1'>
-                    <div className='font-medium '>
-                        {label}
-                    </div>
-                    <div>
-                        <select value={role} onChange={(e) => { setRole(e.target.value) }} className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
-                            <option value="student">Student</option>
-                            {/* <option value="parent">Parent</option> */}
-                            <option value="teacher">Teacher</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    const LevelSelectable = ({ label, alllevels }) => {
-        return (
-            <div className='flex flex-col text-start py-1'>
-                <div className='flex flex-col gap-1'>
-                    <div className='font-medium flex gap-1'>
-                        <p>
-                            {label}
-                        </p>
-                        <p className='font-normal'>
-                            <FaAsterisk size={6} color='red' className='mt-1' />
-                        </p>
-                    </div>
-                    <div>
-                        <select className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
-                            <option value="">Enroll in</option>
-                            {alllevels.map((item) => {
-                                return <option value={JSON.stringify(item)}>{item.name}</option>
-                            })}
-                        </select>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    const CustomSelectable = ({ label, options }) => {
-        return (
-            <div className='flex flex-col text-start py-1'>
-                <div className='flex flex-col gap-1'>
-                    <div className='font-medium flex gap-1'>
-                        <p>
-                            {label}
-                        </p>
-                        <p className='font-normal'>
-                            <FaAsterisk size={6} color='red' className='mt-1' />
-                        </p>
-                    </div>
-                    <div>
-                        <select className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
-                            <option value="">Select {label} </option>
-                            {options.map((item) => {
-                                return <option value={item}>{item}</option>
-                            })}
-                        </select>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-
-    const CustomFileSelector = ({ label }) => {
-        return <div className="flex flex-col gap-2">
-            <div className='flex gap-2 items-center'>
-
-                <p className="font-semibold">{label}</p>
-                <p className='font-normal'>
-                    <FaAsterisk size={6} color='red' className='mt-1' />
-                </p>
-            </div>
-            <div className="flex border border-black/20 rounded-lg px-6 py-4 flex-col text-xs justify-center items-center">
-                <input
-                    type="file"
-                    className="hidden"
-                    id="cv"
-                />
-                <label htmlFor="cv">
-                    <img
-                        src={IMAGES.upload}
-                        className="w-8 h-8 cursor-pointer"
-                    />
-                </label>
-                <p className="text-[#6A00FF] font-medium text-[10px] text-center">Click to Upload <span className='text-black font-normal'>drag and drop you CV</span> </p>
-                <p className='text-[10px]'>PNG, JPG, Word or PDF</p>
-            </div>
-        </div>
-    }
-
     const { allLevels } = useAdmin();
-    const [role, setRole] = useState("student");
+    const [role, setRole] = useState(() => {
+        const formData = JSON.parse(localStorage.getItem('addUserFormData') || '{}');
+        return formData.role || "student";
+    });
     const [loading, setLoading] = useState(false);
+
+    const initialFormData = JSON.parse(localStorage.getItem('addUserFormData') || '{}');
+
 
     const ref = useRef(null); // Reference to the modal container
     const { toggleBlur } = useBlur(); // Access toggleBlur from the context
@@ -210,6 +234,7 @@ const AddUserModal = ({ closeModal, refetch }) => {
 
                 if (response?._id) {
                     toast.success("User added successfully!");
+                    localStorage.removeItem('addUserFormData');
                     await refetch();
                     closeModal();
                 } else {
@@ -247,12 +272,14 @@ const AddUserModal = ({ closeModal, refetch }) => {
                 const response = await registerStudent(dataBody);
                 if (response?._id) {
                     toast.success("User added successfully!");
+                    localStorage.removeItem('addUserFormData');
                     await refetch();
                     closeModal();
                 } else {
                     throw new Error("Failed to register user.");
                 }
             }
+
         } catch (error) {
             console.error("Error during form submission:", error);
             toast.error(error.message || "Cannot add the user!");
@@ -279,50 +306,55 @@ const AddUserModal = ({ closeModal, refetch }) => {
                     <div className='flex flex-col bg-white h-full px-10 py-4'>
                         <form onSubmit={handleSubmit}>
                             <div className=''>
-                                <Selectable label={"Occupation"} />
+                                <Selectable label={"Occupation"} role={role} setRole={setRole} />
                                 {role == "student" ?
                                     <>
-                                        <CustomInput label={"Name"} type="text" placeholder={"Enter your Name"} required />
-                                        <CustomInput label={"Email"} type="email" placeholder={"Enter your Email"} required />
-                                        <CustomInput label={"Roll No"} type="text" placeholder={"Enter your Roll No"} required />
-                                        <CustomInput label={"Reference No"} type="text" placeholder={"Enter your Reference No"} />
+                                        <CustomInput label={"Name"} type="text" placeholder={"Enter your Name"} required name="name" defaultValue={initialFormData.name} />
+                                        <CustomInput label={"Email"} type="email" placeholder={"Enter your Email"} required name="email" defaultValue={initialFormData.email} />
+                                        <CustomInput label={"Roll No"} type="text" placeholder={"Enter your Roll No"} required name="rollNo" defaultValue={initialFormData.rollNo} />
+                                        <CustomInput label={"Reference No"} type="text" placeholder={"Enter your Reference No"} name="referenceNo" defaultValue={initialFormData.referenceNo} />
 
                                         <div className="flex flex-col">
                                             <label className="text-gray-700 font-medium">Gender</label>
-                                            <select name="gender" className="border p-2 rounded-md" required>
+                                            <select name="gender" className="border p-2 rounded-md" required defaultValue={initialFormData.gender} onChange={(e) => {
+                                                const formData = JSON.parse(localStorage.getItem('addUserFormData') || '{}');
+                                                formData['gender'] = e.target.value;
+                                                localStorage.setItem('addUserFormData', JSON.stringify(formData));
+                                            }}>
                                                 <option value="">Select Gender</option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>
                                         </div>
-                                        <CustomInput label={"Bio"} type="text" placeholder={"Enter your Bio"} />
-                                        <CustomInput label={"Phone no."} type="text" placeholder={"Enter your Phone Number"} required />
-                                        <LevelSelectable label={"Enroll in"} alllevels={allLevels} />
-                                        <CustomInput label={"Guardian Name"} type="text" placeholder={"Enter Guardian Name"} required />
-                                        <CustomInput label={"Guardian Email"} type="email" placeholder={"Enter Guardian Email"} required />
-                                        <CustomInput label={"Guardian Phone no."} type="text" placeholder={"Enter Guardian Phone no."} required />
-                                        <CustomInput label={"Password"} type="password" placeholder={"Enter your Password"} required />
-                                        <CustomInput label={"Confirm Password"} type="password" placeholder={"Confirm your Password"} required />
+                                        <CustomInput label={"Bio"} type="text" placeholder={"Enter your Bio"} name="bio" defaultValue={initialFormData.bio} />
+                                        <CustomInput label={"Phone no."} type="text" placeholder={"Enter your Phone Number"} required name="phoneNumber" defaultValue={initialFormData.phoneNumber} />
+                                        <LevelSelectable label={"Enroll in"} alllevels={allLevels} defaultValue={initialFormData.levelID} />
+                                        <CustomInput label={"Guardian Name"} type="text" placeholder={"Enter Guardian Name"} required name="guardianName" defaultValue={initialFormData.guardianName} />
+                                        <CustomInput label={"Guardian Email"} type="email" placeholder={"Enter Guardian Email"} required name="guardianEmail" defaultValue={initialFormData.guardianEmail} />
+                                        <CustomInput label={"Guardian Phone no."} type="text" placeholder={"Enter Guardian Phone no."} required name="guardianPhoneNumber" defaultValue={initialFormData.guardianPhoneNumber} />
+                                        <CustomInput label={"Password"} type="password" placeholder={"Enter your Password"} required name="password" defaultValue={initialFormData.password} />
+                                        <CustomInput label={"Confirm Password"} type="password" placeholder={"Confirm your Password"} required name="confirmPassword" defaultValue={initialFormData.confirmPassword} />
                                     </>
                                     : role == "parent" ? <>
-                                        <CustomInput label={"Student Name"} type="text" placeholder={"Enter student Name"} required />
-                                        <CustomInput label={"Student ID"} type="text" placeholder={"Enter student ID"} required />
-                                        <CustomInput label={"Password"} type="password" placeholder={"Enter your Password"} required />
-                                        <CustomInput label={"Confirm Password"} type="password" placeholder={"Confirm your Password"} required />
+                                        <CustomInput label={"Student Name"} type="text" placeholder={"Enter student Name"} required name="sName" defaultValue={initialFormData.sName} />
+                                        <CustomInput label={"Student ID"} type="text" placeholder={"Enter student ID"} required name="sID" defaultValue={initialFormData.sID} />
+                                        <CustomInput label={"Password"} type="password" placeholder={"Enter your Password"} required name="password" defaultValue={initialFormData.password} />
+                                        <CustomInput label={"Confirm Password"} type="password" placeholder={"Confirm your Password"} required name="confirmPassword" defaultValue={initialFormData.confirmPassword} />
                                     </> :
                                         <>
-                                            <CustomInput label={"Name"} type="text" placeholder={"Enter your Name"} required />
-                                            <CustomInput label={"Email"} type="email" placeholder={"Enter your email"} required />
-                                            <CustomInput label={"Bio"} type="text" placeholder={"Enter your Bio"} />
-                                            <CustomInput label={"Phone"} type="text" placeholder={"Enter your phone no."} required />
-                                            <CustomInput label={"Reference No"} type="text" placeholder={"Enter your Reference No"} />
+                                            <CustomInput label={"Name"} type="text" placeholder={"Enter your Name"} required name="name" defaultValue={initialFormData.name} />
+                                            <CustomInput label={"Email"} type="email" placeholder={"Enter your email"} required name="email" defaultValue={initialFormData.email} />
+                                            <CustomInput label={"Bio"} type="text" placeholder={"Enter your Bio"} name="bio" defaultValue={initialFormData.bio} />
+                                            <CustomInput label={"Phone"} type="text" placeholder={"Enter your phone no."} required name="phoneNumber" defaultValue={initialFormData.phoneNumber} />
+                                            <CustomInput label={"Reference No"} type="text" placeholder={"Enter your Reference No"} name="referenceNo" defaultValue={initialFormData.referenceNo} />
 
                                             {/* <CustomSelectable label={"Qualification"} options={qualification} />
                                             <CustomFileSelector label={"CV"} />
                                             <CustomSelectable label={"Experience"} options={experience} /> */}
-                                            <CustomInput label={"Password"} type="password" placeholder={"Enter your Password"} required />
-                                            <CustomInput label={"Confirm Password"} type="password" placeholder={"Confirm your Password"} required />
+                                            <CustomInput label={"Password"} type="password" placeholder={"Enter your Password"} required name="password" defaultValue={initialFormData.password} />
+                                            <CustomInput label={"Confirm Password"} type="password" placeholder={"Confirm your Password"} required name="confirmPassword" defaultValue={initialFormData.confirmPassword} />
                                         </>}
+
                             </div>
                             <div className='py-4 flex flex-col gap-2'>
                                 {loading ?

@@ -184,7 +184,7 @@ const UnifiedSubjectAssign = () => {
         </div>
 
         {/* ── Filter Card ────────────────────────────────────────────────────── */}
-        <div className="bg-white border border-[#E2E8F0] rounded-[28px] p-6 sm:p-7
+        <div className="bg-white border border-[#E2E8F0] rounded-[28px] p-6 w-full sm:p-7
                         shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] mb-6">
 
           <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#64748B] mb-5">

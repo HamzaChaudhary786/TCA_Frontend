@@ -23,22 +23,56 @@ const QuizAssignmentsTable = ({ data }) => {
                         </thead>
 
                         <tbody className="flex flex-col">
-                            {data.map((item, index) => {
+                             {data.map((item, index) => {
+                                const isGraded = item.isGraded;
+                                const isSubmitted = item.isSubmitted;
+                                const dueDate = new Date(item.deadline || item.dueDate);
+                                const isDueDatePassed = new Date() > dueDate;
+
+                                let displayMarks = item.obtainedMarks;
+                                let displayGrade = item.grade || "-";
+
+                                if (!isSubmitted) {
+                                    if (isDueDatePassed) {
+                                        displayMarks = <span className="text-red-500 font-semibold italic">no assignment</span>;
+                                        displayGrade = "F";
+                                    } else {
+                                        displayMarks = <span className="text-yellow-600 italic">pending</span>;
+                                        displayGrade = "-";
+                                    }
+                                } else if (!isGraded) {
+                                    displayMarks = <span className="text-blue-600 italic">Pending Grading</span>;
+                                    displayGrade = "-";
+                                } else {
+                                    // Graded
+                                    displayMarks = item.obtainedMarks;
+                                    if (!item.grade || item.grade === "-") {
+                                        const per = (item.obtainedMarks / item.totalMarks) * 100;
+                                        if (per >= 90) displayGrade = "A";
+                                        else if (per >= 80) displayGrade = "B";
+                                        else if (per >= 70) displayGrade = "C";
+                                        else if (per >= 60) displayGrade = "D";
+                                        else if (per >= 50) displayGrade = "E";
+                                        else displayGrade = "F";
+                                    } else {
+                                        displayGrade = item.grade;
+                                    }
+                                }
+
                                 return (
-                                    // onClick={() => navigate(`/reports/${params.subject}/${item.title}`)}
-                                    <tr style={{ cursor: "pointer" }} className="flex flex-1 text-xs border-t border-t-black/10">
+                                    <tr key={index} style={{ cursor: "pointer" }} className="flex flex-1 text-xs border-t border-t-black/10">
                                         <td className="flex-[1] py-2 lg:py-3 flex justify-center">{index + 1}</td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
                                             {item.title}
                                         </td>
-                                        <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {item.obtainedMarks}
+                                        <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center">
+                                            {displayMarks}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
                                             {item.totalMarks}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                            {item.grade}
+                                            {displayGrade}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center">
                                             {item.feedback || "No Feedback"}

@@ -81,7 +81,7 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
   });
 
   // Format due date for submission
-  const formatDueDate = () => `${dueDate}T${dueTime}:00.000Z`;
+  const formatDueDate = () => new Date(`${dueDate}T${dueTime}`).toISOString();
 
   // Handle file upload
   const handleFileChange = async (e) => {

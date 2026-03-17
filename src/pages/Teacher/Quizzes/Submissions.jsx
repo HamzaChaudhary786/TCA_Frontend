@@ -103,17 +103,24 @@ const Submissions = () => {
 
   console.log("all quiz submissions are : ", data);
 
-  const handleDownloadAll = async () => {
+  const handleDownloadAll = () => {
     if (data?.submissions) {
-      for (const submission of data.submissions) {
-        if (submission?.submission?.file) {
-          console.log("Opening file URL:", submission.submission.file);
-          await new Promise((resolve) => {
-            window.open(submission.submission.file, "_blank");
-            setTimeout(resolve, 500); // Wait 500ms before opening the next file
-          });
-        }
-      }
+      const filteredSubmissions = data.submissions.filter(submission =>
+        (searchText === "" || submission?.studentID?.name?.toLowerCase().includes(searchText.toLowerCase())) &&
+        submission?.submission?.file
+      );
+
+      filteredSubmissions.forEach((submission, index) => {
+        setTimeout(() => {
+          const link = document.createElement("a");
+          link.href = submission.submission.file;
+          link.setAttribute("download", "");
+          link.setAttribute("target", "_blank");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }, index * 500); 
+      });
     }
   };
 
@@ -240,13 +247,12 @@ const Submissions = () => {
                   {/* {console.log(data, "quizese data")} */}
 
 
-                  {data?.submissions?.length !== 0 && isSuccess && searchText === "" && data?.submissions?.map((submission, index) => (
-                    <>
-                      {console.log(data?.submissions, "submission?.submissions")
-                      }
+                  {isSuccess && data?.submissions?.length > 0 && data.submissions
+                    .filter(submission => searchText === "" || submission?.studentID?.name?.toLowerCase().includes(searchText.toLowerCase()))
+                    .map((submission, index) => (
                       <SubmissionRow
                         isQuiz={true}
-                        key={submission._id || index} // Use a unique key
+                        key={submission?.studentID?._id || index}
                         header={false}
                         index={index + 1}
                         bgColor={"#FFFFFF"}
@@ -255,25 +261,8 @@ const Submissions = () => {
                         submission={submission?.submission?.submittedAt}
                         profileLink={submission?.studentID?.profilePic || submission?.profilePic || "http://bit.ly/4gcOBHl"}
                       />
-                    </>
-                  ))}
-
-
-                  {data?.submissions?.length !== 0 && isSuccess && searchText !== "" && data?.submissions.map((submission, index) => {
-                    if (submission?.studentID?.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                      return <SubmissionRow
-                        isQuiz={false}
-                        header={false}
-                        index={index + 1}
-                        bgColor={"#FFFFFF"}
-                        key={JSON.stringify(submission)}
-                        name={submission?.studentID?.name}
-                        submissionData={submission?.submission}
-                        submission={submission?.submission?.submittedAt}
-                        profileLink={submission?.studentID?.profilePic || submission?.profilePic || "http://bit.ly/4gcOBHl"}
-                      />
-                    }
-                  })}
+                    ))
+                  }
 
                   {data?.submissions?.length == 0 && <div className="text-center py-4 text-3xl font-medium">No submissions right now!</div>}
 

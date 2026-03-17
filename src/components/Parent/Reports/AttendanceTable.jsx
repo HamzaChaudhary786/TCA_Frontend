@@ -23,21 +23,23 @@ const AttendanceTable = ({ data }) => {
 
                         <tbody className="flex flex-col w-full">
                             {data?.map((item, index) => {
+                                const status = item?.isPresent ? (item?.late ? "Late" : "Present") : "Absent";
+                                const dateDisplay = moment(item.startTime).format("Do MMM YYYY");
+                                const timeDisplay = `${moment.utc(item.startTime).format("hh:mm a")} - ${moment.utc(item.endTime).format("hh:mm a")}`;
+
                                 return (
                                     <tr key={index} className="flex flex-1 w-full border-t border-t-black/10 items-stretch">
                                         <td className="flex-[1] py-2 lg:py-3 flex justify-center items-center text-[10px] md:text-[14px] min-w-0">
                                             {index + 1}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
-                                            {item?.isPresent
-                                                ? (item?.isLate ? "Late" : "Present")
-                                                : "Absent"}
+                                            {status}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
-                                            {moment(item.startTime).format("Do MMM YYYY")}
+                                            {dateDisplay}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
-                                            {moment.utc(item.startTime).format("hh:mm a")} - {moment.utc(item.endTime).format("hh:mm a")}
+                                            {timeDisplay}
                                         </td>
                                     </tr>
                                 );

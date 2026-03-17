@@ -87,7 +87,7 @@ const DataRow = (props) => {
   {/* Popup for admin warning */}
 {showAdminPopup && (
   <div
-    className="absolute top-8 right-0 bg-[#dadbf3] text-[#0B1053] text-xs py-2 px-3 rounded shadow-lg z-50 w-48"
+    className="fixed bg-[#dadbf3] text-[#0B1053] text-xs py-2 px-3 rounded shadow-lg z-[9999] w-48 right-0"
   >
     You cannot delete admin entries!
   </div>

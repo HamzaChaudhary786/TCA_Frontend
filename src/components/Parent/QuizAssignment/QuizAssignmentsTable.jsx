@@ -27,13 +27,40 @@ const QuizAssignmentsTable = ({ data, type }) => {
 
                         <tbody className="flex flex-col w-full">
                             {data?.[type]?.map((item, index) => {
-                                const mod = (item.marksObtained / item.totalMarks) * 100;
-                                let grade = "F";
-                                if (mod >= 90) grade = "A";
-                                else if (mod >= 80) grade = "B";
-                                else if (mod >= 70) grade = "C";
-                                else if (mod >= 60) grade = "D";
-                                else if (mod >= 50) grade = "E";
+                                const isGraded = item.isGraded;
+                                const isSubmitted = item.isSubmitted;
+                                const dueDate = new Date(item.deadline || item.dueDate);
+                                const isDueDatePassed = new Date() > dueDate;
+
+                                let displayMarks = item.obtainedMarks;
+                                let displayGrade = item.grade || "-";
+
+                                if (!isSubmitted) {
+                                    if (isDueDatePassed) {
+                                        displayMarks = <span className="text-red-500 font-semibold italic">Overdue</span>;
+                                        displayGrade = "F";
+                                    } else {
+                                        displayMarks = <span className="text-yellow-600 italic">pending</span>;
+                                        displayGrade = "-";
+                                    }
+                                } else if (!isGraded) {
+                                    displayMarks = <span className="text-blue-600 italic">Pending Grading</span>;
+                                    displayGrade = "-";
+                                } else {
+                                    // Graded
+                                    displayMarks = item.obtainedMarks;
+                                    if (!item.grade || item.grade === "-") {
+                                        const per = (item.obtainedMarks / item.totalMarks) * 100;
+                                        if (per >= 90) displayGrade = "A";
+                                        else if (per >= 80) displayGrade = "B";
+                                        else if (per >= 70) displayGrade = "C";
+                                        else if (per >= 60) displayGrade = "D";
+                                        else if (per >= 50) displayGrade = "E";
+                                        else displayGrade = "F";
+                                    } else {
+                                        displayGrade = item.grade;
+                                    }
+                                }
 
                                 return (
                                     <tr
@@ -49,13 +76,13 @@ const QuizAssignmentsTable = ({ data, type }) => {
                                             {item.title}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
-                                            {item.marksObtained}
+                                            {displayMarks}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
                                             {item.totalMarks}
                                         </td>
                                         <td className={`flex-[2] ${tdClass}`}>
-                                            {grade}
+                                            {displayGrade}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
                                             {item.feedback || "No Feedback"}

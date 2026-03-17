@@ -59,7 +59,7 @@ const ProfileDetails = ({ onClose }) => {
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
 
-      // Use the separated utility to handle the upload
+      // Use the separated utility to handle the upload to Cloudinary
       await handleProfileImageUpdate(file, (url) => {
         console.log("Uploaded Image URL:", url);
         setUserDataObj(prev => ({ ...prev, profilePic: url }));
@@ -118,10 +118,34 @@ const ProfileDetails = ({ onClose }) => {
         </div>
 
         <div className="flex flex-col items-center py-4">
-          <label htmlFor="profile" className="cursor-pointer">
-            <img src={previewUrl || userData.profilePic || profile} alt="Profile" className="w-28 h-28 rounded-full object-cover" />
+          <label 
+            htmlFor={isEditing ? "profile" : ""} 
+            className={`relative ${isEditing ? "cursor-pointer" : "cursor-default"}`}
+          >
+            <img 
+              src={previewUrl || userData.profilePic || profile} 
+              alt="Profile" 
+              className={`w-28 h-28 rounded-full object-cover ${loading ? 'opacity-50' : ''} ${isEditing ? 'ring-2 ring-[#0B1053] ring-offset-2' : ''}`} 
+            />
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-[#0B1053] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+            {isEditing && !loading && (
+              <div className="absolute bottom-0 right-0 bg-[#0B1053] p-1.5 rounded-full text-white shadow-md">
+                <FiEdit size={12} />
+              </div>
+            )}
           </label>
-          <input id="profile" type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
+          <input 
+            id="profile" 
+            type="file" 
+            className="hidden" 
+            onChange={handleFileChange} 
+            accept="image/*" 
+            disabled={!isEditing || loading} 
+          />
           <p className="mt-2 font-medium">{userData.name}</p>
           <p className="text-sm text-gray-500">{userData.bio || "No bio available"}</p>
         </div>
@@ -140,8 +164,12 @@ const ProfileDetails = ({ onClose }) => {
               <FiEdit className="cursor-pointer " onClick={() => setIsEditing(true)} />
             </div>
           ) : (
-            <button onClick={() => updateUserMutation.mutate(userDataObj)} className="px-8 py-2 text-white bg-[#0B1053] rounded-md">
-              {updateUserMutation.isPending ? <Loader /> : "Save"}
+            <button 
+              onClick={() => updateUserMutation.mutate(userDataObj)} 
+              disabled={updateUserMutation.isPending || loading}
+              className={`px-8 py-2 text-white bg-[#0B1053] rounded-md flex items-center justify-center min-w-[100px] ${(updateUserMutation.isPending || loading) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90 transition-all'}`}
+            >
+              {updateUserMutation.isPending ? <Loader /> : loading ? "Uploading..." : "Save"}
             </button>
           )}
         </div>

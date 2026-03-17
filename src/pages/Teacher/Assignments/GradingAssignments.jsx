@@ -10,7 +10,7 @@ import { IoBookOutline } from "react-icons/io5";
 import { useBlur } from "../../../context/BlurContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery ,useQueryClient } from "@tanstack/react-query";
 import { getMultipleAssignmentsForGrading, gradeAssignments } from "../../../api/Teacher/Assignments";
 import Loader from "../../../utils/Loader";
 import { useUser } from "../../../context/UserContext";
@@ -102,13 +102,15 @@ const GradingAssignments = () => {
 
   }, []);
 
+  const queryClient = useQueryClient();
   const gradeMutation = useMutation({
-    mutationKey: ["submissions"],
+    // mutationKey: ["submissions"],
     mutationFn: async (data) => {
       console.log("data being sent is : ", data);
       let result = await gradeAssignments({ submissions: data }, location.state._id);
       return result;
-    }, onSettled: () => {
+    }, onSuccess: () => {
+      toast.dismiss();
       toast.success("Grades Added Successfully!");
       // Invalidate all relevant queries for all roles to ensure reports "progress"
       queryClient.invalidateQueries(["assignment"]);
@@ -132,11 +134,15 @@ const GradingAssignments = () => {
 
 
   useEffect(() => {
-    let myobj = {};
     if (allAssignmentsQuery.isSuccess) {
       console.log("all Query data ", allAssignmentsQuery?.data);
       let dataObjArr = allAssignmentsQuery?.data?.submissions.map(item => {
-        return myobj = { ...item, grade: "", feedback: "", marks: "" }
+        return {
+          ...item,
+          grade: item.submission?.grade || "",
+          feedback: item.submission?.feedback || "",
+          marks: item.submission?.marks !== null && item.submission?.marks !== undefined ? item.submission.marks : ""
+        }
       })
       console.log("data after useeffect is : ", dataObjArr)
       setGradingData(dataObjArr)

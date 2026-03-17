@@ -32,6 +32,10 @@ const SubjectReport = () => {
         label: "Absent",
         value: 0,
       },
+      {
+        label: "Late",
+        value: 0,
+      },
     ]
   )
 
@@ -52,16 +56,24 @@ const SubjectReport = () => {
 
 
   useEffect(() => {
-    if (!reportQuery.isPending)
-      reportQuery?.data?.attendance?.classes.map((item) => {
-        if (item?.matchedAttendance[0]?.isPresent) {
-          setChartDate([...chartData, chartData[0].value = chartData[0].value + 1])
-        }
-        if (!item?.matchedAttendance[0]?.isPresent) {
-          setChartDate([...chartData, chartData[1].value = chartData[1].value + 1])
-        }
-      })
-  }, [reportQuery.isPending])
+    if (reportQuery.data?.attendance) {
+      const { presentCount, absentCount, lateCount } = reportQuery.data.attendance;
+      setChartDate([
+        {
+          label: "Present",
+          value: presentCount,
+        },
+        {
+          label: "Absent",
+          value: absentCount,
+        },
+        {
+          label: "Late",
+          value: lateCount,
+        },
+      ]);
+    }
+  }, [reportQuery.data]);
 
 
   return (
