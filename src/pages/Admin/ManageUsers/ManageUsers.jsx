@@ -35,7 +35,6 @@ const ManageUsers = () => {
 
   const toggleAddUserModal = () => {
     setIsAddUserModal(!isAddUserModal);
-    // toggleBlur();
   }
 
   const toggleEditUserModal = () => {
@@ -105,53 +104,78 @@ const ManageUsers = () => {
   return (
     accessMutation.isPending || adminUsersDataPending || userDellMutation.isPending ? <div className="flex flex-1"> <Loader /> </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
+        <div className="w-full bg-[#F9F9F9] font-poppins">
           <div className="flex flex-1">
-            <div
-              className={`w-full h-screen lg:px-10 sm:px-6 px-3 flex-grow lg:ml-72`}
-            >
+            <div className={`w-full h-screen lg:px-10 sm:px-6 px-3 flex-grow lg:ml-72`}>
               <div className="h-screen md:pt-4">
                 <Navbar heading={"Manage Users"} />
                 <div className={`${isBlurred ? "blur" : ""}`}>
-                  <div className="flex flex-row-reverse my-4">
-                    <div className="flex items-center flex-wrap gap-4">
-                      <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl w-full lg:w-fit">
-                        <IoSearch />
+
+                  {/* ─── Toolbar ─── */}
+                  <div className="flex flex-col sm:flex-row sm:flex-row-reverse gap-3 my-4">
+
+                    {/* Right group: search + select + buttons */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-3 w-full sm:w-auto">
+
+                      {/* Search input — full width on mobile */}
+                      <div className="flex items-center gap-2 border bg-white border-[#00000020] px-4 py-2 rounded-3xl w-full sm:w-auto">
+                        <IoSearch className="shrink-0" />
                         <input
                           type="text"
-                          className="bg-transparent outline-none"
+                          className="bg-transparent outline-none w-full sm:w-auto"
                           placeholder="Search Users"
                           value={searchText}
                           onChange={(e) => setSearchText(e.target.value)}
                         />
                       </div>
 
-                      <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-xl w-full lg:w-fit">
-                        <select name="" id="" className="px-2 " onChange={(e) => setSelectText(e.target.value)}  >
+                      {/* Select dropdown — full width on mobile */}
+                      <div className="flex items-center border bg-white border-[#00000020] px-4 py-2 rounded-xl w-full sm:w-auto">
+                        <select
+                          className="px-2 w-full bg-transparent outline-none"
+                          onChange={(e) => setSelectText(e.target.value)}
+                        >
                           <option value="student" className="px-2 py-1">Student</option>
                           <option value="teacher" className="px-2 py-1">Teacher</option>
                           <option value="parent" className="px-2 py-1">Parent</option>
                         </select>
                       </div>
 
-                      {
-                        console.log(selectText, "selected Text")
-
-                      }
-
+                      {/* Requests modal */}
                       <div>
-                        {requestsModal && <RequestModal onclose={() => setRequestsModal(false)} refetch={adminUsersRefecth} data={adminUsersData.allUsers} />}
+                        {requestsModal && (
+                          <RequestModal
+                            onclose={() => setRequestsModal(false)}
+                            refetch={adminUsersRefecth}
+                            data={adminUsersData.allUsers}
+                          />
+                        )}
                       </div>
 
-                      <div className="flex items-center gap-2">
-                        <p onClick={toggleRequestModal} className={`cursor-pointer flex py-2 px-4 rounded-3xl bg-[#cccffa] text-[#0B1053] text-sm  items-center justify-center gap-2`}>Requests <span className="text-xs px-2 py-1 bg-[#a5aaf3] text-[#0B1053] rounded-3xl">{requestCount}</span> </p>
-                        <p onClick={toggleAddUserModal} className={`cursor-pointer flex py-2 px-4 rounded-3xl bg-[#6A00FF] text-white text-sm `}>Add User</p>
+                      {/* Action buttons — side by side, full width row on mobile */}
+                      <div className="flex items-center gap-2 w-full sm:w-auto">
+                        <button
+                          onClick={toggleRequestModal}
+                          className="flex-1 sm:flex-none cursor-pointer flex py-2 px-4 rounded-3xl bg-[#cccffa] text-[#0B1053] text-sm items-center justify-center gap-2"
+                        >
+                          Requests{" "}
+                          <span className="text-xs px-2 py-1 bg-[#a5aaf3] text-[#0B1053] rounded-3xl">
+                            {requestCount}
+                          </span>
+                        </button>
+                        <button
+                          onClick={toggleAddUserModal}
+                          className="flex-1 sm:flex-none cursor-pointer flex py-2 px-4 rounded-3xl bg-[#6A00FF] text-white text-sm items-center justify-center"
+                        >
+                          Add User
+                        </button>
                       </div>
 
                     </div>
                   </div>
-                  <div className="my-2 h-[70%] overflow-auto">
+                  {/* ─── End Toolbar ─── */}
 
+                  <div className="my-2 h-[70%] overflow-x-auto overflow-y-auto">
                     <DataRows
                       header={true}
                       role={"Role"}
@@ -165,7 +189,6 @@ const ManageUsers = () => {
 
                     {adminUsersData?.allUsers
                       ?.filter((usr) => {
-                        // Always consider both `searchText` and `selectText` dynamically
                         const matchesName =
                           searchText && usr.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase());
                         const matchesRollNo =
@@ -173,23 +196,9 @@ const ManageUsers = () => {
                         const matchesUserType =
                           selectText && usr.userType === selectText.toLocaleLowerCase();
 
-                        // Apply combined logic:
-                        // If only `selectText` is provided, filter by userType
-                        if (!searchText && selectText) {
-                          return matchesUserType;
-                        }
-
-                        // If only `searchText` is provided, filter by name or rollNo
-                        if (searchText && !selectText) {
-                          return matchesName || matchesRollNo;
-                        }
-
-                        // If both are provided, apply all filters
-                        if (searchText && selectText) {
-                          return matchesUserType && (matchesName || matchesRollNo);
-                        }
-
-                        // Default to showing all users when no filters are applied
+                        if (!searchText && selectText) return matchesUserType;
+                        if (searchText && !selectText) return matchesName || matchesRollNo;
+                        if (searchText && selectText) return matchesUserType && (matchesName || matchesRollNo);
                         return true;
                       })
                       .map((usr, index) => (
@@ -215,14 +224,16 @@ const ManageUsers = () => {
                         />
                       ))}
 
-                    {adminUsersData.allUsers.length == 0 && <div className="text-center py-4 text-3xl font-medium">No users to display!</div>}
-
+                    {adminUsersData.allUsers.length == 0 && (
+                      <div className="text-center py-4 text-3xl font-medium">No users to display!</div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         <DotsMenu
           isopen={isMenu}
           data={editData}
@@ -237,4 +248,4 @@ const ManageUsers = () => {
   );
 }
 
-export default ManageUsers
+export default ManageUsers;

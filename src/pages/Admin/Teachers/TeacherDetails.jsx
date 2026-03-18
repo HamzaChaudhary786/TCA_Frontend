@@ -139,7 +139,7 @@ const TeacherDetails = () => {
   return (
     <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
       <div className="flex flex-1">
-        <div className="flex-grow w-full px-5 lg:px-10 sm:px-6 lg:ml-72">
+        <div className="flex-grow w-full px-3 lg:px-10 sm:px-6 lg:ml-72">
           <div className="pt-6 ">
             <Navbar heading={"Teacher Reports"} />
             <div className="mt-7">
@@ -158,8 +158,8 @@ const TeacherDetails = () => {
                   <p className="text-maroon text-lg">Class Average: 88 Marks / A+ Grade</p>
                 </div> */}
               </div>
-            </div>
-            <div className="flex gap-2">
+            </div> 
+            <div className=" pt-3 sm:pt-0 flex gap-2">
               <p onClick={onReportClick} className={`cursor-pointer py-2 font-medium px-2 ${reportActive ? "border-b-2 border-[#0B1053]" : "text-black/50"} `}>Report</p>
               <p onClick={onFeedbackClick} className={`cursor-pointer py-2 font-medium px-2 ${reportActive ? "text-black/50" : "border-b-2 border-[#0B1053]"} `}>Feedback</p>
             </div>

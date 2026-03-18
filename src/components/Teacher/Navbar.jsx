@@ -64,29 +64,29 @@ const Navbar = ({ heading }) => {
   return (
     <>
       <div className="flex flex-1 h-20">
-        <div className={`ml-9 space-x-3 flex justify-end  md:justify-between flex-1 px-4 ${isBlurred ? "blur" : ""}`}>
+        <div className={`ml-9 space-x-3 flex justify-between  md:justify-between flex-1 px-4 ${isBlurred ? "blur" : ""}`}>
           <div className="flex flex-col items-start justify-center">
             {heading ?
               <div className="md:ml-14">
                 <p className="font-medium text-sm sm:mr-3 md:text-3xl">{heading}</p>
               </div> :
-              <div className="hidden md:flex flex-col">
+              <div className="md:flex flex-col">
                 <p className="text-xl font-semibold">Hello {userData.name} </p>
-                <p className="">Welcome to your learning space!</p>
+                <p className=" hidden  sm:block">Welcome to your learning space!</p>
               </div>
             }
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex gap-4">
+            <div className="flex gap-2 sm:gap-4">
               <div
-                className={`p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
+                className={`p-1 sm:p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
                   }`}
                 onClick={toggleMail}
               >
                 <IoMailOutline className="h-5 w-5" />
               </div>
               <div
-                className={`p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${bell ? "bg-[#0B1053] text-white" : ""
+                className={`p-1 sm:p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${bell ? "bg-[#0B1053] text-white" : ""
                   }`}
                 onClick={togglebell}
               >
@@ -94,11 +94,11 @@ const Navbar = ({ heading }) => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <p className="font-medium">M. {userData.name}</p>
+              <p className="text-sm sm:text-lg font-medium">M. {userData.name}</p>
               <img
                 src={userData?.profilePic || profile}
                 alt="profile"
-                className="w-12 h-12 cursor-pointer rounded-full object-cover"
+                className="w-10 h-10 sm:w-12 sm:h-12 cursor-pointer rounded-full object-cover"
                 onClick={toggleProfielMenu}
               />
               <FaChevronDown

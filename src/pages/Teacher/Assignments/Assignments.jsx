@@ -75,10 +75,10 @@ const Assignments = () => {
                       toggleBlur();
                     }}
                   >
-                    <p className="px-4 py-2 text-white">Create new +</p>
+                    <p className="px-2 py-1 text-sm sm:text-lg sm:px-4 sm:py-2 text-white">Create new +</p>
                   </div>
                 </div>
-                <div className="mt-8 h-[80%] overflow-auto">
+                <div className="mt-8 h-[80%] overflow-x-auto">
 
                   <QuizAssignmentRow
                     isQuiz={false}

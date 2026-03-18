@@ -130,7 +130,7 @@ const SubjectReport = () => {
       <>
         <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
           <div className="flex flex-1">
-            <div className="flex-grow w-full px-5 lg:px-20 sm:px-10 lg:ml-72">
+            <div className="flex-grow w-full px-3  lg:px-20 sm:px-10 lg:ml-72">
               <div className="">
                 <Navbar heading={"Subjects Report"} />
                 <div className="mt-7">
@@ -157,10 +157,10 @@ const SubjectReport = () => {
                 </div>
                 <div className="mt-7">
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-col md:flex-row justify-between">
+                    <div className="flex flex-col sm:flex-row justify-between">
                       <p className="md:text-[20px]">Overview</p>
                       <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl">
-                        <select className="outline-none w-60" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} >
+                        <select className="outline-none w-full sm:w-60" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} >
                           <option value={""}>Select Subject</option>
                           {isSuccess && subjects?.subjects?.map((sub) => <option key={sub._id} value={JSON.stringify(sub)}>{sub.subject?.name}</option>)}
                         </select>

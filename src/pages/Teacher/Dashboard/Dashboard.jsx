@@ -22,7 +22,7 @@ const Dashboard = () => {
             <Navbar />
           </div>
           <div
-            className={`flex flex-col md:px-10 lg:px-0 lg:mt-0 mt-16 sm:mt-1 md:mt-1 lg:flex-row flex-1 gap-5 my-2 ${isBlurred ? "blur" : ""
+            className={`flex flex-col md:px-10 lg:px-0 lg:mt-0 mt-5 sm:mt-1 md:mt-1 lg:flex-row flex-1 gap-5 my-2 ${isBlurred ? "blur" : ""
               }`}
           >
             <div className="flex flex-[2]">
