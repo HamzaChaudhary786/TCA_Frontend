@@ -62,9 +62,9 @@ const Assignments = () => {
   return (
     isPending || isRefetching ? <div className="flex justify-start flex-1"> <Loader /> </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
-            <div className={`w-full flex-grow lg:ml-72`}>
+        <div className="flex flex-col flex-1 bg-[#F9F9F9] font-poppins w-full">
+          <div className="flex flex-1 min-w-0">
+            <div className={`w-full flex-grow lg:ml-72 min-w-0 overflow-x-hidden`}>
               <Navbar heading={"Assignment"} />
               <div className="p-4 lg:px-12">
                 <div className="flex justify-end my-2">
@@ -78,8 +78,8 @@ const Assignments = () => {
                     <p className="px-2 py-1 text-sm sm:text-lg sm:px-4 sm:py-2 text-white">Create new +</p>
                   </div>
                 </div>
-                <div className="mt-8 h-[80%] overflow-x-auto">
-
+                <div className="mt-8 h-[80%] overflow-x-auto w-full">
+                  <div className="min-w-[700px] lg:min-w-full">
                   <QuizAssignmentRow
                     isQuiz={false}
                     index={"Sr. No"}
@@ -136,7 +136,7 @@ const Assignments = () => {
                   })}
 
                   {data?.length === 0 && <div className="text-center py-4 text-3xl font-medium">No assignments to display!</div>}
-
+                  </div>
                 </div>
               </div>
             </div>
