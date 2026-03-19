@@ -112,7 +112,7 @@ const ManageUsers = () => {
                 <div className={`${isBlurred ? "blur" : ""}`}>
 
                   {/* ─── Toolbar ─── */}
-                  <div className="flex flex-col sm:flex-row sm:flex-row-reverse gap-3 my-4">
+                  <div className="flex flex-col sm:flex-row-reverse gap-3 my-4">
 
                     {/* Right group: search + select + buttons */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:flex-wrap gap-3 w-full sm:w-auto">
@@ -233,6 +233,7 @@ const ManageUsers = () => {
             </div>
           </div>
         </div>
+
 
         <DotsMenu
           isopen={isMenu}

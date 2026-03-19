@@ -67,10 +67,10 @@ const Classroom = () => {
       </div>
     ) : (
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-h-screen">
+        <div className="flex flex-col flex-1 bg-[#F9F9F9] font-poppins w-full">
           <div className="flex flex-1">
-            <div className="w-full h-screen lg:px-10 sm:px-8 px-4 flex-grow lg:ml-72">
-              <div className="min-h-screen md:pt-6">
+           <div className="w-full lg:px-10 px-4 flex-grow lg:ml-72 transition-all duration-300 min-w-0 overflow-x-hidden">
+              <div className="min-h-screen pb-6">
                 <Navbar heading={"Classroom"} />
 
                 <div className={`${isBlurred ? "blur" : ""}`}>
@@ -107,10 +107,10 @@ const Classroom = () => {
                     </div>
                   </div>
 
-                  {/* Data Table */}
-                  {/* Data Table */}
-                  <div className="py-4 w-full overflow-auto bg-white rounded-xl shadow-sm border border-black/10">
-                    <div className="min-w-[700px]">
+                  {/* Data Table Container */}
+                  <div className="mt-4 w-full bg-white rounded-xl shadow-sm border border-black/10 overflow-hidden">
+                    <div className="overflow-x-auto w-full">
+                      <div className="min-w-[550px] lg:min-w-full">
                       <DataRow
                         header={true}
                         isQuiz={true}
@@ -169,6 +169,7 @@ const Classroom = () => {
                           No classrooms to display!
                         </div>
                       )}
+                    </div>
                     </div>
                   </div>
                 </div>

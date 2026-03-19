@@ -59,7 +59,7 @@ const DataRows = ({
         {!header && (
           <p
             onClick={() => toggleClassMenu(data)}
-            className="text-[18px] text-gray-500 hover:text-gray-800 transition-colors"
+            className="text-[18px] text-gray-400 hover:text-[#6A00FF] transition-colors"
           >
             <BsThreeDotsVertical />
           </p>
