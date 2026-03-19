@@ -27,10 +27,10 @@ const AttendanceTable = ({ data }) => {
                                                     {att?.late ? "Late" : (att?.isPresent ? "Present" : "Absent")}
                                                 </td>
                                                 <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                                    {moment.utc(item.startTime).format("Do MMM YYYY")}
+                                                    {moment(item.startTime).format("Do MMM YYYY")}
                                                 </td>
                                                 <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                                    {moment.utc(item.startTime).format("hh:mm a")} - {moment.utc(item.endTime).format("hh:mm a")}
+                                                    {moment(item.startTime).format("hh:mm a")} - {moment(item.endTime).format("hh:mm a")}
                                                 </td>
                                             </tr>
                                         );

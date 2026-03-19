@@ -78,6 +78,7 @@ const Classroom = () => {
 
 
                       <div className="flex flex-col w-full md:flex-row md:w-auto  gap-2">
+                        
                         <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-3xl">
                           <BiSearch />
                           <input

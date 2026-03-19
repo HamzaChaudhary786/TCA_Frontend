@@ -156,7 +156,8 @@ const MyCalendar = ({ data, isPending, refetch, isRefetching }) => {
       </div>
 
       {!isPending && (
-        <div className="w-full min-h-[100vh] lg:h-[80vh] overflow-y-auto scrollbar-hide">
+        // overflow-y-auto scrollbar-hide
+        <div className="w-full min-h-[100vh] lg:h-[80vh] ">
           <Calendar
             style={{}}
             formats={{ dayRangeHeaderFormat }}

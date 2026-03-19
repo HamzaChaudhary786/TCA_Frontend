@@ -5,6 +5,9 @@ import { IoMdRadioButtonOff, IoMdRadioButtonOn } from "react-icons/io";
 const DataRow = (props) => {
 
 
+  useEffect(() => {
+    console.log("Student Attendance DataRow for:", props.data?.name, props.data);
+  }, [props.data]);
 
   const [present, setPresent] = useState(true);
   const [late, setLate] = useState(false);

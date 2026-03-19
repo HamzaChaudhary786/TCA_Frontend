@@ -68,9 +68,9 @@ const Quizzes = () => {
   return (
     isPending || isRefetching ? <div className="flex justify-center flex-1"> <LargeLoader />  </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
-            <div className={`w-full flex-grow lg:ml-72`}>
+        <div className="flex flex-col flex-1 bg-[#F9F9F9] font-poppins w-full">
+          <div className="flex flex-1 min-w-0">
+            <div className={`w-full flex-grow lg:ml-72 min-w-0 overflow-x-hidden`}>
               <Navbar heading={"Quizes"} />
               <div className="p-4 lg:px-12">
                 <div className="flex justify-end my-2">

@@ -159,21 +159,21 @@ const AttendanceReportComp = () => {
     return (
         <div className="bg-white border border-[#e5e7eb] rounded-xl shadow-lg overflow-hidden">
             {/* Header */}
-            <div className="bg-[#6A00FF] px-6 py-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                        <div className="bg-white/20 p-2 rounded-lg">
-                            <Filter className="h-5 w-5 text-white" />
+            <div className="bg-[#6A00FF] px-4 sm:px-6 py-3 sm:py-4">
+                <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+                        <div className="bg-white/20 p-1.5 sm:p-2 rounded-lg flex-shrink-0">
+                            <Filter className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                         </div>
-                        <div>
-                            <h2 className="text-xl font-bold text-white">Attendance Report Filters</h2>
-                            <p className="text-[#bfdbfe] text-sm">Configure your search parameters</p>
+                        <div className="min-w-0">
+                            <h2 className="text-base sm:text-xl font-bold text-white ">Attendance Report Filters</h2>
+                            <p className="text-[#bfdbfe] text-xs sm:text-sm hidden sm:block">Configure your search parameters</p>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                         {activeFiltersCount > 0 && (
-                            <div className="bg-white/20 px-3 py-1 rounded-full">
-                                <span className="text-white text-sm font-medium">
+                            <div className="bg-white/20 px-2 sm:px-3 py-1 rounded-full">
+                                <span className="text-white text-xs sm:text-sm font-medium">
                                     {activeFiltersCount} active
                                 </span>
                             </div>
@@ -182,7 +182,7 @@ const AttendanceReportComp = () => {
                             onClick={() => setIsFilterExpanded(!isFilterExpanded)}
                             className={`bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors ${isSidebarOpen ? "-z-50" : "z-auto"}`}
                         >
-                            <Filter className={`h-4 w-4 text-white transition-transform  ${isFilterExpanded ? 'rotate-180' : ''}`} />
+                            <Filter className={`h-4 w-4 text-white transition-transform ${isFilterExpanded ? 'rotate-180' : ''}`} />
                         </button>
                     </div>
                 </div>
@@ -190,19 +190,19 @@ const AttendanceReportComp = () => {
 
             {/* Filter Content */}
             {isFilterExpanded && (
-                <div className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div className="p-4 sm:p-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
                         {/* Classroom Selection */}
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                             <label className="flex items-center space-x-2 text-sm font-semibold text-[#374151]">
-                                <Users className="h-4 w-4 text-[#2563eb]" />
+                                <Users className="h-4 w-4 text-[#2563eb] flex-shrink-0" />
                                 <span>Select Classroom</span>
                             </label>
-                            <div className={` ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
+                            <div className={`${isSidebarOpen ? "-z-50" : "z-auto"}`}>
                                 <select
                                     value={filters.classroomId}
                                     onChange={(e) => handleFilterChange('classroomId', e.target.value)}
-                                    className="w-full px-4 py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent transition-all duration-200 appearance-none bg-white"
+                                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-transparent transition-all duration-200 appearance-none bg-white text-sm"
                                 >
                                     <option value="">Choose a classroom...</option>
                                     {classrooms.map(classroom => (
@@ -211,26 +211,21 @@ const AttendanceReportComp = () => {
                                         </option>
                                     ))}
                                 </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
-                                    <svg className="h-5 w-5 text-[#9ca3af]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
                             </div>
                         </div>
 
                         {/* Subject Selection */}
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                             <label className="flex items-center space-x-2 text-sm font-semibold text-[#374151]">
-                                <BookOpen className="h-4 w-4 text-[#059669]" />
+                                <BookOpen className="h-4 w-4 text-[#059669] flex-shrink-0" />
                                 <span>Select Subject</span>
                             </label>
-                            <div className={`relative  ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
+                            <div className={`relative ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
                                 <select
                                     value={filters.subjectId}
                                     onChange={(e) => handleFilterChange('subjectId', e.target.value)}
                                     disabled={!filters.classroomId || availableSubjects.length === 0}
-                                    className="w-full px-4 py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#10b981] focus:border-transparent transition-all duration-200 appearance-none bg-white disabled:bg-[#f9fafb] disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#10b981] focus:border-transparent transition-all duration-200 appearance-none bg-white disabled:bg-[#f9fafb] disabled:cursor-not-allowed disabled:opacity-60 text-sm"
                                 >
                                     <option value="">Choose a subject...</option>
                                     {availableSubjects.map(subject => (
@@ -247,30 +242,30 @@ const AttendanceReportComp = () => {
                             </div>
                             {!filters.classroomId && (
                                 <p className="text-xs text-[#6b7280] flex items-center">
-                                    <span className="w-2 h-2 bg-[#f59e0b] rounded-full mr-2"></span>
+                                    <span className="w-2 h-2 bg-[#f59e0b] rounded-full mr-2 flex-shrink-0"></span>
                                     Select a classroom first
                                 </p>
                             )}
                         </div>
 
                         {/* Start Date */}
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                             <label className="flex items-center space-x-2 text-sm font-semibold text-[#374151]">
-                                <Clock className="h-4 w-4 text-[#7c3aed]" />
+                                <Clock className="h-4 w-4 text-[#7c3aed] flex-shrink-0" />
                                 <span>Start Date</span>
                             </label>
                             <input
                                 type="date"
                                 value={filters.startDate}
                                 onChange={(e) => handleFilterChange('startDate', e.target.value)}
-                                className="w-full px-4 py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all duration-200"
+                                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all duration-200 text-sm"
                             />
                         </div>
 
                         {/* End Date */}
-                        <div className="space-y-3">
+                        <div className="space-y-2 sm:space-y-3">
                             <label className="flex items-center space-x-2 text-sm font-semibold text-[#374151]">
-                                <Clock className="h-4 w-4 text-[#7c3aed]" />
+                                <Clock className="h-4 w-4 text-[#7c3aed] flex-shrink-0" />
                                 <span>End Date</span>
                             </label>
                             <input
@@ -278,22 +273,22 @@ const AttendanceReportComp = () => {
                                 value={filters.endDate}
                                 onChange={(e) => handleFilterChange('endDate', e.target.value)}
                                 min={filters.startDate}
-                                className="w-full px-4 py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all duration-200"
+                                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-[#d1d5db] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all duration-200 text-sm"
                             />
                         </div>
                     </div>
 
                     {/* Active Filters Display */}
                     {activeFiltersCount > 0 && (
-                        <div className="mt-6 p-4 bg-[#f9fafb] rounded-lg border border-[#e5e7eb]">
-                            <div className="flex items-center justify-between mb-3">
+                        <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-[#f9fafb] rounded-lg border border-[#e5e7eb]">
+                            <div className="flex items-center justify-between mb-2 sm:mb-3">
                                 <h3 className="text-sm font-semibold text-[#374151] flex items-center">
-                                    <span className="w-2 h-2 bg-[#2563eb] rounded-full mr-2"></span>
+                                    <span className="w-2 h-2 bg-[#2563eb] rounded-full mr-2 flex-shrink-0"></span>
                                     Active Filters ({activeFiltersCount})
                                 </h3>
                                 <button
                                     onClick={handleReset}
-                                    className="text-xs text-[#6b7280] hover:text-[#6A00FF] transition-colors flex items-center"
+                                    className="text-xs text-[#6b7280] hover:text-[#6A00FF] transition-colors flex items-center flex-shrink-0"
                                 >
                                     <X className="h-3 w-3 mr-1" />
                                     Clear all
@@ -301,48 +296,48 @@ const AttendanceReportComp = () => {
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {filters.classroomId && (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#dbeafe] text-[#1e40af] border border-[#93c5fd]">
-                                        <Users className="h-3 w-3 mr-1" />
-                                        {selectedClassroomName}
+                                    <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-[#dbeafe] text-[#1e40af] border border-[#93c5fd]">
+                                        <Users className="h-3 w-3 mr-1 flex-shrink-0" />
+                                        <span className="truncate max-w-[120px] sm:max-w-none">{selectedClassroomName}</span>
                                         <button
                                             onClick={() => handleFilterChange('classroomId', '')}
-                                            className="ml-1 hover:text-[#2563eb]"
+                                            className="ml-1 hover:text-[#2563eb] flex-shrink-0"
                                         >
                                             <X className="h-3 w-3" />
                                         </button>
                                     </span>
                                 )}
                                 {filters.subjectId && (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]">
-                                        <BookOpen className="h-3 w-3 mr-1" />
-                                        {selectedSubjectName}
+                                    <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-[#dcfce7] text-[#166534] border border-[#bbf7d0]">
+                                        <BookOpen className="h-3 w-3 mr-1 flex-shrink-0" />
+                                        <span className="truncate max-w-[100px] sm:max-w-none">{selectedSubjectName}</span>
                                         <button
                                             onClick={() => handleFilterChange('subjectId', '')}
-                                            className="ml-1 hover:text-[#059669]"
+                                            className="ml-1 hover:text-[#059669] flex-shrink-0"
                                         >
                                             <X className="h-3 w-3" />
                                         </button>
                                     </span>
                                 )}
                                 {filters.startDate && (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#f3e8ff] text-[#7c2d12] border border-[#e9d5ff]">
-                                        <Clock className="h-3 w-3 mr-1" />
+                                    <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-[#f3e8ff] text-[#7c2d12] border border-[#e9d5ff]">
+                                        <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
                                         From: {formatDate(filters.startDate)}
                                         <button
                                             onClick={() => handleFilterChange('startDate', '')}
-                                            className="ml-1 hover:text-[#7c3aed]"
+                                            className="ml-1 hover:text-[#7c3aed] flex-shrink-0"
                                         >
                                             <X className="h-3 w-3" />
                                         </button>
                                     </span>
                                 )}
                                 {filters.endDate && (
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#f3e8ff] text-[#7c2d12] border border-[#e9d5ff]">
-                                        <Clock className="h-3 w-3 mr-1" />
+                                    <span className="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-[#f3e8ff] text-[#7c2d12] border border-[#e9d5ff]">
+                                        <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
                                         To: {formatDate(filters.endDate)}
                                         <button
                                             onClick={() => handleFilterChange('endDate', '')}
-                                            className="ml-1 hover:text-[#7c3aed]"
+                                            className="ml-1 hover:text-[#7c3aed] flex-shrink-0"
                                         >
                                             <X className="h-3 w-3" />
                                         </button>
@@ -353,17 +348,17 @@ const AttendanceReportComp = () => {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-3 justify-end mt-6 pt-4 border-t border-[#e5e7eb]">
+                    <div className="flex flex-col sm:flex-row gap-3 justify-end mt-4 sm:mt-6 pt-4 border-t border-[#e5e7eb]">
                         <button
                             onClick={handleReset}
-                            className="px-6 py-3 border border-[#d1d5db] text-[#374151] rounded-lg hover:bg-[#f9fafb] focus:outline-none focus:ring-2 focus:ring-[#6b7280] focus:ring-offset-2 transition-all duration-200 font-medium"
+                            className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 border border-[#d1d5db] text-[#374151] rounded-lg hover:bg-[#f9fafb] focus:outline-none focus:ring-2 focus:ring-[#6b7280] focus:ring-offset-2 transition-all duration-200 font-medium text-sm"
                         >
                             Reset All Filters
                         </button>
                         <button
                             onClick={handleSearch}
                             disabled={!filters.classroomId || attendanceSearch.isPending}
-                            className={`px-8 py-3 bg-[#6A00FF] text-white rounded-lg hover:from-[#1d4ed8] hover:to-[#1e40af] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${isSidebarOpen ? "-z-50" : "z-auto"}`}
+                            className={`w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 bg-[#6A00FF] text-white rounded-lg hover:from-[#1d4ed8] hover:to-[#1e40af] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2 font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm ${isSidebarOpen ? "-z-50" : "z-auto"}`}
                         >
                             {attendanceSearch.isPending ? (
                                 <>
@@ -382,61 +377,64 @@ const AttendanceReportComp = () => {
                     {/* Results Table */}
                     <section ref={reportRef}>
                         {studentReport && studentReport.length > 0 && (
-                            <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                <div className="flex flex-row justify-between items-center px-4 mb-6">
-                                    <h3 className="text-2xl font-semibold text-gray-800">
+                            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <div className="flex flex-row justify-between items-center px-2 sm:px-4 mb-4 sm:mb-6 gap-2">
+                                    <h3 className="text-lg sm:text-2xl font-semibold text-gray-800">
                                         Attendance Report Results
                                     </h3>
                                     <button
                                         onClick={handlePrint}
-                                        className="export-button inline-flex items-center gap-2 px-4 py-2 bg-[#6A00FF] hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                        className="export-button inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#6A00FF] hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm flex-shrink-0"
                                     >
                                         <Download size={16} />
-                                        Export
+                                        <span className="hidden xs:inline">Export</span>
                                     </button>
                                 </div>
-                                <div className="overflow-x-auto">
-                                    <table className="w-full border-collapse border border-gray-300">
-                                        <thead>
-                                            <tr className="bg-gray-100">
-                                                <th className="border border-gray-300 px-4 py-2 text-left">No.</th>
-                                                <th className="border border-gray-300 px-4 py-2 text-left">Student</th>
-                                                <th className="border border-gray-300 px-4 py-2 text-left">Classroom</th>
-                                                <th className="border border-gray-300 px-4 py-2 text-left">Subject</th>
-                                                <th className="border border-gray-300 px-4 py-2 text-left">Date</th>
-                                                <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {studentReport.map((item, index) => (
-                                                <tr key={index} className="hover:bg-gray-50">
-                                                    <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
-                                                    <td className="border border-gray-300 px-4 py-2">
-                                                        {item.studentName} ({item.rollNo})
-                                                    </td>
-                                                    <td className="border border-gray-300 px-4 py-2">{item.classroomName}</td>
-                                                    <td className="border border-gray-300 px-4 py-2">{item.subjectName}</td>
-                                                    <td className="border border-gray-300 px-4 py-2">{formatDate(item.date)}</td>
-                                                    <td className="border border-gray-300 px-4 py-2">
-                                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.status === 'present'
-                                                            ? 'bg-green-100 text-green-800'
-                                                            : 'bg-red-100 text-red-800'
-                                                            }`}>
-                                                            {item.status}
-                                                        </span>
-                                                    </td>
+                                <div className="overflow-x-auto -mx-3 sm:mx-0">
+                                    <div className="min-w-full inline-block align-middle px-3 sm:px-0">
+                                        <table className="w-full border-collapse border border-gray-300 text-xs sm:text-sm">
+                                            <thead>
+                                                <tr className="bg-gray-100">
+                                                    <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left whitespace-nowrap">No.</th>
+                                                    <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left whitespace-nowrap">Student</th>
+                                                    <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left whitespace-nowrap">Classroom</th>
+                                                    <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left whitespace-nowrap">Subject</th>
+                                                    <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left whitespace-nowrap">Date</th>
+                                                    <th className="border border-gray-300 px-2 sm:px-4 py-2 text-left whitespace-nowrap">Status</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                {studentReport.map((item, index) => (
+                                                    <tr key={index} className="hover:bg-gray-50">
+                                                        <td className="border border-gray-300 px-2 sm:px-4 py-2">{index + 1}</td>
+                                                        <td className="border border-gray-300 px-2 sm:px-4 py-2">
+                                                            <span className="block font-medium">{item.studentName}</span>
+                                                            <span className="text-gray-500 text-xs">({item.rollNo})</span>
+                                                        </td>
+                                                        <td className="border border-gray-300 px-2 sm:px-4 py-2 whitespace-nowrap">{item.classroomName}</td>
+                                                        <td className="border border-gray-300 px-2 sm:px-4 py-2 whitespace-nowrap">{item.subjectName}</td>
+                                                        <td className="border border-gray-300 px-2 sm:px-4 py-2 whitespace-nowrap">{formatDate(item.date)}</td>
+                                                        <td className="border border-gray-300 px-2 sm:px-4 py-2">
+                                                            <span className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium whitespace-nowrap ${item.status === 'present'
+                                                                ? 'bg-green-100 text-green-800'
+                                                                : 'bg-red-100 text-red-800'
+                                                                }`}>
+                                                                {item.status}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         )}
                     </section>
 
                     {studentReport && studentReport.length === 0 && (
-                        <div className="mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                            <p className="text-yellow-800 text-center">No attendance records found for the selected criteria.</p>
+                        <div className="mt-4 sm:mt-6 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                            <p className="text-yellow-800 text-center text-sm">No attendance records found for the selected criteria.</p>
                         </div>
                     )}
                 </div>

@@ -291,7 +291,7 @@ const AddUserModal = ({ closeModal, refetch }) => {
 
 
     return (
-        <div className='absolute sm:w-96 w-72 border h-screen border-black/20 z-10 bg-white right-0 top-0'
+        <div className='absolute sm:w-96 w-80 border h-screen border-black/20 z-10 bg-white right-0 top-0'
         // ref={ref}
         >
             <div className='flex flex-col gap-2 h-full'>
@@ -303,7 +303,7 @@ const AddUserModal = ({ closeModal, refetch }) => {
                 </div>
 
                 <div className='overflow-y-auto register-scrollbar'>
-                    <div className='flex flex-col bg-white h-full px-10 py-4'>
+                    <div className='flex flex-col bg-white h-full px-2 sm:px-10 py-4'>
                         <form onSubmit={handleSubmit}>
                             <div className=''>
                                 <Selectable label={"Occupation"} role={role} setRole={setRole} />
