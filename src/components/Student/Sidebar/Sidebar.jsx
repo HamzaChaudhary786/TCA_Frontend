@@ -56,7 +56,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsopen(!isopen);
 
   const Menubar = () => (
-    <div className="sm:w-72 w-75 h-lvh shadow-lg mt-3 bg-[#0B1053] px-4 flex flex-col justify-between z-50">
+    <div className="sm:w-72 w-75 h-lvh shadow-lg lg:mt-3 bg-[#0B1053] px-4 flex flex-col justify-between z-50">
       <div className="py-5">
         <div className="text-white flex justify-end items-center ">
           <IoClose className="w-6 h-6 block sm:hidden hover:scale-105 cursor-pointer" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />

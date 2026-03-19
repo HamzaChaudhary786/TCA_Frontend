@@ -172,7 +172,7 @@ const UnifiedSubjectAssign = () => {
 
         {/* ── Page Header ────────────────────────────────────────────────────── */}
         <div className="mb-8">
-          <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#2563EB] mb-2">
+          <p className="pl-12 md:pl-0 text-[11px] font-semibold tracking-[0.12em] uppercase text-[#2563EB] mb-2">
             Administration
           </p>
           <h1 className="text-[28px] sm:text-[30px] font-extrabold text-[#0F172A] tracking-tight leading-[1.15] mb-1.5">
@@ -184,7 +184,7 @@ const UnifiedSubjectAssign = () => {
         </div>
 
         {/* ── Filter Card ────────────────────────────────────────────────────── */}
-        <div className="bg-white border border-[#E2E8F0] rounded-[28px] p-6 sm:p-7
+        <div className="bg-white border border-[#E2E8F0] rounded-[28px] p-6 w-full sm:p-7
                         shadow-[0_1px_3px_rgba(15,23,42,0.06),0_1px_2px_rgba(15,23,42,0.04)] mb-6">
 
           <p className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#64748B] mb-5">

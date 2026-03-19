@@ -1,74 +1,64 @@
-import React, { useEffect, useState } from "react";
-import IMAGES from "../../../assets/images/index";
+import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-
 const DataRow = (props) => {
-
-  useEffect(() => {}, []);
-
   return (
-    <div className="min-w-full">
-      <div
-        style={{ backgroundColor: props.bgColor }}
-        className={`min-w-full border-b flex border-grey items-center`}
-      >
-        <div className="flex flex-row items-center flex-1 py-1 my-1  md:pl-3 md:pr-5 space-x-4">
+    <div
+      style={{ backgroundColor: props.bgColor }}
+      className="flex items-center border-b border-grey w-full min-w-[600px]"
+    >
+      {/* Index */}
+      <div className="w-[8%] min-w-[45px] text-center px-1 py-3">
+        <p className={`text-[11px] sm:text-[13px] truncate ${props.header ? "font-semibold" : ""}`}>
+          {props.index}
+        </p>
+      </div>
+
+      {/* Classroom */}
+      <div className="w-[22%] min-w-[100px] text-center px-1 py-3">
+        <p className={`text-[11px] sm:text-[13px] truncate ${props.header ? "font-semibold" : ""}`}>
+          {props.classname}
+        </p>
+      </div>
+
+      {/* Classes Scheduled */}
+      <div className="w-[18%] min-w-[90px] text-center px-1 py-3">
+        <p className={`text-[11px] sm:text-[13px] truncate ${props.header ? "font-semibold" : ""}`}>
+          {props.classesSchedualled}
+        </p>
+      </div>
+
+      {/* Students */}
+      <div className="w-[15%] min-w-[70px] text-center px-1 py-3">
+        <p className={`text-[11px] sm:text-[13px] truncate ${props.header ? "font-semibold" : ""}`}>
+          {props.students}
+        </p>
+      </div>
+
+      {/* Teachers */}
+      <div className="w-[15%] min-w-[70px] text-center px-1 py-3">
+        <p className={`text-[11px] sm:text-[13px] truncate ${props.header ? "font-semibold" : ""}`}>
+          {props.teachers}
+        </p>
+      </div>
+
+      {/* Created By */}
+      <div className="w-[17%] min-w-[80px] text-center px-1 py-3">
+        <p className={`text-[11px] sm:text-[13px] truncate ${props.header ? "font-semibold" : ""}`}>
+          {props.createdBy}
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div className="w-[5%] min-w-[35px] flex justify-center py-3">
+        {!props.header && (
           <p
-            className={`w-full md:flex-[1] flex-[1] md:text-[14px] text-[11px] text-center md:text-left ${
-              props.header ? "font-semibold" : ""
-            }`}
-          >
-            {props.index + "."}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${
-              props.header ? "font-semibold" : ""
-            }`}
-          >
-            {props.classname}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${
-              props.header ? "font-semibold" : ""
-            }`}
-          >
-            {props.classesSchedualled}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${
-              props.header ? "font-semibold" : ""
-            }`}
-          >
-            {props.students}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${
-              props.header ? "font-semibold" : ""
-            }`}
-          >
-            {props.teachers}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${
-              props.header ? "font-semibold" : ""
-            }`}
-          >
-            {props.createdBy}
-          </p>
-        </div>
-        <div className="flex ml-3 mr-2 lg:mr-5 cursor-pointer">
-          <p
-            onClick={() => {
-              props.toggleClassMenu(props.data);
-            }}
-            className={`w-full my-1 md:my-0 text-center md:text-center md:text-[20px] text-[14px] ${
-              props.header ? "hidden" : ""
-            }`}
+            onClick={() => props.toggleClassMenu(props.data)}
+            className="text-[16px] sm:text-[18px] text-gray-500 hover:text-gray-800 cursor-pointer transition-colors"
           >
             <BsThreeDotsVertical />
           </p>
-        </div>
+        )}
       </div>
     </div>
   );

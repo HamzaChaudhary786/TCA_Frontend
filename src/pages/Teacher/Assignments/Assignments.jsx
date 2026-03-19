@@ -62,11 +62,11 @@ const Assignments = () => {
   return (
     isPending || isRefetching ? <div className="flex justify-start flex-1"> <Loader /> </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
-            <div className={`w-full flex-grow lg:ml-72`}>
+        <div className="flex flex-col flex-1 bg-[#F9F9F9] font-poppins w-full">
+          <div className="flex flex-1 min-w-0">
+            <div className={`w-full flex-grow lg:ml-72 min-w-0 overflow-x-hidden`}>
               <Navbar heading={"Assignment"} />
-              <div className="p-4 lg:px-12">
+              <div className="p-3 sm:p-4 lg:px-12">
                 <div className="flex justify-end my-2">
                   <div
                     className="flex cursor-pointer bg-[#6A00FF] hover:bg-[#007EEA] rounded-3xl"
@@ -75,10 +75,10 @@ const Assignments = () => {
                       toggleBlur();
                     }}
                   >
-                    <p className="px-4 py-2 text-white">Create new +</p>
+                    <p className="px-2 py-1 text-sm sm:text-lg sm:px-4 sm:py-2 text-white">Create new +</p>
                   </div>
                 </div>
-                <div className="mt-8 h-[80%] overflow-auto">
+                <div className="mt-8 h-[80%] w-full  overflow-x-auto">
 
                   <QuizAssignmentRow
                     isQuiz={false}
@@ -97,7 +97,7 @@ const Assignments = () => {
                     const expectedCount = assignment?.classroomID?.students?.filter(student => (
                       (!student?.subjects || student?.subjects?.length === 0) ||
                       student?.subjects?.some(sub => (sub?._id || sub)?.toString() === (assignment?.subjectID?._id || assignment?.subjectID)?.toString())
-                    )).length || 0;
+                    ))?.length || 0;
 
                     return (
                       <QuizAssignmentRow
@@ -135,13 +135,12 @@ const Assignments = () => {
                     );
                   })}
 
-                  {data.length == 0 && <div className="text-center py-4 text-3xl font-medium">No assignments to display!</div>}
-
+                  {data?.length === 0 && <div className="text-center py-4 text-3xl font-medium">No assignments to display!</div>}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         <CreateQuizAssignmentModal
           isQuiz={false}
           refetch={refetch}

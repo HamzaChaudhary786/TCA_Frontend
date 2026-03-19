@@ -82,7 +82,8 @@ export default function ViewEventDetailsModal({
     <div
       onClick={() => { }}
       ref={ref}
-      className={`fixed z-10 mt-10 bg-white p-8 w-[400px] text-black rounded-xl ml-96 ${open ? "" : "hidden"
+      // w-[400px]ml-96
+      className={`fixed z-10 mt-10 bg-white p-8 w-[400px] text-black rounded-xl ml-[13rem] ${open ? "" : "hidden"
         }`}
       style={
         isOutside

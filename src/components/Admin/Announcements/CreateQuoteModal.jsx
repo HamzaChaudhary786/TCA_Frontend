@@ -57,109 +57,115 @@ const CreateQuoteModal = ({
     if (mutation.isError) return toast.error("Quote cannot be added");
 
     return (
-        <div
-            onClick={() => { }}
-            ref={ref}
-            className={`fixed z-10 mt-4 bg-white p-8 sm:w-[600px] w-[320px] sm:px-16 px-4 text-black rounded-xl ml-5 md:ml-96 max-h-[90vh] overflow-y-auto no-scrollbar ${open ? "" : "hidden"
-                }`}
-        >
-            <div className="flex gap-2">
-                <div className="flex flex-col w-full gap-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex justify-center flex-1 w-[fit] gap-2 items-center">
-                            <p className="text-2xl font-semibold cursor-text">
-                                {isEditTrue ? "Update Quote" : "Create new Quote"}
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2 cursor-pointer">
-                            <img
-                                src={IMAGES.CloseIcon}
-                                className="w-[15px] h-[15px]"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    toggleBlur();
-                                    setopen(false);
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex flex-col flex-1 gap-1">
-                            <p className="text-xs font-semibold text-grey_700">Title</p>
-                            <div className="flex justify-between border-[1px] py-1 px-4 rounded-lg w-full items-center border-grey/50">
-                                <input
-                                    className="text-sm outline-none text-custom-gray-3 w-full"
-                                    placeholder="Enter title"
-                                    value={quoteObj.title}
-                                    onChange={(e) => { setQuoteObj({ ...quoteObj, title: e.target.value }) }}
+        <div className="fixed inset-0 z-10 flex items-center justify-center p-4">
+            <div
+                onClick={() => { }}
+                ref={ref}
+                className={`bg-white p-4 sm:p-8 w-full max-w-lg sm:px-10 text-black rounded-xl max-h-[90vh] overflow-y-auto no-scrollbar ${open ? "" : "hidden"
+                    }`}
+            >
+                <div className="flex gap-2">
+                    <div className="flex flex-col w-full gap-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex justify-center flex-1 gap-2 items-center">
+                                <p className="text-xl sm:text-2xl font-semibold cursor-text">
+                                    {isEditTrue ? "Update Quote" : "Create new Quote"}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-2 cursor-pointer">
+                                <img
+                                    src={IMAGES.CloseIcon}
+                                    className="w-[15px] h-[15px]"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleBlur();
+                                        setopen(false);
+                                    }}
                                 />
                             </div>
                         </div>
-                    </div>
 
-                    <div className="flex flex-col flex-1 gap-1">
-                        <p className="text-xs font-semibold text-grey_700">Schedule</p>
-                        <div className="flex items-center gap-3 ">
-                            <div className="flex flex-col flex-1 gap-1 ">
-                                <div className="flex items-center flex-1 justify-between gap-3 px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
-                                    <input
-                                        id="date"
-                                        type="date"
-                                        className="text-sm outline-none text-custom-gray-3 w-full"
-                                        placeholder="Enter date"
-                                        value={quoteObj.date}
-                                        onChange={(e) => { setQuoteObj({ ...quoteObj, date: e.target.value }) }}
-                                    />
-                                </div>
-                            </div>
-
+                        <div className="flex items-center gap-3">
                             <div className="flex flex-col flex-1 gap-1">
-                                <div className="flex flex-1 items-center justify-between gap-3 px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
+                                <p className="text-xs font-semibold text-grey_700">Title</p>
+                                <div className="flex justify-between border-[1px] py-1 px-4 rounded-lg w-full items-center border-grey/50">
                                     <input
-                                        type="time"
-                                        className="text-sm outline-none text-custom-gray-3 w-full"
-                                        placeholder="Enter time"
-                                        value={quoteObj.time}
-                                        onChange={(e) => { setQuoteObj({ ...quoteObj, time: e.target.value }) }}
+                                        className="text-sm outline-none text-custom-gray-3 w-full min-w-0"
+                                        placeholder="Enter title"
+                                        value={quoteObj.title}
+                                        onChange={(e) => { setQuoteObj({ ...quoteObj, title: e.target.value }) }}
                                     />
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex items-center gap-3">
+
                         <div className="flex flex-col flex-1 gap-1">
-                            <p className="text-xs font-semibold text-grey_700">Visibility</p>
-                            <div className="flex justify-between border-[1px] py-1 px-4 rounded-lg w-full items-center border-grey/50">
-                                <select value={quoteObj.visibility}
-                                    onChange={(e) => { setQuoteObj({ ...quoteObj, visibility: e.target.value }) }}
-                                    className=' outline-none rounded-sm border-black/20 w-full text-sm'>
-                                    <option value="student">Students</option>
-                                    <option value="parent">Parents</option>
-                                    <option value="teacher">Teachers</option>
-                                    <option value="all">All</option>
-                                </select>
+                            <p className="text-xs font-semibold text-grey_700">Schedule</p>
+                            <div className="flex items-center gap-1 sm:gap-3">
+                                <div className="flex flex-col flex-1 min-w-0 gap-1">
+                                    <div className="flex items-center flex-1 justify-between gap-3 px-1 sm:px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
+                                        <input
+                                            id="date"
+                                            type="date"
+                                            className="text-sm outline-none text-custom-gray-3 w-full min-w-0"
+                                            placeholder="Enter date"
+                                            value={quoteObj.date}
+                                            onChange={(e) => { setQuoteObj({ ...quoteObj, date: e.target.value }) }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col flex-1 min-w-0 gap-1">
+                                    <div className="flex flex-1 items-center justify-between gap-3 px-1 sm:px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
+                                        <input
+                                            type="time"
+                                            className="text-sm outline-none text-custom-gray-3 w-full min-w-0"
+                                            placeholder="Enter time"
+                                            value={quoteObj.time}
+                                            onChange={(e) => { setQuoteObj({ ...quoteObj, time: e.target.value }) }}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <p className="text-xs font-semibold text-grey_700">Quote</p>
-                        <textarea className="outline-none border border-black/20 w-full rounded-md p-2"
-                            name="quote"
-                            id="quote"
-                            cols="30"
-                            rows="7"
-                            placeholder="Quote"
-                            value={quoteObj.description}
-                            onChange={(e) => { setQuoteObj({ ...quoteObj, description: e.target.value }) }}
-                        />
-                    </div>
-                    <div className="flex justify-center items-center gap-3">
-                        <div className="w-32">
-                            <div
-                                onClick={() => { mutation.mutate() }}
-                                className="flex items-center justify-center w-full py-2 text-center rounded-3xl cursor-pointer bg-[#0B1053]"
-                            >
-                                <p className="text-sm text-white">{isEditTrue ? "Update" : "Create"}</p>
+
+                        <div className="flex items-center gap-3">
+                            <div className="flex flex-col flex-1 gap-1">
+                                <p className="text-xs font-semibold text-grey_700">Visibility</p>
+                                <div className="flex justify-between border-[1px] py-1 px-4 rounded-lg w-full items-center border-grey/50">
+                                    <select value={quoteObj.visibility}
+                                        onChange={(e) => { setQuoteObj({ ...quoteObj, visibility: e.target.value }) }}
+                                        className='outline-none rounded-sm border-black/20 w-full text-sm'>
+                                        <option value="student">Students</option>
+                                        <option value="parent">Parents</option>
+                                        <option value="teacher">Teachers</option>
+                                        <option value="all">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p className="text-xs font-semibold text-grey_700">Quote</p>
+                            <textarea className="outline-none border border-black/20 w-full rounded-md p-2"
+                                name="quote"
+                                id="quote"
+                                cols="30"
+                                rows="7"
+                                placeholder="Quote"
+                                value={quoteObj.description}
+                                onChange={(e) => { setQuoteObj({ ...quoteObj, description: e.target.value }) }}
+                            />
+                        </div>
+
+                        <div className="flex justify-center items-center gap-3">
+                            <div className="w-32">
+                                <div
+                                    onClick={() => { mutation.mutate() }}
+                                    className="flex items-center justify-center w-full py-2 text-center rounded-3xl cursor-pointer bg-[#0B1053]"
+                                >
+                                    <p className="text-sm text-white">{isEditTrue ? "Update" : "Create"}</p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -73,12 +73,12 @@ const Sidebar = () => {
       <div className="w-full sm:w-72 shadow-lg bg-[#0B1053] text-white z-50 h-full px-4 md:px-8 overflow-y-auto no-scrollbar">
         <div className="py-5">
           <div className="text-white flex justify-end items-center ">
-            <IoClose className="w-6 h-6 block sm:hidden hover:scale-105 cursor-pointer fixed" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+            <IoClose className="w-8 h-8 mt-4 lg:mt-0 lg:w-7 lg:h-7  block sm:hidden hover:scale-105 cursor-pointer fixed" onClick={() => setIsSidebarOpen(!isSidebarOpen)} />
           </div>
 
 
           <div className="flex justify-start ">
-            <img className="w-8/12 h-6/12 mb-3" src={IMAGES?.logo} alt="logo-TCA" />
+            <img className="w-5/12 h-3/12 md:w-8/12 md:h-6/12 mb-3" src={IMAGES?.logo} alt="logo-TCA" />
           </div>
 
 
@@ -98,7 +98,7 @@ const Sidebar = () => {
           ) : (
             <div
               onClick={handleLogoutClick}
-              className="flex items-center gap-4 px-5 py-3 text-lg rounded-md cursor-pointer text-[#6A00FF]"
+              className="flex items-center gap-4 px-5 py-3 text-lg rounded-md cursor-pointer text-white"
             >
               <IoIosLogOut />
               <p>Logout</p>

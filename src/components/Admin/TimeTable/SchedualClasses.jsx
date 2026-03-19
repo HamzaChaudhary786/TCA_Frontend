@@ -147,7 +147,7 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
 
     return (
       <div
-        className={`absolute top-0 right-0 flex-1 z-10 flex bg-white rounded-md shadow-lg w-96 sm:w-96 ${isOpen ? "" : "hidden"
+        className={`absolute top-0 right-0 flex-1 z-10 flex bg-white rounded-md shadow-lg w-full sm:w-96 ${isOpen ? "" : "hidden"
           } `}
         ref={ref}
       >
@@ -159,7 +159,7 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
                 onclose();
                 setAddScheduleModalOpen(false);
               }}
-              className="cursor-pointer"
+              className="cursor-pointer w-8 h-8 md:w-5 md:h-5"
             />
           </div>
           <div className="flex flex-col flex-1 w-full">

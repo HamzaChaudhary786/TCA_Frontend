@@ -10,7 +10,7 @@ export default function FilterButton({
 }) {
   return (
     <button
-      className={`text-white py-2 rounded-3xl flex gap-1 items-center justify-center bg-[#6A00FF] ${className}`}
+      className={`text-sm sm:text-lg text-white py-2 rounded-3xl flex gap-1 justify-center bg-[#6A00FF] ${className}`}
       onClick={clickHandler}
       disabled={disabled ? disabled : false}
     >

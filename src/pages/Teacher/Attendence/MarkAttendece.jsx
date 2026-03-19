@@ -36,7 +36,7 @@ const MarkAttendence = () => {
         onSettled: (data, error) => {
             if (error) console.log(error, "error is accurs");
             if (!error) {
-                toast.success("Attendance submitted successfully!");
+                toast.success(`Attendance ${location.state.attendance?.length > 0 ? "updated" : "submitted"} successfully!`);
                 // Invalidate all relevant queries for all roles to ensure reports "progress"
                 queryClient.invalidateQueries(["assignment"]);
                 queryClient.invalidateQueries(["quiz"]);
@@ -56,25 +56,30 @@ const MarkAttendence = () => {
     })
 
     useEffect(() => {
-        console.log(location.state);
+        console.log("Location state in MarkAttendence:", location.state);
         if (location.state) {
+            console.log("Processing class data for attendance...");
 
-            console.log("inside state if");
+            const existingAttendance = location.state.attendance || [];
+            let temparray = [];
 
-            // if(location.state.attendance.length == 0){
-
-
-            let temparray = attendeceData;
-            location.state?.classroom?.students?.map((cls, index) => {
-                console.log("cls is : ", cls);
-                temparray[index] = { studentID: cls, isPresent: true };
-            });
+            if (existingAttendance.length > 0) {
+                console.log("Existing attendance found, pre-filling data:", existingAttendance);
+                temparray = existingAttendance.map(item => ({
+                    studentID: item.studentID._id || item.studentID,
+                    isPresent: item.isPresent,
+                    late: item.late || false
+                }));
+            } else {
+                console.log("No existing attendance, defaulting all present.");
+                location.state?.classroom?.students?.forEach((cls, index) => {
+                    temparray[index] = { studentID: cls, isPresent: true, late: false };
+                });
+            }
 
             setAttendenceData(temparray);
-
             setClassData(location?.state);
         }
-
     }, [location])
 
     console.log(classData, "class dta si");
@@ -166,7 +171,7 @@ const MarkAttendence = () => {
 
                                     {!attendenceMutation.isPending && <div className="flex justify-end my-4 border-t border-black">
                                         <div className="flex justify-end py-4">
-                                            <p onClick={attendenceMutation.mutate} className="flex cursor-pointer px-8 py-3 text-sm text-white rounded-3xl bg-[#0B1053]">Submit</p>
+                                            <p onClick={attendenceMutation.mutate} className="flex cursor-pointer px-8 py-3 text-sm text-white rounded-3xl bg-[#0B1053]">{location.state.attendance?.length > 0 ? "Update" : "Submit"}</p>
                                         </div>
                                     </div>}
                                 </div>

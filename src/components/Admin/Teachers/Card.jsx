@@ -15,7 +15,7 @@ const Card = (props) => {
                 <div className='absolute flex flex-col items-center'>
                     <span className='text-[7px] md:text-[10px]'>{props.type}</span>
                     <span className='text-[12px] md:text-sm font-semibold'>{
-                        props.type === 'Marks' ? props.percentage : props.percentage + "%"
+                        props.type === 'Marks' ? Math.round(props.percentage) : Math.round(props.percentage) + "%"
                     }</span>
                     <span className='text-[7px] md:text-[10px]'>{props.grade}</span>
                 </div>

@@ -9,6 +9,7 @@ const LastDeliverables = () => {
 
   const { data, isPending, isSuccess, isError, refetch, isRefetching } = useQuery({ queryKey: ["assignments"], queryFn: getAllAssignments });
   const { isSidebarOpen } = useSidebar();
+  const lastDeliverable = data?.[data.length - 1];
   console.log("deliverable is : ", data)
 
   const DeliverableComponent = ({deliverable}) => {
@@ -45,12 +46,14 @@ const LastDeliverables = () => {
         <div className="flex flex-col gap-1 px-3 py-5 bg-white rounded-lg custom-shadow">
           <div className="flex px-5 text-sm ">
             <div className="flex justify-center flex-1">
-              <p>{data[0]?.title}</p>
+              {/* <p>{data[0]?.title}</p> */}
+              <p>{lastDeliverable?.title}</p>
             </div>
           </div>
           <div className="flex flex-1 gap-2 p-2">
             {data?.length > 0 &&
-            <DeliverableComponent deliverable={data[0]? data[0] : {}} />
+            // <DeliverableComponent deliverable={data[0]? data[0] : {}} />
+            <DeliverableComponent deliverable={lastDeliverable ?? {}} />
             }
             {data?.length == 0 && <div className="py-4 text-xl px-4">No latest deliverables available right now!</div>}
             {/* <DeliverableComponent /> */}

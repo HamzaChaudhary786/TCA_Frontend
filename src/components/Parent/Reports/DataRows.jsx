@@ -6,7 +6,7 @@ const DataRows = ({ index, subject, instructor, attendance, bgColor, header, onC
   }
     return (
         <div className='min-w-full'>
-            <div style={{ backgroundColor: bgColor, cursor: "pointer" }} onClick={onClickFunction} className={`md:py-5 py-2 md:pl-5 md:pr-10 flex flex-row items-center justify-around border-b border-grey mt-2`}>
+            <div style={{ backgroundColor: bgColor, cursor: "pointer" }} onClick={onClickFunction} className={`px-1 md:py-5 py-2 md:pl-5 md:pr-10 flex flex-row items-center justify-around border-b border-grey mt-2`}>
             
                     
                 <p className={`w-full md:flex-[1] flex-[1] md:text-[16px] text-[14px] text-center md:text-left ${header ? 'font-semibold' : ''}`}>{index + "."}</p>
@@ -16,7 +16,12 @@ const DataRows = ({ index, subject, instructor, attendance, bgColor, header, onC
                     header ? (<p className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-left md:text-[16px] text-[14px] ${header ? 'font-semibold' : ''}`}>{attendance}</p>) : (
                         <div className="md:flex-[3] w-full bg-grey/50 rounded-3xl overflow-hidden">
                             <div style={{width: `${attendance || 10}%` }} className=" text-xs h-4 bg-gradient-to-r from-[#0B1053] to-[#007EEA] rounded-3xl flex justify-center text-white md:text-[16px] text-[14px]">
-                                {attendance || 0}
+                                <span className=" ml-[1.26rem]">
+                                {attendance || 0} 
+                                %
+
+
+                                </span>
                             </div>
                         </div>
                     )

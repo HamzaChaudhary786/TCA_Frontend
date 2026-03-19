@@ -68,9 +68,9 @@ const Quizzes = () => {
   return (
     isPending || isRefetching ? <div className="flex justify-center flex-1"> <LargeLoader />  </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
-            <div className={`w-full flex-grow lg:ml-72`}>
+        <div className="flex flex-col flex-1 bg-[#F9F9F9] font-poppins w-full">
+          <div className="flex flex-1 min-w-0">
+            <div className={`w-full flex-grow lg:ml-72 min-w-0 overflow-x-hidden`}>
               <Navbar heading={"Quizes"} />
               <div className="p-4 lg:px-12">
                 <div className="flex justify-end my-2">
@@ -102,7 +102,7 @@ const Quizzes = () => {
                     const expectedCount = assignment?.classroomID?.students?.filter(student => (
                       (!student?.subjects || student?.subjects?.length === 0) ||
                       student?.subjects?.some(sub => (sub?._id || sub)?.toString() === (assignment?.subjectID?._id || assignment?.subjectID)?.toString())
-                    )).length || 0;
+                    ))?.length || 0;
 
                     return (
                       <QuizAssignmentRow
@@ -138,7 +138,7 @@ const Quizzes = () => {
                     );
                   })}
 
-                  {data.length == 0 && <div className="text-center py-4 text-3xl font-medium">No quizes to display!</div>}
+                  {data?.length === 0 && <div className="text-center py-4 text-3xl font-medium">No quizes to display!</div>}
 
                 </div>
               </div>

@@ -120,19 +120,20 @@ const Navbar = ({ heading }) => {
 
   return (
     <div className="flex flex-1 items-center justify-center h-20">
-      <div className={`flex justify-end gap-2  md:justify-between flex-1 py-3 md:py-5 ${isBlurred ? "blur" : ""}`}>
+      <div className={`flex justify-between items-center gap-2  md:justify-between flex-1 py-3 md:py-5 ${isBlurred ? "blur" : ""}`}>
         {heading ?
-          <div className="flex justify-start items-center text-base sm:text-xl md:text-3xl font-semibold">{heading}</div>
+          <div className="flex justify-start items-center text-base sm:text-xl md:text-3xl font-semibold ml-[3rem] sm:ml-[1.4rem] lg:ml-[0rem] ">{heading}</div>
           :
-          <div className=" flex-col hidden md:flex">
-            <p className="text-xl font-semibold ">Hello {userData.name} </p>
-            <p className="">Welcome to your learning space!</p>
+          <div className=" flex-col  md:flex">
+            <p className="text-lg sm:text-xl font-semibold ml-[2.5rem]  md:ml-[0rem] ">Hello {userData.name} </p>
+            <p className="hidden md:block ">Welcome to your learning space!</p>
           </div>
         }
         <div className="flex items-center  gap-2">
           <div className="flex gap-2 sm:gap-4">
+            {/* p-1 sm:p-2 border cursor-pointer  rounded-md border-black/50 transition-all duration-500  */}
             <div
-              className={`p-2 h-8 sm:auto border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
+              className={`p-1 sm:p-2 sm:auto border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
                 }`}
               onClick={toggleMail}
             >
@@ -140,7 +141,7 @@ const Navbar = ({ heading }) => {
             </div>
             <div className={`relative ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
               <div
-                className={`p-2 h-8 sm:auto border cursor-pointer rounded-md border-black/50 transition-all duration-500 `}
+                className={`p-1 sm:p-2  sm:auto border cursor-pointer rounded-md border-black/50 transition-all duration-500 `}
                 onClick={handleBellClick}
               >
                 <div className={`${hasNewNotifications ? "animate-bellShake text-green_dark" : ""} `}>

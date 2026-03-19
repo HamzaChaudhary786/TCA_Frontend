@@ -61,14 +61,14 @@ const CreateAnnouncementModal = ({
         <div className="fixed inset-0 z-10 flex items-center justify-center p-4">
             <div
                 ref={ref}
-                className={`bg-white p-6 sm:p-8 w-[90%] sm:w-full max-w-[600px] sm:px-16 text-black rounded-xl max-h-[90vh] overflow-y-auto custom-scrollbar ${open ? "" : "hidden"
+                className={`bg-white p-4 sm:p-6 md:p-8 w-full max-w-lg sm:px-10 text-black rounded-xl max-h-[90vh] overflow-y-auto custom-scrollbar ${open ? "" : "hidden"
                     }`}
             >
                 <div className="flex gap-2">
                     <div className="flex flex-col w-full gap-4">
                         <div className="flex items-center justify-between">
-                            <div className="flex justify-center flex-1 w-[fit] gap-2 items-center">
-                                <p className="text-2xl font-semibold cursor-text">
+                            <div className="flex justify-center flex-1 gap-2 items-center">
+                                <p className="text-xl sm:text-2xl font-semibold cursor-text">
                                     {isEditTrue ? "Update Announcement" : "Create new Announcement"}
                                 </p>
                             </div>
@@ -89,7 +89,7 @@ const CreateAnnouncementModal = ({
                                 <p className="text-xs font-semibold text-grey_700">Title</p>
                                 <div className="flex justify-between border-[1px] py-1 px-4 rounded-lg w-full items-center border-grey/50">
                                     <input
-                                        className="text-sm outline-none text-custom-gray-3 w-full"
+                                        className="text-sm outline-none text-custom-gray-3 w-full min-w-0"
                                         placeholder="Enter title"
                                         value={announcemnetObj.title}
                                         onChange={(e) => { setAnnouncementObj({ ...announcemnetObj, title: e.target.value }) }}
@@ -100,13 +100,13 @@ const CreateAnnouncementModal = ({
 
                         <div className="flex flex-col flex-1 gap-1">
                             <p className="text-xs font-semibold text-grey_700">Schedule</p>
-                            <div className="flex items-center gap-3 ">
-                                <div className="flex flex-col flex-1 gap-1 ">
-                                    <div className="flex items-center flex-1 justify-between gap-3 px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
+                            <div className="flex items-center gap-1 sm:gap-3">
+                                <div className="flex flex-col flex-1 min-w-0 gap-1">
+                                    <div className="flex items-center flex-1 justify-between gap-3 px-1 sm:px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
                                         <input
                                             id="date"
                                             type="date"
-                                            className="text-sm outline-none text-custom-gray-3 w-full"
+                                            className="text-sm outline-none text-custom-gray-3 w-full min-w-0"
                                             placeholder="Enter date"
                                             value={announcemnetObj.date}
                                             onChange={(e) => { setAnnouncementObj({ ...announcemnetObj, date: e.target.value }) }}
@@ -114,11 +114,11 @@ const CreateAnnouncementModal = ({
                                     </div>
                                 </div>
 
-                                <div className="flex flex-col flex-1 gap-1">
-                                    <div className="flex flex-1 items-center justify-between gap-3 px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
+                                <div className="flex flex-col flex-1 min-w-0 gap-1">
+                                    <div className="flex flex-1 items-center justify-between gap-3 px-1 sm:px-3 py-1 border-[1.5px] rounded-lg border-grey/30">
                                         <input
                                             type="time"
-                                            className="text-sm outline-none text-custom-gray-3 w-full"
+                                            className="text-sm outline-none text-custom-gray-3 w-full min-w-0"
                                             placeholder="Enter time"
                                             value={announcemnetObj.time}
                                             onChange={(e) => { setAnnouncementObj({ ...announcemnetObj, time: e.target.value }) }}
@@ -127,7 +127,8 @@ const CreateAnnouncementModal = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3">
+
+                        <div className="flex flex-col gap-3">
                             {/* Visibility Dropdown */}
                             <div className="flex flex-col flex-1 gap-1">
                                 <p className="text-xs font-semibold text-grey_700">Visibility</p>
@@ -149,13 +150,13 @@ const CreateAnnouncementModal = ({
 
                             {/* Conditional WhatsApp Checkbox */}
                             {announcemnetObj.visibility === 'parent' && (
-                                <div className="flex flex-row gap-x-2 flex-1 items-center">
+                                <div className="flex flex-row gap-x-2 items-center">
                                     <input
                                         type="checkbox"
-                                        className="h-4 w-4"
+                                        className="h-4 w-4 shrink-0"
                                         checked={sendOnWhatsapp}
                                         onChange={(e) => setSendOnWhatsapp(e.target.checked)} />
-                                    <div className="text-[9px]">Do you want to send announcement on WhatsApp?</div>
+                                    <div className="text-[10px] sm:text-xs leading-tight">Do you want to send announcement on WhatsApp?</div>
                                 </div>
                             )}
                         </div>

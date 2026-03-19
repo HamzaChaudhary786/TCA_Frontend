@@ -88,33 +88,35 @@ const Navbar = ({ heading }) => {
 
   return (
     <div className="flex flex-1 h-20">
-      <div className={`flex justify-end md:justify-between flex-1 py-3 ${isBlurred ? "blur" : ""}`}>
-        <div className="hidden md:flex flex-col">
-          {heading ? <div className="font-medium text-2xl">{heading} </div> :
+      <div className={`flex justify-between items-center md:justify-between flex-1 py-3 ${isBlurred ? "blur" : ""}`}>
+        {/* hidden */}
+        <div className=" md:flex flex-col">
+          {heading ? <div className="font-medium text-lg sm:text-2xl ml-[3.5rem] sm:ml-[1.4rem] lg:ml-[0rem]  ">{heading} </div> :
             <div className="flex flex-col">
-              <p className="text-xl font-semibold">Hello {userData.name} </p>
-              <p className="">Welcome to your learning space!</p>
+              <p className="text-lg sm:text-xl font-semibold ml-[2.8rem]  md:ml-[0rem]  ">Hello {userData.name} </p>
+              <p className="hidden sm:block sm:ml-[2.8rem] md:ml-[0rem]">Welcome to your learning space!</p>
             </div>
           }
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             <div
-              className={`p-2 border cursor-pointer  rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
+              className={`p-1 sm:p-2 border cursor-pointer  rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
                 }`}
               onClick={toggleMail}
             >
               <IoMailOutline />
             </div>
             <div
-              className={`p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${bell ? "bg-[#0B1053] text-white" : ""
+              className={`p-1 sm:p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${bell ? "bg-[#0B1053] text-white" : ""
                 }`}
               onClick={togglebell}
             >
+
               <CiBellOn />
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pr-1 sm:pr-0">
             <p className="font-medium hidden md:block">{userData?.name}</p>
             <img
               src={userData.profilePic || profile}

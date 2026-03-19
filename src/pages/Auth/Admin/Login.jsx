@@ -111,26 +111,29 @@ const Login = () => {
     }
 
     return (
-        <div className='flex flex-col md:flex-row min-h-screen w-full flex-1 bg-[#0B1053]'
+        <div className='flex flex-col md:flex-row min-h-screen w-full bg-[#0B1053]'
         // style={{ background: 'linear-gradient(140.21deg, rgba(243, 233, 233, 0.4) -6.93%, rgba(246, 246, 246, 0) 98.1%)' }}
         >
             {/* <div className=' bg-cover bg-hero-pattern absolute w-72 h-72' ></div> */}
-            <div className='flex flex-1 px-4 md:px-10 py-10 justify-center'>
-                <div className='flex items-center justify-center'>
+            {/* <div className='flex flex-1 sm:w-1/2 px-4 md:px-10 py-10 justify-center'> */}
+            <div className='flex w-full md:w-1/2 px-4 md:px-10 py-6 justify-center items-center'>
+                <div className='flex lg:w-full items-center justify-center'>
                     <img src={IMAGES.logo} alt="" className=' bg-cover' />
                 </div>
             </div>
-            <div className='flex flex-1 '>
+            <div className='flex flex-1 md:w-1/2 '>
                 {/* <div className='relative hidden bottom-10 items-end lg:items-center lg:left-11 2xl:left-14 lg:flex justify-center '>
                      <div className='bg-cover mr-5 bg-center-img 2xl:w-80 2xl:h-72 xl:w-72 xl:h-64 h-44 w-52 absolute'></div> 
                 </div> */}
-                <div className='flex flex-col flex-1 px-4 md:px-10 py-8 justify-center items-center text-center w-full lg:w-auto'>
-                    <div className='flex flex-col bg-white h-full px-4 md:px-8 lg:px-12 py-10 lg:w-4/5'>
-                        <div className='py-3'>
+                {/* <div className='flex flex-col lg:px-32 md:px-4 px-0 flex-1 px-4 md:px-10 py-8 justify-center items-center text-center w-full'> */}
+                <div className='flex flex-1 justify-center items-center lg:px-24 px-4 py-8 w-full'>
+                    {/* <div className='flex w-full lg:px-16 px-0 flex-col bg-white h-full px-4 py-10 justify-center items-center'> */}
+                    <div className='flex flex-col bg-white w-full h-full lg:px-16  px-4 max-w-md sm:max-w-full mx-auto px-6 py-10 rounded-lg shadow-lg justify-center items-center'>                        {/* <div> */}
+                        <div className='py-3 text-center'>
                             <p className='text-2xl font-medium'>Welcome Back</p>
                             <p className='text-sm text-black/60'>Welcome back please enter your details</p>
                         </div>
-                        <div>
+                        <div className='w-full'>
                             <form onSubmit={handleSubmit}>
                                 <div className=''>
                                     {/* <Selectable label={"Parent/Student"} /> */}
@@ -160,11 +163,13 @@ const Login = () => {
                                 </div>
                             </form>
                         </div>
+                        {/* </div> */}
                     </div>
                 </div>
             </div>
         </div>
     )
+
 }
 
 export default Login

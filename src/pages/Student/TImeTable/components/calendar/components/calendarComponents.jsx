@@ -48,20 +48,20 @@ export const CustomEvent = ({ event, setevents }) => {
           return event.teacher.teacherID.name ? setdetailsModalOpen(true) : null;
         }}
       >
-        <div className="flex flex-col h-full justify-start p-2 space-y-1">
-          <div className="text-[10px] leading-tight">
+        <div className="flex flex-col h-full justify-start p-[2px] sm:p-2 space-y-1">
+          <div className="text-[9.5px] sm:text-[10px] leading-tight">
             <span className="font-bold text-blue-50">Teacher:</span>
             <div className="font-semibold text-white truncate">
               {event.teacher ? event.teacher.teacherID.name : ""}
             </div>
           </div>
-          <div className="text-[10px] leading-tight">
+          <div className="text-[9.5px] sm:text-[10px] leading-tight">
             <span className="font-bold text-blue-50">Title:</span>
             <div className="font-semibold text-white truncate">
               {event.title ? event.title : ""}
             </div>
           </div>
-          <div className="text-[10px] leading-tight">
+          <div className="text-[9.5px] sm:text-[10px] leading-tight">
             <span className="font-bold text-blue-50">Subject:</span>
             <div className="font-semibold text-white truncate">
               {event.subjectID.name ? event.subjectID.name : ""}
@@ -201,7 +201,7 @@ export const CustomToolbar = ({
               <MdKeyboardArrowLeft />
             </button>
 
-            <p className="mx-4 text-xl font-semibold text-[#6A00FF]">
+            <p className="mx-0 sm:mx-4 text-xl font-semibold text-[#6A00FF]">
               {moment(Date.now()).format("DD MMMM, YYYY")}
               <span className="ml-2 text-xs font-normal text-grey/70">Today</span>
             </p>
@@ -216,7 +216,7 @@ export const CustomToolbar = ({
         </div>
         <div className="flex items-center gap-6">
           <FilterButton
-            className={"px-8 py-1"}
+            className={"px-2 sm:px-8 py-1"}
             text={"Filter Classes"}
             clickHandler={() => setaddModalOpen(!addModalOpen)}
           />

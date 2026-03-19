@@ -280,7 +280,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
 
-      {/* Modal */}
+      {/* Modal */} 
       <div
         ref={ref}
         className="relative w-full max-w-2xl h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100"
@@ -288,9 +288,10 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
       >
         {/* Purple top accent bar */}
         <div className="h-1 w-full bg-gradient-to-r from-[#6A00FF] to-[#9B4DFF] flex-shrink-0" />
-
+ 
         {/* Header */}
         <div className="flex items-center justify-between px-7 pt-5 pb-4 flex-shrink-0">
+     
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-[#6A00FF]/10 flex items-center justify-center">
               {isEditTrue

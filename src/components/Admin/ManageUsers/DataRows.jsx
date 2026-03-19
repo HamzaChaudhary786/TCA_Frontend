@@ -1,7 +1,6 @@
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-
 const DataRows = ({
   data,
   index,
@@ -16,60 +15,55 @@ const DataRows = ({
   toggleClassMenu
 }) => {
   return (
-    <div className="min-w-full">
-      <div
-        style={{ backgroundColor: bgColor, cursor: "pointer" }}
-        className={`flex flex-row items-center justify-around border-b border-grey custom-shadow my-1`}
-      >
-        <div className={`flex flex-row items-center flex-1 ${header? "py-1 md:py-1 md:pl-3 md:pr-5": "py-[6px] md:pl-3 md:pr-5"} my-1 `}>
+    <div
+      style={{ backgroundColor: bgColor, cursor: "pointer" }}
+      className="flex flex-row gap-1 items-center border-b border-grey custom-shadow my-1 px-3 min-w-[600px]"
+    >
+      {/* Index */}
+      <div className="w-[5%] min-w-[40px] text-center py-3">
+        <p className={`text-sm ${header ? "font-semibold" : "text-gray-700"}`}>
+          {index}
+        </p>
+      </div>
+
+      {/* Name */}
+      <div className="w-[25%] min-w-[120px] text-center py-3">
+        <p className={`text-sm truncate ${header ? "font-semibold" : "text-gray-700"}`}>
+          {userName}
+        </p>
+      </div>
+
+      {/* Role */}
+      <div className="w-[15%] min-w-[80px] text-center py-3">
+        <p className={`text-sm truncate ${header ? "font-semibold" : "text-gray-700"}`}>
+          {role}
+        </p>
+      </div>
+
+      {/* User ID */}
+      <div className="w-[20%] min-w-[100px] text-center py-3">
+        <p className={`text-sm truncate ${header ? "font-semibold" : "text-gray-700"}`}>
+          {userId}
+        </p>
+      </div>
+
+      {/* Contact */}
+      <div className="w-[30%] min-w-[120px] text-center py-3">
+        <p className={`text-sm truncate ${header ? "font-semibold" : "text-gray-700"}`}>
+          {contact}
+        </p>
+      </div>
+
+      {/* Actions */}
+      <div className="w-[5%] min-w-[40px] flex justify-center py-3">
+        {!header && (
           <p
-            className={`w-full md:flex-[1] flex-[1] text-sm text-center md:text-left ${header ? "font-semibold" : ""
-              }`}
-          >
-            {index + "."}
-          </p>
-          <p
-            className={`w-full ml-2 md:flex-[3] my-1 md:my-0 text-center text-sm md:text-left ${header ? "font-semibold ml-14 text-center" : ""
-              }`}
-          >
-            {userName}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-left text-sm   text-[14px] ${header ? "font-semibold" : ""
-              }`}
-          >
-            {role}
-          </p>
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-left text-sm ${header ? "font-semibold" : ""
-              }`}
-          >
-            {userId}
-          </p>
-          {/* <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-left text-sm ${header ? "font-semibold" : ""
-              }`}
-          >
-            {userclass}
-          </p> */}
-          <p
-            className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-left text-sm ${header ? "font-semibold" : ""
-              }`}
-          >
-            {contact}
-          </p>
-        </div>
-        <div className="flex ml-3 mr-2 lg:mr-5 cursor-pointer">
-          <p
-            onClick={() => {
-              toggleClassMenu(data);
-            }}
-            className={`w-full my-1 md:my-0 text-center md:text-center md:text-[20px] text-[14px] ${header ? "hidden" : ""
-              }`}
+            onClick={() => toggleClassMenu(data)}
+            className="text-[18px] text-gray-400 hover:text-[#6A00FF] transition-colors"
           >
             <BsThreeDotsVertical />
           </p>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import Card from "../../../components/Admin/StudentReports/Card";
 import ActivityCard from "../../../components/Admin/StudentReports/ActivityCard";
 import SystemOverview from "../../../components/Admin/StudentReports/SystemOverview"
 import QuizAssignmentsTable from "../../../components/Admin/StudentReports/QuizAssignmentsTable";
+import AttendanceTable from "../../../components/Admin/StudentReports/AttendanceTable";
 import { X } from "lucide-react";
 import { LuPhone } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
@@ -48,10 +49,10 @@ const SubjectReport = () => {
     enabled: !!location.state?._id
   });
 
-  const studentAssignmentsQuizes = useQuery({ 
-    queryKey: ["student-assignments-quizes"], 
+  const { data: subjectReport, isPending: subjectReportPending } = useQuery({ 
+    queryKey: ["student-assignments-quizes", location.state?._id, selectedSubject && JSON.parse(selectedSubject).subject?._id], 
     queryFn: async () => await getStudentSubjectReport(location.state?._id, JSON.parse(selectedSubject).subject._id), 
-    enabled: subjectQueryFlag 
+    enabled: !!selectedSubject && !!location.state?._id
   });
 
   useEffect(() => {
@@ -59,12 +60,10 @@ const SubjectReport = () => {
   }, [isSuccess, subjects]);
 
   useEffect(() => {
-    setSubjectQueryFlag(true);
-    studentAssignmentsQuizes.refetch();
-    if (!studentAssignmentsQuizes.isPending) {
-      console.log("subject report data in subject report section in admin penal is: ", studentAssignmentsQuizes.data);
+    if (!subjectReportPending && subjectReport) {
+      console.log("subject report data in subject report section in admin penal is: ", subjectReport);
     }
-  }, [selectedSubject, studentAssignmentsQuizes.data, studentAssignmentsQuizes.isPending])
+  }, [selectedSubject, subjectReport, subjectReportPending])
 
   const { data: studentSubjectWithLevel, isSuccess: studentIsSuccess, isPending: studentSubjectPending } = useQuery({
     queryKey: ["studentSubjectwithLevel"], 
@@ -131,12 +130,12 @@ const SubjectReport = () => {
       <>
         <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
           <div className="flex flex-1">
-            <div className="flex-grow w-full px-5 lg:px-20 sm:px-10 lg:ml-72">
-              <div className="pt-6">
+            <div className="flex-grow w-full px-3  lg:px-20 sm:px-10 lg:ml-72">
+              <div className="">
                 <Navbar heading={"Subjects Report"} />
                 <div className="mt-7">
                   <div className="flex flex-col items-center justify-center gap-1">
-                    {/* <img src={studentData.profilePic || IMAGES.Profile} alt="student profile" className="sm:w-40 sm:h-40 w-20 h-20 rounded-full" /> */}
+                    <img src={studentData.profilePic || IMAGES.Profile} alt="student profile" className="sm:w-40 sm:h-40 w-20 h-20 rounded-full" />
                     <p className="text-lg font-semibold">{studentData.name}</p>
                     <div className="flex items-center gap-2 text-xs">
                       <LuPhone />
@@ -150,7 +149,7 @@ const SubjectReport = () => {
                 </div>
 
                 <div className="w-full justify-end items-center flex">
-                  <button className="mt-5 sm:auto sm:py-3 sm:px-4 py-2 px-2 bg-[#0B1053] text-white rounded-full" onClick={() => {
+                  <button className="mt-5 py-2 px-4 sm:py-2 sm:px-4 bg-[#0B1053] text-white rounded-full" onClick={() => {
                     // Refetch student subjects before opening modal
                     refetchStudentSubjects();
                     setEditSubject(!editSubject);
@@ -158,49 +157,50 @@ const SubjectReport = () => {
                 </div>
                 <div className="mt-7">
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-col md:flex-row justify-between">
+                    <div className="flex flex-col sm:flex-row justify-between">
                       <p className="md:text-[20px]">Overview</p>
                       <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl">
-                        <select className="outline-none w-60" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} >
+                        <select className="outline-none w-full sm:w-60" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} >
                           <option value={""}>Select Subject</option>
                           {isSuccess && subjects?.subjects?.map((sub) => <option key={sub._id} value={JSON.stringify(sub)}>{sub.subject?.name}</option>)}
                         </select>
                       </div>
                     </div>
                     <div className="flex flex-col items-center flex-1 gap-2 sm:flex-row">
-                      {selectedSubject !== "" && studentAssignmentsQuizes && studentAssignmentsQuizes.isPending ? <Loader />
-                        :
-                        <>
-                          <Card
-                            type={"Percentage"}
-                            data={"Assignment"}
-                            grade={studentAssignmentsQuizes.data?.assignments.avgGrade}
-                            percentage={studentAssignmentsQuizes.data?.assignments?.avgMarksPer ? studentAssignmentsQuizes.data?.assignments?.avgMarksPer !== "NaN" ? studentAssignmentsQuizes.data?.assignments?.avgMarksPer : 0 : 0}
-                          />
-                          <Card
-                            data={"Quizes"}
-                            type={"Percentage"}
-                            grade={studentAssignmentsQuizes.data?.quizes?.avgGrade}
-                            percentage={studentAssignmentsQuizes.data?.quizes?.avgMarksPer ? studentAssignmentsQuizes.data?.quizes?.avgMarksPer !== "NaN" ? studentAssignmentsQuizes.data?.quizes?.avgMarksPer : 0 : 0}
-                          />
-                          <Card
-                            data={"Attendence"}
-                            type={"Percentage"}
-                            percentage={studentAssignmentsQuizes.data?.attendance?.avgAttendencePer ? studentAssignmentsQuizes.data?.attendance?.avgAttendencePer : 0}
-                          />
-                        </>
+                      {selectedSubject !== "" && subjectReportPending ? <Loader /> :
+                        (selectedSubject !== "" && subjectReport && (
+                          <>
+                            <Card
+                              type={"Percentage"}
+                              data={"Assignment"}
+                              grade={subjectReport.assignments?.avgGrade}
+                              percentage={subjectReport.assignments?.avgMarksPer || 0}
+                            />
+                            <Card
+                              data={"Quizes"}
+                              type={"Percentage"}
+                              grade={subjectReport.quizes?.avgGrade}
+                              percentage={subjectReport.quizes?.avgMarksPer || 0}
+                            />
+                            <Card
+                              data={"Attendence"}
+                              type={"Percentage"}
+                              percentage={Math.round(subjectReport.attendance?.avgAttendencePer) || 0}
+                            />
+                          </>
+                        ))
                       }
                     </div>
                   </div>
                 </div>
 
-                {selectedSubject !== "" && !studentAssignmentsQuizes.isPending && studentAssignmentsQuizes.data && (
+                {selectedSubject !== "" && !subjectReportPending && subjectReport && (
                   <>
                     <div className="mt-7">
                       <div className="flex flex-col gap-2">
-                        <p className="md:text-[20px]">Assignments</p>
+                        <p className="md:text-[20px]">Assignments </p>
                         <div className="flex flex-row items-center gap-2">
-                          <QuizAssignmentsTable data={studentAssignmentsQuizes.data.assignments.data || []} />
+                          <QuizAssignmentsTable data={subjectReport.assignments?.data || []} />
                         </div>
                       </div>
                     </div>
@@ -208,7 +208,23 @@ const SubjectReport = () => {
                       <div className="flex flex-col gap-2">
                         <p className="md:text-[20px]">Quizzes</p>
                         <div className="flex flex-row items-center gap-2">
-                          <QuizAssignmentsTable data={studentAssignmentsQuizes.data.quizes.data || []} />
+                          <QuizAssignmentsTable data={subjectReport.quizes?.data || []} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-7">
+                      <div className="flex flex-col gap-2">
+                        <p className="md:text-[20px]">Attendance</p>
+                        <div className="flex flex-row items-center gap-2">
+                          <AttendanceTable data={subjectReport.attendance?.classes || []} />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-7">
+                      <div className="flex flex-col gap-2">
+                        <p className="md:text-[20px]">Attendance</p>
+                        <div className="flex flex-row items-center gap-2">
+                          <AttendanceTable data={studentAssignmentsQuizes.data.attendance?.classes || []} />
                         </div>
                       </div>
                     </div>

@@ -130,7 +130,7 @@ const Sidebar = () => {
         {!loading &&
           <div
             onClick={handleLogoutClick}
-            className={`flex items-center gap-4 px-5 py-3 text-lg rounded-md cursor-pointer text-[#0B1053]`}
+            className={`flex items-center gap-4 px-5 py-3 text-lg rounded-md cursor-pointer text-white`}
           >
             <IoIosLogOut />
             <p>Logout</p>

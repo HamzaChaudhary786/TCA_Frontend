@@ -12,6 +12,10 @@ import { useUser } from "../../../context/UserContext";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getStudentSubjectReport } from "../../../api/Student/StudentApis";
 
+// File ke top mein add karein:
+// File ke top mein add karein:
+
+// Component ke andar:
 
 const SubjectReport = () => {
 
@@ -26,6 +30,10 @@ const SubjectReport = () => {
       },
       {
         label: "Absent",
+        value: 0,
+      },
+      {
+        label: "Late",
         value: 0,
       },
     ]
@@ -48,16 +56,24 @@ const SubjectReport = () => {
 
 
   useEffect(() => {
-    if (!reportQuery.isPending)
-      reportQuery?.data?.attendance?.classes.map((item) => {
-        if (item?.matchedAttendance[0]?.isPresent) {
-          setChartDate([...chartData, chartData[0].value = chartData[0].value + 1])
-        }
-        if (!item?.matchedAttendance[0]?.isPresent) {
-          setChartDate([...chartData, chartData[1].value = chartData[1].value + 1])
-        }
-      })
-  }, [reportQuery.isPending])
+    if (reportQuery.data?.attendance) {
+      const { presentCount, absentCount, lateCount } = reportQuery.data.attendance;
+      setChartDate([
+        {
+          label: "Present",
+          value: presentCount,
+        },
+        {
+          label: "Absent",
+          value: absentCount,
+        },
+        {
+          label: "Late",
+          value: lateCount,
+        },
+      ]);
+    }
+  }, [reportQuery.data]);
 
 
   return (
@@ -65,12 +81,12 @@ const SubjectReport = () => {
       <>
         <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
           <div className="flex flex-1">
-            <div className="flex-grow w-full px-5 lg:px-20 sm:px-10 lg:ml-72">
-              <div className="pt-16 ">
+            <div className="flex-grow w-full px-2 lg:px-20 sm:px-10 lg:ml-72">
+              <div className=" pt-20 sm:pt-16 ">
                 <div className="flex flex-row items-center justify-between flex-grow">
                   <div className="flex flex-col justify-between gap-1 md:flex-row md:gap-6">
                     <p className="font-semibold md:text-[25px]">
-                      {subject + " Report"}
+                      {subject + " Report"} 
                     </p>
                     <div className="flex flex-row gap-1 text-[10px] items-center">
                       <p>
@@ -105,7 +121,7 @@ const SubjectReport = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-row items-center gap-2 md:gap-4">
+                  <div className="flex flex-row items-center gap-1 sm:gap-2 md:gap-4">
                     <div className="p-1 bg-white rounded-sm border-1 border-grey">
                       <img
                         src={IMAGES.Notification}
@@ -127,14 +143,14 @@ const SubjectReport = () => {
                       <img
                         src={userData.profilePic || IMAGES.ProfilePic}
                         alt=""
-                        className="w-[29px] h-[30px] rounded-full"
+                        className= "sm:w-[29px] sm:h-[29px]  w-[34px] h-[34px] rounded-full"
                       />
                     </div>
                     <div>
                       <img
                         src={IMAGES.ArrowLeft}
                         alt=""
-                        className="w-[22px] h-[30px]"
+                        className="w-[1rem] h-[1rem]"
                       />
                     </div>
                   </div>
@@ -142,7 +158,10 @@ const SubjectReport = () => {
                 <div className="mt-7">
                   <div className="flex flex-col gap-2">
                     <p className="md:text-[20px]">Overview</p>
-                    <div className="flex flex-col items-center flex-1 gap-2 sm:flex-row">
+                <div 
+  className="flex flex-col items-center flex-1 gap-2 sm:flex-row" 
+ 
+>
                       <Card
                         data={"Assignment"}
                         type={"Percentage"}
@@ -173,7 +192,7 @@ const SubjectReport = () => {
                 </div>
                 <div className="mt-7">
                   <div className="flex flex-col gap-2">
-                    <p className="md:text-[20px]">Assignments</p>
+                    <p className="md:text-[20px]">Assignments </p>
                     <div className="flex flex-row items-center gap-2">
                       <QuizAssignmentsTable data={reportQuery?.data?.assignments} />
                     </div>

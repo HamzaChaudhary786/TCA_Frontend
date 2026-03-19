@@ -182,9 +182,9 @@ export const CustomToolbar = (props) => {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-between gap-6 lg:gap-3 mb-4">
-        <div className="w-full flex flex-1 justify-center">
-          <div className="flex items-center justify-center w-full gap-2 mt-4">
+      <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-start sm:justify-between gap-6 lg:gap-3 my-4">
+        <div className="w-full flex flex-1 justify-normal sm:justify-center">
+          <div className="flex items-center justify-normal sm:justify-center w-full gap-2 lg:gap-1">
             {/* <button
               className="px-3 py-1 rounded-md bg-custom-light-1"
               onClick={goToCurrent}
@@ -192,26 +192,26 @@ export const CustomToolbar = (props) => {
               Today
             </button> */}
             <button
-              className="w-8 h-8 p-2 bg-white border border-grey/50 rounded-2xl"
+              className="w-6 h-6 p-1 sm:w-8 sm:h-8 sm:p-2 bg-white border border-grey/50 rounded-2xl"
               onClick={goToBack}
             >
               <MdKeyboardArrowLeft />
             </button>
 
-            <p className="mx-2 text-2xl lg:text-[16px] font-semibold text-[#6A00FF]">
+            <p className="mx-2 text-lg sm:text-2xl lg:text-[14px] 2xl:text-[16px] font-semibold text-[#6A00FF]">
               {moment.utc(Date.now()).format("DD MMMM, YYYY")}
-              <span className="ml-2 text-xs font-normal text-grey/70">Today</span>
+              <span className="ml-2 text-lg lg:text-[10px] 2xl:text-[12px] font-normal text-grey/70">Today</span>
             </p>
 
             <button
-              className="w-8 h-8 p-2 bg-white border rounded-2xl border-grey/50"
+              className="w-6 h-6 p-1 sm:w-8 sm:h-8 sm:p-2 bg-white border rounded-2xl border-grey/50"
               onClick={goToNext}
             >
               <MdKeyboardArrowRight />
             </button>
           </div>
         </div>
-        <div className="flex flex-1 items-start gap-2 w-full justify-center">
+        <div className="flex flex-1 items-start gap-2 w-full justify-normal sm:justify-center">
           {/* <div className="flex justify-between text-sm py-2 cursor-pointer px-2 w-36 border-[1.5px] border-[#00000020] rounded-xl ">
             Teacher <FaChevronDown size={16} color="black" />
           </div> */}
@@ -229,16 +229,17 @@ export const CustomToolbar = (props) => {
                 ))}
               </select>
             </div>
-            <div className="py-1 mt-3 text-xs text-black/70 flex-wrap w-[75%]">
+            {/* <div className=" text-lg md:text-auto py-1 mt-3 text-xs text-black/70 flex-wrap w-[75%]">
               <p>Selcet the time table you want to view</p>
-            </div>
+            </div> */}
           </div>
 
         </div>
-        <div className="flex flex-2 flex-row flex-wrap items-center justify-center gap-6 lg:gap-2 mb-6 lg:mb-0">
+        <div className="w-full">
+        <div className="flex flex-2 flex-row flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-6 lg:gap-2 mb-6 lg:mb-0">
           <div>
             <FilterButton
-              className={"px-4 py-1"}
+              className={"px-2 sm:px-4 py-2 text-sm sm:text-lg"}
               icon={true}
               text={"Filter Classes"}
               clickHandler={() => {
@@ -249,7 +250,7 @@ export const CustomToolbar = (props) => {
           </div>
           <div>
             <FilterButton
-              className={"px-4 py-1"}
+              className={"px-2 sm:px-4 py-2 text-sm sm:text-lg"}
               text={"Schedule Classes"}
               clickHandler={() => {
                 setAddScheduleModalOpen(!addScheduleModalOpen);
@@ -257,6 +258,7 @@ export const CustomToolbar = (props) => {
             />
 
           </div>
+        </div>
         </div>
       </div>
     </>

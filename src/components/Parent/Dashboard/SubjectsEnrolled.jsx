@@ -19,34 +19,27 @@ const SubjectsEnrolled = () => {
 
   const handleFeedback = () => {
     toggleClickTeacher();
-    // Add backend call here if needed
   };
 
-  // Fetch subjects with React Query
   const subjectQuery = useQuery({
     queryKey: ["subjects", selectedChild?._id],
     queryFn: async () => {
       const results = await getAllSubjects(selectedChild?._id);
-      //console.log("Subjects in enrolled classes:", results);
       setAllSubjects(results);
       return results;
     },
     staleTime: 300000,
-    enabled: enableQuery && !!selectedChild?._id, // Enable query only if `selectedChild._id` is defined
+    enabled: enableQuery && !!selectedChild?._id,
   });
 
-  // Enable query if `allSubjects` is empty
   useEffect(() => {
     if (allSubjects.length === 0 && selectedChild?._id) {
       setEnableQuery(true);
     }
   }, [allSubjects, selectedChild]);
 
-  //console.log(subjectQuery.data ,"subject query data");
-
-
-  //console.log(allSubjects ,"all Subjects Of Parent ");
-  
+  const thClass = "flex justify-center items-center text-center min-w-0 break-words text-sm sm:text-lg font-medium";
+  const tdClass = "flex justify-center items-center text-center px-[2px] md:px-[4px] text-[10px] md:text-[14px] py-2 lg:py-3 border-l border-l-black/10 min-w-0 break-words leading-tight";
 
   return (
     <div className="flex flex-1">
@@ -54,14 +47,14 @@ const SubjectsEnrolled = () => {
         <div>
           <p className="text-lg font-medium">Subjects Enrolled</p>
         </div>
-        <div className="flex flex-1">
-          <table className="flex flex-col flex-1 bg-white rounded-lg table-fixed">
-            <thead className="flex gap-5 px-2 py-3 border-t-4 rounded-tl-lg rounded-tr-lg border-t-[#007EEA] bg-[#c7cafd]">
-              <tr className="flex flex-1 font-medium">
-                <td className="flex-[1] flex justify-center">Sr No.</td>
-                <td className="flex-[3] flex justify-center">Subject Name</td>
-                <td className="flex-[3] flex justify-center">Instructor</td>
-                <td className="flex-[3] flex justify-center">Attendance</td>
+        <div className="flex flex-1 overflow-x-auto">
+          <table className="flex flex-col flex-1 bg-white rounded-lg w-full">
+            <thead className="flex px-2 py-3 border-t-4 rounded-tl-lg rounded-tr-lg border-t-[#007EEA] bg-[#c7cafd]">
+              <tr className="flex flex-1 w-full">
+                <td className={`flex-[1] ${thClass}`}>Sr No.</td>
+                <td className={`flex-[3] ${thClass}`}>Subject Name</td>
+                <td className={`flex-[3] ${thClass}`}>Instructor</td>
+                <td className={`flex-[3] ${thClass}`}>Attendance</td>
               </tr>
             </thead>
 
@@ -82,28 +75,32 @@ const SubjectsEnrolled = () => {
                 </tr>
               </tbody>
             ) : (
-              <tbody className="flex flex-col">
+              <tbody className="flex flex-col w-full">
                 {subjectQuery?.data?.subjects?.length > 0 ? (
                   subjectQuery.data.subjects.map((item, index) => (
-                    <tr key={index} className="flex flex-1 text-xs border-t border-t-black/10">
-                      <td className="flex-[1] py-2 lg:py-3 flex justify-center">{index + 1}</td>
-                      <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
+                    <tr key={index} className="flex flex-1 w-full border-t border-t-black/10 items-stretch">
+                      <td className="flex-[1] py-2 lg:py-3 flex justify-center items-center text-[10px] md:text-[14px] min-w-0">
+                        {index + 1}
+                      </td>
+                      <td className={`flex-[3] ${tdClass}`}>
                         {item.subject.name}
                       </td>
                       <td
                         onClick={() => toggleClickTeacher(item)}
                         style={{ cursor: "pointer" }}
-                        className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center"
+                        className={`flex-[3] ${tdClass}`}
                       >
                         {item.teacher.name}
                       </td>
-                      <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex w-full justify-center">
+                      <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex items-center justify-center min-w-0 px-[4px]">
                         <div className="flex w-[90%] h-4 bg-grey/50 rounded-3xl">
                           <div
                             style={{ width: `${item.avgAttendancePer || 0}%` }}
                             className="text-xs h-4 bg-gradient-to-r from-[#0B1053] to-[#007EEA] rounded-3xl flex justify-center text-white"
                           >
-                            {item?.avgAttendancePer || 0} %
+                            <span className="ml-[1.26rem]">
+                              {item?.avgAttendancePer || 0}%
+                            </span>
                           </div>
                         </div>
                       </td>

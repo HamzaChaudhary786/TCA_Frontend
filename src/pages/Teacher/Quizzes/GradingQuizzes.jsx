@@ -11,7 +11,7 @@ import { IoBookOutline } from "react-icons/io5";
 import { useBlur } from "../../../context/BlurContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMultipleQuizesForGrading, gradeQuizes } from "../../../api/Teacher/Quiz";
 import { useUser } from "../../../context/UserContext";
 import Loader from "../../../utils/Loader";
@@ -99,14 +99,15 @@ const GradingQuizzes = () => {
       return inp;
     }))
   }, []);
-
+  const queryClient = useQueryClient();
   const gradeMutation = useMutation({
     mutationKey: ["submissions"],
     mutationFn: async (data) => {
       console.log("data being sent is : ", data);
       let result = await gradeQuizes({ submissions: data }, location.state._id);
       return result;
-    }, onSettled: () => {
+    }, onSuccess: () => {
+      toast.dismiss();
       toast.success("Grades Added Successfully!");
       // Invalidate all relevant queries for all roles to ensure reports "progress"
       queryClient.invalidateQueries(["assignment"]);
@@ -130,16 +131,26 @@ const GradingQuizzes = () => {
   });
 
   useEffect(() => {
-    let myobj = {};
     if (allQuizQuery.isSuccess) {
       console.log("all Query data ", allQuizQuery.data);
       let dataObjArr = allQuizQuery?.data?.submissions.map(item => {
-        return myobj = { ...item, grade: "", feedback: "", marks: "" }
+        return {
+          ...item,
+          grade: item.submission?.grade || "",
+          feedback: item.submission?.feedback || "",
+          marks: item.submission?.marks !== null && item.submission?.marks !== undefined ? item.submission.marks : ""
+        }
       })
       console.log("data after useeffect is : ", dataObjArr)
       setGradingData(dataObjArr)
     }
   }, [allQuizQuery.data, allQuizQuery.isSuccess]);
+
+  const filteredData = gradingData?.filter((submission) =>
+    submission?.studentID?.name
+      ?.toLowerCase()
+      .includes(searchText.toLowerCase())
+  );
 
   return (
     <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
@@ -249,9 +260,9 @@ const GradingQuizzes = () => {
                 marksObtained={"Marks Obtained"}
                 grade={"Grade"}
               />
-              {!gradingData.isPending && searchText == "" && gradingData?.map((submission, index) => (
+              {filteredData?.map((submission, index) => (
                 <GradeQuizAssignmentRow
-                  isQuiz={false}
+                  isQuiz={true}
                   header={false}
                   index={index + 1}
                   bgColor={"#FFFFFF"}
@@ -267,26 +278,7 @@ const GradingQuizzes = () => {
                 />
               ))}
 
-              {!gradingData.isPending && searchText !== "" && gradingData?.map((submission, index) => {
-                if (submission?.studentID?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                  return <GradeQuizAssignmentRow
-                    isQuiz={false}
-                    header={false}
-                    index={index + 1}
-                    bgColor={"#FFFFFF"}
-                    grade={submission?.grade}
-                    marks={submission?.marks}
-                    profileLink={submission.studentID.profilePic || IMAGES.Profile}
-                    setInputField={setInputField}
-                    id={submission?.studentID?._id}
-                    feedback={submission?.feedback}
-                    name={submission?.studentID?.name}
-                    marksObtained={submission?.marksObtained}
-                    submission={submission?.submission?.submittedAt || "Not Submitted Yet"}
-                  />
-                }
-              }
-              )}
+              {/* Removed redundant and buggy search mapping */}
             </div>
 
             {gradeMutation.isPending && <div> <Loader /> </div>}

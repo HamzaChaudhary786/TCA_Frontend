@@ -41,7 +41,6 @@ const QuizAssignmentRow = (props) => {
             if (!error) {
                 toast.success("Uploaded successfully!");
                 setIsUploadded(true);
-                // Invalidate all relevant queries for all roles to ensure reports "progress"
                 queryClient.invalidateQueries(["assignment"]);
                 queryClient.invalidateQueries(["quiz"]);
                 queryClient.invalidateQueries(["reports"]);
@@ -59,11 +58,9 @@ const QuizAssignmentRow = (props) => {
 
         setSelectedFile(file);
 
-        // Immediate upload to Cloudinary
         await handleProfileImageUpdate(file, (url) => {
             console.log("Submission Cloudinary URL:", url);
             setUploadedFileUrl(url);
-            // Trigger the submission mutation directly with the fresh URL
             quizAssignmentMutation.mutate(url);
         }, setIsUploading, 'auto');
     };
@@ -76,14 +73,11 @@ const QuizAssignmentRow = (props) => {
             setTimePassed(true);
         } else {
             setTimePassed(false);
-            // Calculate the difference in milliseconds
             const difference = eventDateTime - currentDateTime;
-            // Convert the difference to days, hours, minutes, and seconds
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
             const minutes = Math.floor((difference / (1000 * 60)) % 60);
             const seconds = Math.floor((difference / 1000) % 60);
-            // Update the timeLeft state with days included
             setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s`);
         }
     };
@@ -102,7 +96,6 @@ const QuizAssignmentRow = (props) => {
             .replace(/(\d+)([ap]m)$/i, (match, p1, p2) => `${p1} ${p2.toUpperCase()}`);
 
         compareDateAndTime(formattedDateTimeString);
-
 
         const intervalId = setInterval(() => {
             compareDateAndTime(formattedDateTimeString);
@@ -123,49 +116,69 @@ const QuizAssignmentRow = (props) => {
     return (
         <>
             <div className='min-w-full'>
-                <div className='border-b border-grey md:py-5 py-2 md:pl-3 md:pr-5  '>
-                    <div style={{ backgroundColor: props.bgColor, }} className={`flex flex-row items-center  mt-2 space-x-3`}>
-                        <p className={`w-full md:flex-[1] flex-[1] md:text-[14px] sm:text-[11px] text-[9px] text-center md:text-left ${props.header ? 'font-semibold' : ''}`}>{props.index + "."}</p>
-                        <p className={`w-full md:flex-[3] my-1 md:my-0  md:text-[14px] text-[11px] md:text-center ${props.header ? 'font-semibold' : ''}`}>{props.subject}</p>
-                        <p className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>{props.title}</p>
-                        <p className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>{props.header ? props.deadline : formatDate(props.deadline)}</p>
-                        <p className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>{props.total_marks}</p>
-                        <p className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>
+                <div className='border-b border-grey md:py-5 py-2 md:pl-3 md:pr-5'>
+                    <div style={{ backgroundColor: props.bgColor }} className={`flex flex-row items-center px-1 mt-2 space-x-3`}>
+
+                        {/* Index */}
+                        <p className={`flex-[1] md:text-[14px] sm:text-[11px] text-[9px] text-center ${props.header ? 'font-semibold' : ''}`}>
+                            {props.index + "."}
+                        </p>
+
+                        {/* Subject */}
+                        <p className={`flex-[3] my-1 md:my-0 text-center md:text-[14px] sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>
+                            {props.subject}
+                        </p>
+
+                        {/* Title */}
+                        <p className={`flex-[3] my-1 md:my-0 text-center md:text-[14px] sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>
+                            {props.title}
+                        </p>
+
+                        {/* Deadline */}
+                        <p className={`flex-[3] my-1 md:my-0 text-center md:text-[14px] sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>
+                            {props.header ? props.deadline : formatDate(props.deadline)}
+                        </p>
+
+                        {/* Total Marks */}
+                        <p className={`flex-[3] my-1 md:my-0 text-center md:text-[14px] sm:text-[11px] text-[9px] ${props.header ? 'font-semibold' : ''}`}>
+                            {props.total_marks}
+                        </p>
+
+                        {/* Download */}
+                        <div className={`flex-[3] my-1 md:my-0 flex items-center justify-center`}>
                             {props.header ? (
-                                "Download"
+                                <p className={`md:text-[14px] sm:text-[11px] text-[9px] font-semibold`}>Download</p>
                             ) : (
                                 <>
                                     {props?.download ? (
                                         <a href={props?.download} download target='_blank' rel="noopener noreferrer">
-                                            <img src={IMAGES.Download} alt='' className='md:w-[18px] cursor-pointer md:h-[18px] mx-auto block w-[16px] h-[16px]' />
+                                            <img src={IMAGES.Download} alt='' className='md:w-[18px] cursor-pointer md:h-[18px] w-[16px] h-[16px]' />
                                         </a>
                                     ) : (
                                         <span className="text-[10px] text-gray-400">No File</span>
                                     )}
                                 </>
                             )}
-                        </p>
-                        {
-                            props.header ? (
-                                <>
-                                    <p className={`w-full md:flex-[2] my-1 md:my-0 text-center md:text-center md:text-[14px] text-[11px] ${props.header ? 'font-semibold' : ''}`}>
-                                        Upload
-                                    </p>
-                                </>
+                        </div>
+
+                        {/* Upload */}
+                        <div className={`flex-[2] my-1 md:my-0 flex items-center justify-center`}>
+                            {props.header ? (
+                                <p className={`md:text-[14px] sm:text-[11px] text-[9px] font-semibold`}>Upload</p>
                             ) : (
                                 !isUploaded ? (
-                                    <div className={`w-full md:flex-[2] my-1 md:my-0 text-center md:text-center`}>
+                                    <>
                                         {(quizAssignmentMutation.isPending || isUploading) && <div><Loader /></div>}
                                         {!quizAssignmentMutation.isPending && !isUploading &&
-                                            <label htmlFor={`upload-${props.id}`} className='bg-[#6A00FF] cursor-pointer rounded-xl flex items-center justify-center py-1 text-white md:text-[14px] text-[11px] p-4'>
+                                            <label htmlFor={`upload-${props.id}`} className='bg-[#6A00FF] cursor-pointer rounded-xl flex items-center justify-center py-1 text-white md:text-[14px] text-[11px] px-2 sm:px-4'>
                                                 Upload
                                                 <input id={`upload-${props.id}`} onChange={handleFileChange} type="file" className='hidden' />
                                             </label>
                                         }
-                                    </div>
+                                    </>
                                 ) : (
-                                    <div className={`w-full md:flex-[2] my-1 md:my-0 text-center md:text-center flex justify-center items-center gap-2`}>
-                                        <div className='bg-[#91919133] rounded-3xl flex items-center justify-center py-2 px-3 text-black md:text-[14px]  text-[11px]'>
+                                    <div className='flex justify-center items-center gap-1 sm:gap-2'>
+                                        <div className='bg-[#91919133] rounded-3xl flex items-center justify-center sm:py-2 sm:px-3 py-1 px-2 text-black md:text-[14px] text-[11px]'>
                                             Uploaded
                                         </div>
                                         <label htmlFor={`upload-${props.id}`} className="cursor-pointer text-[#6A00FF] hover:text-blue-600">
@@ -174,22 +187,22 @@ const QuizAssignmentRow = (props) => {
                                         </label>
                                     </div>
                                 )
-                            )
-                        }
+                            )}
+                        </div>
 
                     </div>
+
+                    {/* Text Assignment Section */}
                     <div className={`mt-4 relative ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
                         {props.text && (
-
                             <>
-                                <h1 className='font-semibold text-xl '> Text Assignment</h1>
+                                <h1 className='font-semibold text-xl'>Text Assignment</h1>
                                 <div className="max-h-[80px] overflow-y-scroll scrollbar-hide pr-2 text-gray-700 bg-gray-100 p-2 rounded relative">
                                     {props.text}
                                 </div>
-
                                 <button
                                     onClick={handleCopy}
-                                    className="absolute top-1 right-1 text-xs bg-[blue] hover:bg-[blue] text-white  px-2 py-1 rounded transition-all"
+                                    className="absolute top-1 right-1 text-xs bg-[blue] hover:bg-[blue] text-white px-2 py-1 rounded transition-all"
                                 >
                                     {copied ? 'Copied!' : 'Copy'}
                                 </button>
@@ -198,6 +211,8 @@ const QuizAssignmentRow = (props) => {
                     </div>
 
                 </div>
+
+                {/* Quiz Timer / Submitted Badge */}
                 {
                     props.isQuiz && !props.header && (
                         !isUploaded ? (
@@ -213,7 +228,6 @@ const QuizAssignmentRow = (props) => {
                                         </div>
                                     </div>
                                 )}
-
                             </div>
                         ) : (
                             <div className='flex flex-row items-center justify-end'>
@@ -225,10 +239,7 @@ const QuizAssignmentRow = (props) => {
                     )
                 }
 
-
             </div>
-
-
         </>
     )
 }

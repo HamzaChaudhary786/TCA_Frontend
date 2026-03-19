@@ -10,7 +10,7 @@ const StudentLayout = ({ children }) => {
   }, []);
   return (
     <div className="flex">
-      <div className="fixed flex">
+      <div className="fixed flex z-20">
         <Sidebar />
       </div>
       {children}

@@ -44,17 +44,17 @@ const SubjectReport = () => {
   const stats = [
     {
       type: "Assignments",
-      percentage: parseInt(reportQuery?.data?.averageAssignmentMarks?.percentage),
-      grade: `Grade ${reportQuery?.data?.averageAssignmentMarks?.grade}`,
+      percentage: parseInt(reportQuery?.data?.averageAssignmentMarks?.percentage) || 0,
+      grade: reportQuery?.data?.averageAssignmentMarks?.grade ? `Grade ${reportQuery?.data?.averageAssignmentMarks?.grade}` : "—",
     },
     {
       type: "Quizzes",
-      percentage: parseInt(reportQuery?.data?.averageQuizMarks?.percentage),
-      grade: `Grade ${reportQuery?.data?.averageAssignmentMarks?.grade}`,
+      percentage: parseInt(reportQuery?.data?.averageQuizMarks?.percentage) || 0,
+      grade: reportQuery?.data?.averageQuizMarks?.grade ? `Grade ${reportQuery?.data?.averageQuizMarks?.grade}` : "—",
     },
     {
       type: "Attendance",
-      percentage: parseInt(reportQuery?.data?.avgAttendancePer),
+      percentage: parseInt(reportQuery?.data?.avgAttendancePer) || 0,
       grade: "",
     },
   ];
@@ -67,8 +67,8 @@ const SubjectReport = () => {
     <>
       <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
         <div className="flex flex-1">
-          <div className="flex-grow w-full px-5 lg:px-20 sm:px-10 lg:ml-72">
-            <div className="pt-16 ">
+          <div className="flex-grow w-full px-2 lg:px-20 sm:px-10 lg:ml-72">
+            <div className="lg:pt-16 ">
               <Navbar heading={"Subject Reports"} />
               <div className="mt-7">
                 <div className="flex flex-col gap-2">
