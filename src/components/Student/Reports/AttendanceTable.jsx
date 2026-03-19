@@ -22,8 +22,8 @@ const AttendanceTable = ({ data }) => {
                                 if (!attStatus) return null;
 
                                 const status = attStatus.late ? "Late" : (attStatus.isPresent ? "Present" : "Absent");
-                                const dateDisplay = moment.utc(item.startTime).format("Do MMM YYYY");
-                                const timeDisplay = `${moment.utc(item.startTime).format("hh:mm a")} - ${moment.utc(item.endTime).format("hh:mm a")}`;
+                                const dateDisplay = moment(item.startTime).format("Do MMM YYYY");
+                                const timeDisplay = `${moment(item.startTime).format("hh:mm a")} - ${moment(item.endTime).format("hh:mm a")}`;
 
                                 return (
                                     <tr key={index} className="flex flex-1 text-xs border-t border-t-black/10">

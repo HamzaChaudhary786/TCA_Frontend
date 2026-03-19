@@ -25,7 +25,7 @@ const AttendanceTable = ({ data }) => {
                             {data?.map((item, index) => {
                                 const status = item?.isPresent ? (item?.late ? "Late" : "Present") : "Absent";
                                 const dateDisplay = moment(item.startTime).format("Do MMM YYYY");
-                                const timeDisplay = `${moment.utc(item.startTime).format("hh:mm a")} - ${moment.utc(item.endTime).format("hh:mm a")}`;
+                                const timeDisplay = `${moment(item.startTime).format("hh:mm a")} - ${moment(item.endTime).format("hh:mm a")}`;
 
                                 return (
                                     <tr key={index} className="flex flex-1 w-full border-t border-t-black/10 items-stretch">

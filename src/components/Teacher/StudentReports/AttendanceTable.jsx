@@ -23,8 +23,8 @@ const AttendanceTable = ({ data }) => {
                                     return item.matchedAttendance.map((att, attIndex) => {
                                         if (!att) return null;
                                         const status = att.late ? "Late" : (att.isPresent ? "Present" : "Absent");
-                                        const dateDisplay = moment.utc(item.startTime).format("Do MMM YYYY");
-                                        const timeDisplay = `${moment.utc(item.startTime).format("hh:mm a")} - ${moment.utc(item.endTime).format("hh:mm a")}`;
+                                        const dateDisplay = moment(item.startTime).format("Do MMM YYYY");
+                                        const timeDisplay = `${moment(item.startTime).format("hh:mm a")} - ${moment(item.endTime).format("hh:mm a")}`;
 
                                         return (
                                             <tr key={`${index}-${attIndex}`} className="flex flex-1 text-xs border-t border-t-black/10">
@@ -45,8 +45,8 @@ const AttendanceTable = ({ data }) => {
                                     // Handle single object case if it ever happens or was mapped as such
                                     const att = item.matchedAttendance;
                                     const status = att.late ? "Late" : (att.isPresent ? "Present" : "Absent");
-                                    const dateDisplay = moment.utc(item.startTime).format("Do MMM YYYY");
-                                    const timeDisplay = `${moment.utc(item.startTime).format("hh:mm a")} - ${moment.utc(item.endTime).format("hh:mm a")}`;
+                                    const dateDisplay = moment(item.startTime).format("Do MMM YYYY");
+                                    const timeDisplay = `${moment(item.startTime).format("hh:mm a")} - ${moment(item.endTime).format("hh:mm a")}`;
 
                                     return (
                                         <tr key={index} className="flex flex-1 text-xs border-t border-t-black/10">

@@ -11,7 +11,7 @@ import { IoBookOutline } from "react-icons/io5";
 import { useBlur } from "../../../context/BlurContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMultipleQuizesForGrading, gradeQuizes } from "../../../api/Teacher/Quiz";
 import { useUser } from "../../../context/UserContext";
 import Loader from "../../../utils/Loader";
@@ -99,14 +99,15 @@ const GradingQuizzes = () => {
       return inp;
     }))
   }, []);
-
+  const queryClient = useQueryClient();
   const gradeMutation = useMutation({
     mutationKey: ["submissions"],
     mutationFn: async (data) => {
       console.log("data being sent is : ", data);
       let result = await gradeQuizes({ submissions: data }, location.state._id);
       return result;
-    }, onSettled: () => {
+    }, onSuccess: () => {
+      toast.dismiss();
       toast.success("Grades Added Successfully!");
       // Invalidate all relevant queries for all roles to ensure reports "progress"
       queryClient.invalidateQueries(["assignment"]);

@@ -125,3 +125,8 @@ export const teacherPresent = apiRequest(async (id) => {
     return response;
 })
 
+export const cancelAttendence = apiRequest(async (id) => {
+    const url = `${BACKEND_URL}/class/cancel-attendance/${id}`;
+    const response = await axios.delete(url);
+    return response;
+});

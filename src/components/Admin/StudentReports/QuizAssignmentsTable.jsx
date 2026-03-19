@@ -10,7 +10,7 @@ const QuizAssignmentsTable = ({ data }) => {
                 <div className="flex flex-1">
                     <table className="flex flex-col flex-1 bg-white rounded-lg table-fixed">
                         <thead className="flex gap-5 px-2 py-3 rounded-tl-lg rounded-tr-lg border-t-[#0B1053] bg-[#dbddf8]">
-                            <tr className="flex flex-1">  
+                            <tr className="flex flex-1">
                                 <td className="flex-[1] flex justify-center md:text-[15px] text-[13px]">Sr No.</td>
                                 <td className="flex-[3] flex justify-center md:text-[15px] text-[13px]">Title</td>
                                 <td className="flex-[3] flex justify-center md:text-[15px] text-[13px] text-center">Obtained Marks</td>
@@ -21,7 +21,7 @@ const QuizAssignmentsTable = ({ data }) => {
                         </thead>
 
                         <tbody className="flex flex-col">
-                             {data.map((item, index) => {
+                            {data.map((item, index) => {
                                 const isGraded = item.isGraded;
                                 const isSubmitted = item.isSubmitted;
                                 const dueDate = new Date(item.deadline || item.dueDate);
@@ -64,13 +64,13 @@ const QuizAssignmentsTable = ({ data }) => {
                                             {item.title}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center break-all">
-                                            {item.obtainedMarks}
+                                            {displayMarks}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center break-all">
                                             {item.totalMarks}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center break-all">
-                                            {item.grade}
+                                            {displayGrade}
                                         </td>
                                         <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center text-center break-all">
                                             {item.feedback || "No Feedback"}
