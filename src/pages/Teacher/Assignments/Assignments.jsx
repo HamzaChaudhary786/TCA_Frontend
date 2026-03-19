@@ -66,7 +66,7 @@ const Assignments = () => {
           <div className="flex flex-1 min-w-0">
             <div className={`w-full flex-grow lg:ml-72 min-w-0 overflow-x-hidden`}>
               <Navbar heading={"Assignment"} />
-              <div className="p-4 lg:px-12">
+              <div className="p-3 sm:p-4 lg:px-12">
                 <div className="flex justify-end my-2">
                   <div
                     className="flex cursor-pointer bg-[#6A00FF] hover:bg-[#007EEA] rounded-3xl"
@@ -78,8 +78,8 @@ const Assignments = () => {
                     <p className="px-2 py-1 text-sm sm:text-lg sm:px-4 sm:py-2 text-white">Create new +</p>
                   </div>
                 </div>
-                <div className="mt-8 h-[80%] overflow-x-auto w-full">
-                  <div className="min-w-[700px] lg:min-w-full">
+                <div className="mt-8 h-[80%] w-full  overflow-x-auto">
+
                   <QuizAssignmentRow
                     isQuiz={false}
                     index={"Sr. No"}
@@ -141,7 +141,6 @@ const Assignments = () => {
               </div>
             </div>
           </div>
-        </div>
         <CreateQuizAssignmentModal
           isQuiz={false}
           refetch={refetch}

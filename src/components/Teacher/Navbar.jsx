@@ -64,7 +64,7 @@ const Navbar = ({ heading }) => {
   return (
     <>
       <div className="flex flex-1 h-20">
-        <div className={`ml-9 space-x-3 flex justify-between  md:justify-between flex-1 px-4 ${isBlurred ? "blur" : ""}`}>
+        <div className={`ml-10 sm:ml-0 space-x-3 flex justify-between  md:justify-between flex-1 pl-2 pr-0 sm:px-4 ${isBlurred ? "blur" : ""}`}>
           <div className="flex flex-col items-start justify-center">
             {heading ?
               <div className="md:ml-14">
@@ -76,7 +76,7 @@ const Navbar = ({ heading }) => {
               </div>
             }
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <div className="flex gap-2 sm:gap-4">
               <div
                 className={`p-1 sm:p-2 border cursor-pointer rounded-md border-black/50 transition-all duration-500 ${mail ? "bg-[#0B1053] text-white" : ""
@@ -93,12 +93,12 @@ const Navbar = ({ heading }) => {
                 <CiBellOn />
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <p className="text-sm sm:text-lg font-medium">M. {userData.name}</p>
               <img
                 src={userData?.profilePic || profile}
                 alt="profile"
-                className="w-10 h-10 sm:w-12 sm:h-12 cursor-pointer rounded-full object-cover"
+                className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer rounded-full object-cover"
                 onClick={toggleProfielMenu}
               />
               <FaChevronDown

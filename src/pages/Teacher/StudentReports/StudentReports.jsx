@@ -201,9 +201,9 @@ const StudentReports = () => {
             <div className="h-screen pt-1">
               <Navbar heading={"Student Reports"} />
               <div className={`px-3 lg:px-20 sm:px-10 ${isBlurred ? "blur" : ""}`}>
-                <div className="flex flex-row-reverse my-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-3 rounded-3xl">
+                <div className="flex sm:flex-row-reverse my-4">
+                  <div className="flex items-center gap-1 sm:gap-4">
+                    <div className="flex items-center gap-4 border bg-white border-[#00000020] px-2 py-[8px]  sm:px-4 sm:py-3 rounded-3xl">
                       <IoSearch />
                       <input
                         type="text"
@@ -214,7 +214,7 @@ const StudentReports = () => {
                       />
                     </div>
                     <div
-                      className="p-4 text-white rounded-lg cursor-pointer bg-[#0B1053]"
+                      className="p-2 sm:p-4 text-white rounded-lg cursor-pointer bg-[#0B1053]"
                       onClick={() => {
                         setOpenFilterModal(true);
                       }}

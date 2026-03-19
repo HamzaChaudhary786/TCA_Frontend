@@ -131,7 +131,7 @@ const Attendence = () => {
 
                   </div>
                   <div className="mt-8 h-[80%] overflow-auto">
-                    <DataRow
+                    <DataRow 
                       isQuiz={true}
                       index={"Sr. No"}
                       classname={"Class Name"}
