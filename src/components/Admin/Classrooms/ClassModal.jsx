@@ -110,8 +110,8 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, isLoading }) =>
           type="button"
           onClick={toggleAll}
           className={`px-3 py-2 text-xs font-semibold rounded-xl border transition-all whitespace-nowrap ${allSelected
-              ? 'bg-[#6A00FF] border-[#6A00FF] text-white'
-              : 'border-gray-200 text-gray-500 hover:border-[#6A00FF] hover:text-[#6A00FF]'
+            ? 'bg-[#6A00FF] border-[#6A00FF] text-white'
+            : 'border-gray-200 text-gray-500 hover:border-[#6A00FF] hover:text-[#6A00FF]'
             }`}
         >
           {allSelected ? '✓ All' : 'Select All'}
@@ -186,6 +186,7 @@ const Divider = () => <div className="h-px bg-gray-100 my-1" />;
 // ─── Main Modal ───────────────────────────────────────────────────────────────
 const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
   const ref = useRef(null);
+  const scrollRef = useRef(null); // ← NEW: ref to hold scroll position
   const [headTeacher, setHeadTeacher] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedSubjects, setSelectedSubjects] = useState({});
@@ -219,29 +220,38 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
     setHeadTeacher(null);
   }, [selectedLevel]);
 
+  // ─── FIXED: merged both state updates into one updater to prevent double re-render / scroll jump
   const handleSubjectCheckboxChange = useCallback((teacherId, subject, isChecked) => {
+    // Preserve scroll position before state update
+    const scrollTop = scrollRef.current?.scrollTop ?? 0;
+
     setSelectedSubjects(prev => {
       const curr = prev[teacherId] || [];
-      return {
-        ...prev,
-        [teacherId]: isChecked ? [...curr, subject] : curr.filter(s => s._id !== subject._id),
-      };
+      const updatedSubjects = isChecked
+        ? [...curr, subject]
+        : curr.filter(s => s._id !== subject._id);
+
+      const newSubjectsState = { ...prev, [teacherId]: updatedSubjects };
+
+      // Derive teacherArr inside the same updater — no stale closure, single render
+      setTeachersArr(() =>
+        Object.entries(newSubjectsState).flatMap(([tid, subjects]) =>
+          subjects.map(subj => ({
+            teacher: tid,
+            subject: subj._id,
+            type: headTeacher?._id === tid ? "head" : "teacher",
+          }))
+        )
+      );
+
+      return newSubjectsState;
     });
-    setTeachersArr(prev => {
-      const filtered = prev.filter(i => i.teacher !== teacherId);
-      const updated = isChecked
-        ? [...(selectedSubjects[teacherId] || []), subject]
-        : (selectedSubjects[teacherId] || []).filter(s => s._id !== subject._id);
-      return [
-        ...filtered,
-        ...updated.map(subj => ({
-          teacher: teacherId,
-          subject: subj._id,
-          type: headTeacher?._id === teacherId ? "head" : "teacher",
-        })),
-      ];
+
+    // Restore scroll position after paint
+    requestAnimationFrame(() => {
+      if (scrollRef.current) scrollRef.current.scrollTop = scrollTop;
     });
-  }, [selectedSubjects, headTeacher]);
+  }, [headTeacher]);
 
   const createClassroomMutation = useMutation({
     mutationKey: ["addclassroom"],
@@ -280,18 +290,17 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={handleClose} />
 
-      {/* Modal */} 
+      {/* Modal */}
       <div
         ref={ref}
-        className="relative w-full max-w-2xl h-[90vh] flex flex-col rounded-2xl overflow-hidden bg-white border border-gray-100"
+        className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl  bg-white border border-gray-100"
         style={{ boxShadow: '0 20px 60px rgba(106,0,255,0.10), 0 8px 24px rgba(0,0,0,0.10)' }}
       >
         {/* Purple top accent bar */}
         <div className="h-1 w-full bg-gradient-to-r from-[#6A00FF] to-[#9B4DFF] flex-shrink-0" />
- 
+
         {/* Header */}
         <div className="flex items-center justify-between px-7 pt-5 pb-4 flex-shrink-0">
-     
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-[#6A00FF]/10 flex items-center justify-center">
               {isEditTrue
@@ -316,11 +325,15 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
         <Divider />
 
-        {/* Scrollable Body */}
-        <div className="flex-1 overflow-y-auto px-7 py-5 space-y-5 custom-scrollbar">
+        {/* ─── Scrollable Body — overflowAnchor:none stops browser scroll-anchor jumping ─── */}
+        <div
+          ref={scrollRef}
+          className="flex flex-col overflow-y-auto px-7 py-5 space-y-5 custom-scrollbar"
+          style={{ overflowAnchor: 'none' }}
+        >
 
           {/* Classroom Name */}
-          <div>
+          <div className="flex-1">
             <SectionLabel icon={<IoText className="w-4 h-4 text-[#6A00FF]" />} text="Classroom Name" />
             <input
               value={classroomName}
@@ -449,7 +462,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
         {/* Footer */}
         <Divider />
-        <div className="px-7 py-4 flex-shrink-0 bg-gray-50/80">
+        <div className="px-7 py-4 flex-shrink-0 bg-gray-50/80 h-fit">
           <button
             onClick={handleCreateClass}
             disabled={isPending}
