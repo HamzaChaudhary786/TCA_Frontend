@@ -63,18 +63,34 @@ const MarkAttendence = () => {
             const existingAttendance = location.state.attendance || [];
             let temparray = [];
 
+            const subjectId = location.state?.subjectID?._id;
+            const matchedStudentsList = location.state?.classroom?.studentdetails?.filter(student =>
+                student.subjects?.includes(subjectId)
+            ) || [];
+
             if (existingAttendance.length > 0) {
                 console.log("Existing attendance found, pre-filling data:", existingAttendance);
-                temparray = existingAttendance.map(item => ({
-                    studentID: item.studentID._id || item.studentID,
-                    isPresent: item.isPresent,
-                    late: item.late || false
-                }));
+                temparray = matchedStudentsList.map(student => {
+                    const studentData = existingAttendance.find(
+                        item => (item.studentID._id || item.studentID) === student._id
+                    );
+                    if (studentData) {
+                        return {
+                            studentID: studentData.studentID._id || studentData.studentID,
+                            isPresent: studentData.isPresent,
+                            late: studentData.late || false
+                        };
+                    } else {
+                        return { studentID: student._id, isPresent: true, late: false };
+                    }
+                });
             } else {
                 console.log("No existing attendance, defaulting all present.");
-                location.state?.classroom?.students?.forEach((cls, index) => {
-                    temparray[index] = { studentID: cls, isPresent: true, late: false };
-                });
+                temparray = matchedStudentsList.map(student => ({
+                    studentID: student._id,
+                    isPresent: true,
+                    late: false
+                }));
             }
 
             setAttendenceData(temparray);
