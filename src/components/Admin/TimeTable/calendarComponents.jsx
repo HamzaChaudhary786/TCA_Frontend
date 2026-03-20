@@ -183,7 +183,7 @@ export const CustomToolbar = (props) => {
   return (
     <>
       <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-start sm:justify-between gap-6 lg:gap-3 my-4">
-        <div className="w-full flex flex-1 justify-normal sm:justify-center">
+        <div className=" flex flex-1 justify-normal sm:justify-center">
           <div className="flex items-center justify-normal sm:justify-center w-full gap-2 lg:gap-1">
             {/* <button
               className="px-3 py-1 rounded-md bg-custom-light-1"
@@ -211,7 +211,7 @@ export const CustomToolbar = (props) => {
             </button>
           </div>
         </div>
-        <div className="flex flex-1 items-start gap-2 w-full justify-normal sm:justify-center">
+        <div className="flex flex-1 items-start gap-2 justify-normal sm:justify-center">
           {/* <div className="flex justify-between text-sm py-2 cursor-pointer px-2 w-36 border-[1.5px] border-[#00000020] rounded-xl ">
             Teacher <FaChevronDown size={16} color="black" />
           </div> */}
@@ -235,30 +235,22 @@ export const CustomToolbar = (props) => {
           </div>
 
         </div>
-        <div className="w-full">
         <div className="flex flex-2 flex-row flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-6 lg:gap-2 mb-6 lg:mb-0">
-          <div>
-            <FilterButton
-              className={"px-2 sm:px-4 py-2 text-sm sm:text-lg"}
-              icon={true}
-              text={"Filter Classes"}
-              clickHandler={() => {
-                setAddModalOpen(!addModalOpen);
-              }}
-            />
-
-          </div>
-          <div>
-            <FilterButton
-              className={"px-2 sm:px-4 py-2 text-sm sm:text-lg"}
-              text={"Schedule Classes"}
-              clickHandler={() => {
-                setAddScheduleModalOpen(!addScheduleModalOpen);
-              }}
-            />
-
-          </div>
-        </div>
+          <FilterButton
+            className={"px-2 sm:px-4 py-2 text-sm sm:text-base"}
+            icon={true}
+            text={"Filter Classes"}
+            clickHandler={() => {
+              setAddModalOpen(!addModalOpen);
+            }}
+          />
+          <FilterButton
+            className={"px-2 sm:px-4 py-2 text-sm sm:text-base"}
+            text={"Schedule Classes"}
+            clickHandler={() => {
+              setAddScheduleModalOpen(!addScheduleModalOpen);
+            }}
+          />
         </div>
       </div>
     </>
