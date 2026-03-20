@@ -167,8 +167,8 @@ const UnifiedSubjectAssign = () => {
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
-    <div className="md:ml-80 min-h-screen bg-[#F8FAFC]">
-      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-7 py-8 sm:py-10">
+    <div className="md:ml-72 min-h-screen">
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-10 py-8 sm:py-10">
 
         {/* ── Page Header ────────────────────────────────────────────────────── */}
         <div className="mb-8">

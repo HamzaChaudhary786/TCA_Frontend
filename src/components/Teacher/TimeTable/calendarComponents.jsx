@@ -8,7 +8,7 @@ import FilterButton from "./FilterButton";
 
 export const CustomEvent = ({ event, setevents, refetch }) => {
   const [detailsModalOpen, setdetailsModalOpen] = useState(false);
-  
+
   // Calculate event duration in hours for height scaling
   const startTime = new Date(event.startTime);
   const endTime = new Date(event.endTime);
@@ -82,10 +82,10 @@ export const SideTime = (props) => {
         {times.map((time, index) => {
           const startTime = moment.utc(time[0]).tz("Asia/Karachi");
           // Calculate end time based on slot duration or use next slot start
-          const endTime = index < times.length - 1 
+          const endTime = index < times.length - 1
             ? moment.utc(times[index + 1][0]).tz("Asia/Karachi")
             : startTime.clone().add(1, "hour"); // Default to 1 hour for last slot
-          
+
           return (
             <div
               key={`${time}2`}
@@ -191,7 +191,7 @@ export const CustomToolbar = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row flex-wrap w-full items-center justify-start sm:justify-between gap-6 lg:gap-3 my-4">
-        <div className="w-full flex flex-1 justify-normal sm:justify-center">
+        <div className="w-fit flex flex-1 justify-normal sm:justify-center">
           <div className="flex items-center justify-normal sm:justify-center w-full gap-2 lg:gap-1">
             {/* <button
               className="px-3 py-1 rounded-md bg-custom-light-1"
@@ -217,7 +217,7 @@ export const CustomToolbar = ({
             </button>
           </div>
         </div>
-        <div className="flex flex-1 items-start gap-2 w-full justify-normal sm:justify-center">
+        <div className="flex flex-1 items-start gap-2 w-fit justify-normal sm:justify-center">
           <div className="flex flex-col justify-center items-center">
             <div className="flex text-xs justify-between py-2 px-9 w-fit lg:w-fit border-2 border-[#00000020] rounded-xl ">
               My Time Table
@@ -230,33 +230,33 @@ export const CustomToolbar = ({
 
 
         </div>
-<div className="w-full">
+        <div className="w-fit">
 
-        <div className="flex flex-2 flex-row flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-6 lg:gap-2 mb-6 lg:mb-0">
-        
-          <div>
-            <FilterButton
-              className={"px-2 sm:px-4 py-1"}
-              icon={true}
-              text={"Filter Classes"}
-              clickHandler={() => {
-                setAddModalOpen(!addModalOpen);
-              }}
-            />
+          <div className="flex flex-2 flex-row flex-wrap items-center justify-start sm:justify-center gap-2 sm:gap-6 lg:gap-2 mb-6 lg:mb-0">
 
-          </div>
-          <div>
-            <FilterButton
-              className={"px-2 sm:px-4 py-1"}
-              text={"Schedule Classes"}
-              clickHandler={() => {
-                setAddScheduleModalOpen(!addScheduleModalOpen);
-              }}
-            />
+            <div>
+              <FilterButton
+                className={"px-2 sm:px-4 py-1"}
+                icon={true}
+                text={"Filter Classes"}
+                clickHandler={() => {
+                  setAddModalOpen(!addModalOpen);
+                }}
+              />
 
+            </div>
+            <div>
+              <FilterButton
+                className={"px-2 sm:px-4 py-1"}
+                text={"Schedule Classes"}
+                clickHandler={() => {
+                  setAddScheduleModalOpen(!addScheduleModalOpen);
+                }}
+              />
+
+            </div>
           </div>
         </div>
-</div>
       </div>
     </>
   );
