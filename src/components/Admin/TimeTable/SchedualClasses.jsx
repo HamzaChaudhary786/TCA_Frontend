@@ -294,7 +294,7 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
                       {classCreateMutate.isPending && <div className="flex justify-center items-center"><Loader /></div>}
                       {!classCreateMutate.isPending &&
                         <>
-                          <FilterButton text={"Schedule Class"} className={"px-2 py-2 text-sm"} clickHandler={() => handleSchedualClass()} />
+                          <FilterButton text={"Schedule Class"} className={"px-2 w-full py-2 text-sm"} clickHandler={() => handleSchedualClass()} />
                           <FilterButton text={"Cancel"} className={"px-2 text-sm py-2 bg-[#0B1053] border w-full !text-white"} clickHandler={() => {
                             setaddEventModalOpen(false)
                             onclose();

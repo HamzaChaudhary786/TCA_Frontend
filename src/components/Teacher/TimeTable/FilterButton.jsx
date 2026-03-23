@@ -10,12 +10,12 @@ export default function FilterButton({
 }) {
   return (
     <button
-      className={`text-sm sm:text-lg text-white py-2 rounded-3xl flex gap-1 justify-center bg-[#6A00FF] ${className}`}
+      className={`text-sm  text-white py-2 rounded-3xl flex gap-1 justify-center bg-[#6A00FF] ${className}`}
       onClick={clickHandler}
       disabled={disabled ? disabled : false}
     >
        {icon? 
-       <HiOutlineCalendarDays size={25} /> 
+       <HiOutlineCalendarDays size={20} /> 
       : <></>} 
       {text}
     </button>
