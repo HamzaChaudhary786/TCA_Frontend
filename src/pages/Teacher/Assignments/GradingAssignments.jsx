@@ -119,13 +119,14 @@ const GradingAssignments = () => {
       queryClient.invalidateQueries(["report"]);
       queryClient.invalidateQueries(["studentReports"]);
       queryClient.invalidateQueries(["teacherStudets"]);
+      queryClient.invalidateQueries(["submissions"]);
       queryClient.invalidateQueries(["student-assignments-quizes"]);
       navigate("/teacher/assignments");
     }
   });
 
   const allAssignmentsQuery = useQuery({
-    queryKey: ["submissions"],
+    queryKey: ["submissions", location.state._id],
     queryFn: async () => {
       let result = await getMultipleAssignmentsForGrading(location.state._id);
       return result;

@@ -7,7 +7,7 @@ const QuizAssignmentRow = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <div className="overflow-visible ">
+    <div className="overflow-visible">
       <div
         style={{ backgroundColor: props.bgColor }}
         className={`border-b flex border-grey items-center min-w-[600px]`}
@@ -39,7 +39,7 @@ const QuizAssignmentRow = (props) => {
               }`}
           >
             {props.header ? props.deadline :
-              moment.utc(props.deadline).format("Do MMM YYYY hh:mm a")
+              moment(props.deadline).format("Do MMM YYYY hh:mm a")
             }
           </p>
           <p

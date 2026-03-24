@@ -54,11 +54,11 @@ const FilterClassesModal = ({ setAddModalOpen, setaddModalOpen, classData, isPen
             <div className="flex gap-2 text-xs font-light">
               <p className="flex items-center gap-1">
                 <FiClock />
-                {moment.utc(item.startTime).format("DD-MM-YYYY")}
+                {moment(item.startTime).format("DD-MM-YYYY")}
               </p>
               <p className="flex items-center gap-1">
                 <FiClock />
-                {moment.utc(item.startTime).format("h:mm a")}-{moment.utc(item.endTime).format("h:mm a")}
+                {moment(item.startTime).format("h:mm a")}-{moment(item.endTime).format("h:mm a")}
               </p>
             </div>
           </div>
