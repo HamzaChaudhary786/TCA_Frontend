@@ -126,11 +126,12 @@ const GradingAssignments = () => {
   });
 
   const allAssignmentsQuery = useQuery({
-    queryKey: ["submissions", location.state._id],
+    queryKey: ["submissions", "assignment", location.state._id],
     queryFn: async () => {
       let result = await getMultipleAssignmentsForGrading(location.state._id);
       return result;
-    }, staleTime: 300000 // 5 minutes
+    },
+    staleTime: 0 // always fetch fresh grades
   });
 
 

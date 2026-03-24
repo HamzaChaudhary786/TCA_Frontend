@@ -101,7 +101,6 @@ const GradingQuizzes = () => {
   }, []);
   const queryClient = useQueryClient();
   const gradeMutation = useMutation({
-    mutationKey: ["submissions"],
     mutationFn: async (data) => {
       console.log("data being sent is : ", data);
       let result = await gradeQuizes({ submissions: data }, location.state._id);
@@ -123,12 +122,12 @@ const GradingQuizzes = () => {
   });
 
   const allQuizQuery = useQuery({
-    // const allAssignmentsQuery = useQuery({
-    queryKey: ["submissions", location.state._id],
+    queryKey: ["submissions", "quiz", location.state._id],
     queryFn: async () => {
       let result = await getMultipleQuizesForGrading(location.state._id);
       return result;
-    }, staleTime: 300000 // 5 minutes
+    },
+    staleTime: 0 // always fetch fresh grades
   });
 
   useEffect(() => {
