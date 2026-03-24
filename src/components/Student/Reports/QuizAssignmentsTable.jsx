@@ -1,6 +1,8 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { VscFeedback } from "react-icons/vsc";
+
 const QuizAssignmentsTable = ({ data }) => {
     const params = useParams();
     const navigate = useNavigate();
@@ -85,7 +87,8 @@ const QuizAssignmentsTable = ({ data }) => {
                                             {displayGrade}
                                         </td>
                                         <td className={`flex-[3] ${tdClass}`}>
-                                            {item.feedback || "No Feedback"}
+                                            {/* {item.feedback || "No Feedback"} */}
+                                            <VscFeedback />
                                         </td>
                                     </tr>
                                 );
