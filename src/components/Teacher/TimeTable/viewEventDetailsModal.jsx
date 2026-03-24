@@ -60,7 +60,7 @@ export default function ViewEventDetailsModal({
   const [confirmDeleteModalOpen, setconfirmDeleteModalOpen] = useState(false);
   const [eventType, setEventType] = useState(false);
   const [startDate, setStartDate] = useState(
-    moment.utc(event.startTime).format("YYYY-MM-DD") // Format for <input type="date">
+    moment(event.startTime).format("YYYY-MM-DD") // Format for <input type="date">
   );
 
   let prevStartTime = formatTimeInPKT(event.startTime, 'HH:mm');
@@ -171,7 +171,7 @@ export default function ViewEventDetailsModal({
         updateSeries: false,
       });
 
-      setStartDate(moment.utc(event.startTime).format("YYYY-MM-DD"));
+      setStartDate(moment(event.startTime).format("YYYY-MM-DD"));
       setEventType(false); // reset checkbox too
     }
   }, [open, event, userData._id]);
@@ -311,7 +311,7 @@ export default function ViewEventDetailsModal({
                     <p className="text-xs font-semibold text-grey_700">Start Date</p>
                     <div className="flex justify-between border-[1.5px] py-2 px-4 rounded-lg items-center border-grey/50">
                       <p className="text-sm text-custom-gray-3">
-                        {moment.utc(event.start).format("DD MMMM, YYYY")}
+                        {moment(event.startTime).format("DD MMMM, YYYY")}
                       </p>
                       <svg
                         width="15"
@@ -333,7 +333,7 @@ export default function ViewEventDetailsModal({
                     <p className="text-xs font-semibold text-grey_700">End Date</p>
                     <div className="flex justify-between border-[1.5px] py-2 px-4 rounded-lg  items-center border-grey/50">
                       <p className="text-sm text-custom-gray-3">
-                        {moment.utc(event.end).format("DD MMMM, YYYY")}
+                        {moment(event.endTime).format("DD MMMM, YYYY")}
                       </p>
                       <svg
                         width="15"

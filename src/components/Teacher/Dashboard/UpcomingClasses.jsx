@@ -143,7 +143,7 @@ const UpcomingClasses = () => {
           <div className="flex gap-2">
             <FiClock />
 
-            <p>{moment.utc(item.startTime).format("hh:mm A")} - {moment.utc(item.endTime).format("hh:mm A")} </p>
+            <p>{moment(item.startTime).format("hh:mm A")} - {moment(item.endTime).format("hh:mm A ")} </p>
           </div>
         )}
       </div>

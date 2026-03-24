@@ -116,6 +116,7 @@ const GradingQuizzes = () => {
       queryClient.invalidateQueries(["report"]);
       queryClient.invalidateQueries(["studentReports"]);
       queryClient.invalidateQueries(["teacherStudets"]);
+      queryClient.invalidateQueries(["submissions"]);
       queryClient.invalidateQueries(["student-assignments-quizes"]);
       navigate("/teacher/quizzes");
     }
@@ -123,7 +124,7 @@ const GradingQuizzes = () => {
 
   const allQuizQuery = useQuery({
     // const allAssignmentsQuery = useQuery({
-    queryKey: ["submissions"],
+    queryKey: ["submissions", location.state._id],
     queryFn: async () => {
       let result = await getMultipleQuizesForGrading(location.state._id);
       return result;
