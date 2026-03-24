@@ -245,11 +245,11 @@ const SchedualClasses = ({ refetch, data, isPending, addScheduleModalOpen, setAd
 
                 <div className="py-8 border-t border-black/20">
                   <div className="flex items-center gap-2">
-                    <div className="flex justify-between gap-4 px-4 py-2">
+                    <div className="flex justify-between gap-4 w-full">
                       {!classCreateMutate.isPending && (
                         <>
-                          <FilterButton text={"Schedual Class"} className={"px-4 text-sm"} clickHandler={() => handleSchedualClass()} />
-                          <FilterButton text={"Cancel"} className={"px-8 text-sm bg-white border !text-[#0B1053]"} clickHandler={() => setaddEventModalOpen(false)} />
+                          <FilterButton text={"Schedual Class"} className={"px-4 py-2 w-full text-sm"} clickHandler={() => handleSchedualClass()} />
+                          <FilterButton text={"Cancel"} className={"px-4 py-2 w-full text-sm bg-white border !text-[#0B1053]"} clickHandler={() => setaddEventModalOpen(false)} />
                         </>
                       )}
                     </div>
