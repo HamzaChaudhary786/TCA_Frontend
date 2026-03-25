@@ -142,7 +142,7 @@ const MarkAttendence = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="mt-8 h-[80%] overflow-auto">
+                                    <div className="mt-8 h-[80%] overflow-auto  ">
                                         <DataRow
                                             isQuiz={true}
                                             header={true}

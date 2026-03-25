@@ -16,7 +16,7 @@ const DataRow = (props) => {
 
 
   return (
-    <div className="min-w-full">
+    <div className="min-w-[700px] md:min-w-full">
       <div
         style={{ backgroundColor: props.bgColor }}
         className={`min-w-full border-b flex border-grey items-center`}
@@ -71,29 +71,29 @@ const DataRow = (props) => {
           </p> */}
         </div>
         <div className="relative ml-3 mr-2 lg:mr-5">
-  <button
-    onClick={() => {
-      if (props.createdBy !== "admin") {
-        props.toggleClassMenu(props);
-      } else {
-        setShowAdminPopup(true);
-      }
-    }}
-    className={`p-1 text-[20px] ${props.header ? "hidden" : ""}`}
-  >
-    {props.threeDots && <BsThreeDotsVertical />}
-  </button>
+          <button
+            onClick={() => {
+              if (props.createdBy !== "admin") {
+                props.toggleClassMenu(props);
+              } else {
+                setShowAdminPopup(true);
+              }
+            }}
+            className={`p-1 text-[20px] ${props.header ? "hidden" : ""}`}
+          >
+            {props.threeDots && <BsThreeDotsVertical />}
+          </button>
 
-  {/* Popup for admin warning */}
-{showAdminPopup && (
-  <div
-    className="fixed bg-[#dadbf3] text-[#0B1053] text-xs py-2 px-3 rounded shadow-lg z-[9999] w-48 right-0"
-  >
-    You cannot delete admin entries!
-  </div>
-)}
+          {/* Popup for admin warning */}
+          {showAdminPopup && (
+            <div
+              className="fixed bg-[#dadbf3] text-[#0B1053] text-xs py-2 px-3 rounded shadow-lg z-[9999] w-48 right-0"
+            >
+              You cannot delete admin entries!
+            </div>
+          )}
 
-</div>
+        </div>
 
       </div>
     </div>

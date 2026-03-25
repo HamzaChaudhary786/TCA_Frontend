@@ -129,12 +129,12 @@ const ClassroomAttendence = () => {
   };
 
   return (
-    <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-      <div className="flex flex-1">
-        <div className={`w-full h-screen flex-grow lg:ml-72`}>
+    <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-w-0">
+      <div className="flex flex-1 min-w-0">
+        <div className={`w-full h-screen flex-grow lg:ml-72 min-w-0`}>
           <div className="h-screen pt-1">
             <Navbar heading={"Mark Attendance"} />
-            <div className={`px-3 lg:px-20 sm:px-10 ${isBlurred ? "blur" : ""}`}> 
+            <div className={`px-3 lg:px-20 sm:px-10 ${isBlurred ? "blur" : ""}`}>
               <div className="py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col gap-2 w-full md:flex-row md:justify-between items-center ">
@@ -159,7 +159,7 @@ const ClassroomAttendence = () => {
                 </div>
               </div>
 
-              <div className="mt-8 h-[80%] overflow-auto"> 
+              <div className="mt-8 h-[80%] overflow-auto markattendece " >
                 <DataRow
                   isQuiz={true}
                   header={true}

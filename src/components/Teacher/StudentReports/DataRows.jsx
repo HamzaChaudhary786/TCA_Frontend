@@ -14,7 +14,7 @@ const DataRows = ({
   onClickFunction,
 }) => {
   return (
-    <div className="min-w-full">
+    <div className="min-w-[700px] md:min-w-full">
       <div
         style={{ backgroundColor: bgColor, cursor: "pointer" }}
         onClick={onClickFunction}

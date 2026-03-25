@@ -7,7 +7,6 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import moment from 'moment';
 import { useSidebar } from '../../../context/SidebarContext';
 
-// ADD: har role ka badge color aur label
 const audienceConfig = {
     student: { label: 'Student', bg: '#E6F1FB', color: '#0C447C' },
     parent: { label: 'Parent', bg: '#EAF3DE', color: '#27500A' },
@@ -15,7 +14,6 @@ const audienceConfig = {
     all: { label: 'All', bg: '#EEEDFE', color: '#3C3489' },
 };
 
-// ADD: yeh badge component title ke saath dikhega
 const AudienceBadge = ({ target }) => {
     const config = audienceConfig[target?.toLowerCase()] || audienceConfig['all'];
     return (
@@ -26,6 +24,8 @@ const AudienceBadge = ({ target }) => {
             fontWeight: 500,
             padding: '2px 8px',
             borderRadius: '999px',
+            whiteSpace: 'nowrap',          // ADD: badge ko wrap hone se rokta hai
+            flexShrink: 0,                 // ADD: badge squeeze na ho
         }}>
             {config.label}
         </span>
@@ -66,29 +66,42 @@ const AnnouncementCard = ({ announcement, deleteAnnouncement, editAnnouncement, 
     return (
         <div className='py-4 px-4 bg-white border border-black/20 rounded-md shadow-sm'>
             <div className='flex flex-col gap-2'>
-                <div className='flex justify-between items-center'>
-                    {/* <p className='text-xl font-semibold'>{announcement.title}</p> */}
 
-                    <div className='flex items-center gap-2'>
-                        <p className='text-xl font-semibold'>{announcement.title}</p>
+                {/* ADD: Top row — mobile pe column ban jaata hai, desktop pe row rehta hai */}
+                <div className='flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center'>
+
+                    {/* Title + Badge */}
+                    <div className='flex items-center gap-2 flex-wrap min-w-0'>  {/* ADD: flex-wrap + min-w-0 */}
+                        <p className='text-base sm:text-xl font-semibold break-words min-w-0'>  {/* ADD: text-base mobile, break-words */}
+                            {announcement.title}
+                        </p>
                         <AudienceBadge target={announcement.visibility} />
                     </div>
-                    <div className={`flex gap-4 items-center text-xs relative text-black/50 ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
-                        <div className='flex gap-2 items-center'>
-                            <p><MdOutlinePerson2 size={16} /> </p>
-                            <p>{announcement?.date?.split("T")[0]} { /*{moment.utc(announcement.date).format("hh:mm A")} */} </p>
+
+                    {/* Date/Time + Dots — mobile pe apni line mein */}
+                    <div className={`flex gap-3 items-center flex-wrap text-xs relative text-black/50 ${isSidebarOpen ? "-z-50" : "z-auto"}`}>
+                        {/* ADD: flex-wrap taake 320px pe date/time wrap ho sake */}
+
+                        <div className='flex gap-1 items-center'>   {/* ADD: gap-1 tighter on small */}
+                            <MdOutlinePerson2 size={16} />
+                            <p className='whitespace-nowrap'>{announcement?.date?.split("T")[0]}</p>  {/* ADD: whitespace-nowrap */}
                         </div>
-                        <div className='flex gap-2 items-center'>
-                            <p><LuClock size={16} /> </p>
-                            <p>{announcement?.date?.split("T")[1].split(".")[0]}</p>
+
+                        <div className='flex gap-1 items-center'>
+                            <LuClock size={16} />
+                            <p className='whitespace-nowrap'>{announcement?.date?.split("T")[1].split(".")[0]}</p>
                         </div>
+
                         {showMenu && <DotsMenu />}
-                        <PiDotsThreeOutlineVerticalLight onClick={toggleMenu} size={20} className='cursor-pointer' />
+                        <PiDotsThreeOutlineVerticalLight onClick={toggleMenu} size={20} className='cursor-pointer flex-shrink-0' />  {/* ADD: flex-shrink-0 */}
                     </div>
                 </div>
+
+                {/* Description */}
                 <div className='flex text-sm'>
-                    <p className='flex'>{announcement.description} </p>
+                    <p className='flex break-words w-full'>{announcement.description}</p>  {/* ADD: break-words + w-full */}
                 </div>
+
             </div>
         </div>
     )

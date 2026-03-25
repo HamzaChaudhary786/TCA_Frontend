@@ -74,10 +74,10 @@ const Attendence = () => {
   return (
     isLoadingClass || isLoadingClassroom ? <div className="flex justify-center items-center flex-1 mt-20 "> <Loader /> </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
+        <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-w-0">
+          <div className="flex flex-1 min-w-0">
             <div
-              className={`w-full h-screen flex-grow lg:ml-72`}
+              className={`w-full h-screen flex-grow lg:ml-72 min-w-0`}
             >
               <div className="h-screen">
                 <Navbar heading={"Attendence"} />
@@ -115,8 +115,8 @@ const Attendence = () => {
                     </div>
 
                   </div>
-                  <div className="mt-8 h-[80%] overflow-auto">
-                    <DataRow 
+                  <div className="mt-8 h-[80%] overflow-auto   hellowclass">
+                    <DataRow
                       isQuiz={true}
                       index={"Sr. No"}
                       classname={"Class Name"}

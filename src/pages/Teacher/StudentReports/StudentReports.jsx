@@ -193,10 +193,10 @@ const StudentReports = () => {
     </div>
   ) : (
     <>
-      <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-        <div className="flex flex-1">
+      <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-w-0">
+        <div className="flex flex-1 min-w-0">
           <div
-            className={`w-full h-screen flex-grow lg:ml-72`}
+            className={`w-full h-screen flex-grow lg:ml-72 min-w-0`}
           >
             <div className="h-screen pt-1">
               <Navbar heading={"Student Reports"} />
@@ -224,40 +224,21 @@ const StudentReports = () => {
                   </div>
                 </div>
                 <div className="mt-8 h-[80%] overflow-auto">
-                  <DataRows
-                    header={true}
-                    index={"Sr. No"}
-                    subject={"Subject"}
-                    bgColor={"#F9F9F9"}
-                    studentName={"Name"}
-                    studentClass={"Class"}
-                    attendance={"Attendance"}
-                  />
+                  <div className="min-w-[700px] md:min-w-full">
+                    <DataRows
+                      header={true}
+                      index={"Sr. No"}
+                      subject={"Subject"}
+                      bgColor={"#F9F9F9"}
+                      studentName={"Name"}
+                      studentClass={"Class"}
+                      attendance={"Attendance"}
+                    />
 
-                  {!filterActive &&
-                    searchText == "" &&
-                    data?.map((std, index) => {
-                      console.log(std, "fileter");
-                      return (
-                        <DataRows
-                          key={std._id}
-                          header={false}
-                          index={index + 1}
-                          bgColor={"#FFFFFF"}
-                          studentName={std.name}
-                          subject={std.subject.name}
-                          attendance={std?.avgAttendancePer}
-                          studentClass={std.classroom.name}
-                          onClickFunction={handleFunctionClick(std)}
-                          studentProfile={std.profilePic || IMAGES.Profile}
-                        />
-                      );
-                    })}
-
-                  {filterActive ? (
-                    filteredData && filteredData.length > 0 ? (
-                      filteredData.map((std, index) => {
-                        console.log(std, "filtered");
+                    {!filterActive &&
+                      searchText == "" &&
+                      data?.map((std, index) => {
+                        console.log(std, "fileter");
                         return (
                           <DataRows
                             key={std._id}
@@ -272,42 +253,63 @@ const StudentReports = () => {
                             studentProfile={std.profilePic || IMAGES.Profile}
                           />
                         );
-                      })
-                    ) : (
-                      <p className="text-center py-4 text-3xl font-medium">Filtered data not present</p>
-                    )
-                  ) : null}
+                      })}
 
-                  {!filterActive &&
-                    searchText &&
-                    data?.map((std, index) => {
-                      if (
-                        std?.classroom?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
-                        std?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
-                        std?.subject?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
-                      ) {
-                        return (
-                          <DataRows
-                            key={std._id}
-                            header={false}
-                            index={index + 1}
-                            bgColor={"#FFFFFF"}
-                            studentName={std.name}
-                            subject={std.subject.name}
-                            attendance={std.attendance}
-                            studentClass={std.classroom.name}
-                            onClickFunction={handleFunctionClick(std)}
-                            studentProfile={std.profilePic || IMAGES.Profile}
-                          />
-                        );
-                      }
-                    })}
+                    {filterActive ? (
+                      filteredData && filteredData.length > 0 ? (
+                        filteredData.map((std, index) => {
+                          console.log(std, "filtered");
+                          return (
+                            <DataRows
+                              key={std._id}
+                              header={false}
+                              index={index + 1}
+                              bgColor={"#FFFFFF"}
+                              studentName={std.name}
+                              subject={std.subject.name}
+                              attendance={std?.avgAttendancePer}
+                              studentClass={std.classroom.name}
+                              onClickFunction={handleFunctionClick(std)}
+                              studentProfile={std.profilePic || IMAGES.Profile}
+                            />
+                          );
+                        })
+                      ) : (
+                        <p className="text-center py-4 text-3xl font-medium">Filtered data not present</p>
+                      )
+                    ) : null}
 
-                  {data?.length == 0 && (
-                    <div className="text-center py-4 text-3xl font-medium">
-                      No student reports to display!
-                    </div>
-                  )}
+                    {!filterActive &&
+                      searchText &&
+                      data?.map((std, index) => {
+                        if (
+                          std?.classroom?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
+                          std?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
+                          std?.subject?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
+                        ) {
+                          return (
+                            <DataRows
+                              key={std._id}
+                              header={false}
+                              index={index + 1}
+                              bgColor={"#FFFFFF"}
+                              studentName={std.name}
+                              subject={std.subject.name}
+                              attendance={std.attendance}
+                              studentClass={std.classroom.name}
+                              onClickFunction={handleFunctionClick(std)}
+                              studentProfile={std.profilePic || IMAGES.Profile}
+                            />
+                          );
+                        }
+                      })}
+
+                    {data?.length == 0 && (
+                      <div className="text-center py-4 text-3xl font-medium">
+                        No student reports to display!
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

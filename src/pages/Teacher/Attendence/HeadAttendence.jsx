@@ -84,10 +84,10 @@ const HeadAttendence = () => {
   return (
     isPending || isRefetching ? <div className="flex justify-start flex-1"> <Loader /> </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
+        <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-w-0">
+          <div className="flex flex-1 min-w-0">
             <div
-              className={`w-full h-screen  flex-grow lg:ml-72`}
+              className={`w-full h-screen  flex-grow lg:ml-72 min-w-0`}
             >
               <div className="h-screen pt-1">
                 <Navbar heading={"Classroom"} />
@@ -114,7 +114,7 @@ const HeadAttendence = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-8 h-[80%] overflow-auto">
+                  <div className="mt-8 h-[80%] overflow-auto  hellow">
                     <DataRow
                       isQuiz={true}
                       index={"Sr. No"}

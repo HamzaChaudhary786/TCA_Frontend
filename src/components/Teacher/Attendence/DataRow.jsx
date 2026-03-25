@@ -12,7 +12,7 @@ const DataRow = (props) => {
 
 
   return (
-    <div className="min-w-full cursor-pointer" onClick={() => { !props.header && !props.threeDots && navigate("/teacher/attendence/submission", { state: props?.allData }) }}>
+    <div className="min-w-[700px] md:min-w-full cursor-pointer" onClick={() => { !props.header && !props.threeDots && navigate("/teacher/attendence/submission", { state: props?.allData }) }}>
       <div
         style={{ backgroundColor: props.bgColor }}
         className={`min-w-full border-b flex border-grey items-center`}

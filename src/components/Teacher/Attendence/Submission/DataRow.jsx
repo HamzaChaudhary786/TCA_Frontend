@@ -68,7 +68,7 @@ const DataRow = (props) => {
 
 
   return (
-    <div className="min-w-full ">
+    <div className=" min-w-[700px] sm:min-w-full ">
       <div
         style={{ backgroundColor: props.bgColor }}
         className={`min-w-full border-b flex border-grey items-center`}

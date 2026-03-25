@@ -65,10 +65,10 @@ const Classroom = () => {
   return (
     isPending || isRefetching ? <div className="flex justify-start flex-1"> <Loader /> </div> :
       <>
-        <div className="flex flex-1 bg-[#F9F9F9] font-poppins">
-          <div className="flex flex-1">
+        <div className="flex flex-1 bg-[#F9F9F9] font-poppins min-w-0">
+          <div className="flex flex-1 min-w-0">
             <div
-              className={`w-full h-screen  flex-grow lg:ml-72`}
+              className={`w-full h-screen  flex-grow lg:ml-72 min-w-0`}
             >
               <div className="h-screen pt-1">
                 <Navbar heading={"Classroom"} />
@@ -78,7 +78,7 @@ const Classroom = () => {
 
 
                       <div className="flex flex-col w-full md:flex-row md:w-auto  gap-2">
-                        
+
                         <div className="flex items-center gap-2 px-4 py-2 bg-white border border-black/10 rounded-3xl">
                           <BiSearch />
                           <input
@@ -95,7 +95,7 @@ const Classroom = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-8 h-[80%] overflow-auto">
+                  <div className="mt-8 h-[80%] overflow-auto classroom ">
                     <DataRow
                       isQuiz={true}
                       index={"Sr. No"}

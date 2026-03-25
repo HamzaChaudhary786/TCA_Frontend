@@ -68,7 +68,11 @@ const Navbar = ({ heading }) => {
           <div className="flex flex-col items-start justify-center">
             {heading ?
               <div className="md:ml-14">
-                <p className="font-medium text-sm sm:mr-3 md:text-3xl">{heading}</p>
+                {/* font-medium text-sm sm:mr-3 md:text-3xl */}
+                <p className="
+                font-medium text-sm sm:mr-3 md:text-3xl w-[60px] sm:w-auto truncate
+                
+                ">{heading}</p>
               </div> :
               <div className="md:flex flex-col">
                 <p className="text-xl font-semibold">Hello {userData.name} </p>
@@ -94,7 +98,8 @@ const Navbar = ({ heading }) => {
               </div>
             </div>
             <div className="flex items-center gap-1 sm:gap-2">
-              <p className="text-sm sm:text-lg font-medium">M. {userData.name}</p>
+              {/* text-sm sm:text-lg font-medium */}
+              <p className=" text-sm sm:text-lg font-medium max-w-[80px] sm:max-w-none truncate ">M. {userData.name}</p>
               <img
                 src={userData?.profilePic || profile}
                 alt="profile"
