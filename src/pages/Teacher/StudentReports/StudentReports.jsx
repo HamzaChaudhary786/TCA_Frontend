@@ -255,29 +255,30 @@ const StudentReports = () => {
                         );
                       })}
 
-                    {filterActive ? (
-                      filteredData && filteredData.length > 0 ? (
-                        filteredData.map((std, index) => {
-                          console.log(std, "filtered");
-                          return (
-                            <DataRows
-                              key={std._id}
-                              header={false}
-                              index={index + 1}
-                              bgColor={"#FFFFFF"}
-                              studentName={std.name}
-                              subject={std.subject.name}
-                              attendance={std?.avgAttendancePer}
-                              studentClass={std.classroom.name}
-                              onClickFunction={handleFunctionClick(std)}
-                              studentProfile={std.profilePic || IMAGES.Profile}
-                            />
-                          );
-                        })
-                      ) : (
-                        <p className="text-center py-4 text-3xl font-medium">Filtered data not present</p>
-                      )
-                    ) : null}
+                  {!filterActive &&
+                    searchText &&
+                    data?.map((std, index) => {
+                      if (
+                        std?.classroom?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
+                        std?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
+                        std?.subject?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
+                      ) {
+                        return (
+                          <DataRows
+                            key={std._id}
+                            header={false}
+                            index={index + 1}
+                            bgColor={"#FFFFFF"}
+                            studentName={std.name}
+                            subject={std.subject.name}
+                            attendance={std.avgAttendancePer}
+                            studentClass={std.classroom.name}
+                            onClickFunction={handleFunctionClick(std)}
+                            studentProfile={std.profilePic || IMAGES.Profile}
+                          />
+                        );
+                      }
+                    })}
 
                     {!filterActive &&
                       searchText &&
