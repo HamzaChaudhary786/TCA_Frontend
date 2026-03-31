@@ -96,8 +96,8 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
       selectedClassrooms.forEach((classroomID) => {
         const myobj = {
           ...classObj,
-          teacher: { teacherID: parsedTeacher._id, status: "absent" },
-          subjectID: JSON.parse(selectedSubject)._id,
+          teacher: { teacherID: parsedTeacher.id, status: "absent" },
+          subjectID: JSON.parse(selectedSubject).id,
           classroomID, // Send one by one
           startTime: isoFormattedStringStartTime,
           endTime: isoFormattedStringEndTime,
@@ -136,9 +136,9 @@ const SchedualClasses = ({ refetch, addScheduleModalOpen, setAddScheduleModalOpe
     // });
 
 
-    console.log(parsedTeacher?._id, "parse teacher status");
+    console.log(parsedTeacher?.id, "parse teacher status");
 
-    const { teacherSubject, isLoading, error } = useGetTeacherSubject(parsedTeacher?._id);
+    const { teacherSubject, isLoading, error } = useGetTeacherSubject(parsedTeacher?.id);
 
 
 

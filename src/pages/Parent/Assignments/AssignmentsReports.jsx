@@ -21,14 +21,14 @@ const AssignmentsReports = () => {
   const { selectedChild } = useParent();
 
   const reportQuery = useQuery({
-    queryKey: ["report", selectedChild._id, location?.state?.classroom?._id, location?.state?.subject?._id, location?.state?.teacher?._id], // Add dependencies
+    queryKey: ["report", selectedChild.id, location?.state?.classroom?.id, location?.state?.subject?.id, location?.state?.teacher?.id], // Add dependencies
     queryFn: async () => {
       //console.log("selected child is : ", selectedChild);
       let results = await getChildReport(
-        selectedChild._id,
-        location?.state?.classroom?._id,
-        location?.state?.subject?._id,
-        location?.state?.teacher?._id
+        selectedChild.id,
+        location?.state?.classroom?.id,
+        location?.state?.subject?.id,
+        location?.state?.teacher?.id
       );
       //console.log(" report result is : ", results);
       return results;

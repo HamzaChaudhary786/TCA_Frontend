@@ -23,9 +23,8 @@ const DataRows = ({
       >
         {/* Index */}
         <p
-          className={`w-5 shrink-0 md:flex-[1] text-xs md:text-sm text-center md:text-left ${
-            header ? "font-semibold" : ""
-          }`}
+          className={`w-5 shrink-0 md:flex-[1] text-xs md:text-sm text-center md:text-left ${header ? "font-semibold" : ""
+            }`}
         >
           {index + "."}
         </p>
@@ -43,18 +42,16 @@ const DataRows = ({
 
         {/* Student Name */}
         <p
-          className={`flex-[2] md:flex-[3] text-xs md:text-sm text-left truncate ${
-            header ? "font-semibold" : ""
-          }`}
+          className={`flex-[2] md:flex-[3] text-xs md:text-sm text-left truncate ${header ? "font-semibold" : ""
+            }`}
         >
           {studentName}
         </p>
 
         {/* Contact + Arrow */}
         <div
-          className={`flex-[2] md:flex-[3] flex items-center justify-between text-xs md:text-sm ${
-            header ? "font-semibold" : ""
-          }`}
+          className={`flex-[2] md:flex-[3] flex items-center justify-between text-xs md:text-sm ${header ? "font-semibold" : ""
+            }`}
         >
           <span className="truncate">{contact}</span>
           {!header && <SlArrowRight size={14} className="shrink-0 md:w-5 md:h-5 ml-1" />}

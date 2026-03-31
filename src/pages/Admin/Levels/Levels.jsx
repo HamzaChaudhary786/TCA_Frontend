@@ -94,12 +94,12 @@ const Levels = () => {
 
                                         {searchText == "" && allLevels?.map((lvl, index) => (
                                             <DataRow
-                                                key={lvl._id}
+                                                key={lvl.id}
                                                 toggleLevelMenu={toggleLevelMenuOpen}
                                                 refetch={levelsRefetch}
                                                 index={index + 1}
                                                 levelName={lvl.name}
-                                                levelId={lvl._id}
+                                                levelId={lvl.id}
                                                 deleteLevel={levelDellMutate.mutate}
                                                 editLevel={(e) => onEditLevel(e)}
                                                 bgColor={"#FFFFFF"}
@@ -110,12 +110,12 @@ const Levels = () => {
                                         {searchText && allLevels?.map((lvl, index) => {
                                             if ((lvl.name.toLocaleLowerCase()).includes(searchText.toLocaleLowerCase())) {
                                                 return <DataRow
-                                                    key={lvl._id}
+                                                    key={lvl.id}
                                                     toggleLevelMenu={toggleLevelMenuOpen}
                                                     refetch={levelsRefetch}
                                                     index={index + 1}
                                                     levelName={lvl.name}
-                                                    levelId={lvl._id}
+                                                    levelId={lvl.id}
                                                     deleteLevel={levelDellMutate.mutate}
                                                     editLevel={(e) => onEditLevel(e)}
                                                     bgColor={"#FFFFFF"}

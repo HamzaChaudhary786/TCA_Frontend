@@ -126,13 +126,13 @@ const Notifications = ({ onclose, dashboard, data }) => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">📢 Announcements</h2>
             {announcementByUsertype && announcementByUsertype.length > 0 ? announcementByUsertype?.map((announcement) => (
               <div
-                key={announcement._id}
+                key={announcement.id}
                 className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300" // Card styles
               >
                 {/* Announcement Header */}
                 <div
                   className="p-5 cursor-pointer flex flex-col justify-between items-center hover:bg-gray-50 transition-colors duration-200" // Header styles
-                  onClick={() => handleToggleDetails(announcement._id)}
+                  onClick={() => handleToggleDetails(announcement.id)}
                 >
                   <div>
                     <p className="text-xs text-center font-medium text-indigo-600 uppercase tracking-wide">{announcement.type}</p>
@@ -142,7 +142,7 @@ const Notifications = ({ onclose, dashboard, data }) => {
                 </div>
 
                 {/* Announcement Details */}
-                {activeAnnouncement === announcement._id && (
+                {activeAnnouncement === announcement.id && (
                   <div className="p-5 bg-gray-50 border-t border-gray-200"> {/* Details styles */}
                     <p className="text-sm text-gray-700 leading-relaxed">{announcement.description}</p>
                   </div>
@@ -185,7 +185,7 @@ const Notifications = ({ onclose, dashboard, data }) => {
               data
                 .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map((not) => (
-                  <Notification key={not._id} item={not} isAssignment={false} />
+                  <Notification key={not.id} item={not} isAssignment={false} />
                 ))
             ) : allAssignments && allAssignments.length > 0 ? (
               allAssignments
@@ -193,7 +193,7 @@ const Notifications = ({ onclose, dashboard, data }) => {
                 .slice(0, 5)
                 .map((assignment) => (
                   <Notification
-                    key={assignment._id}
+                    key={assignment.id}
                     item={assignment}
                     isAssignment={true}
                   />

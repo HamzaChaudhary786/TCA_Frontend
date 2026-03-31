@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../../context/UserContext";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getStudentSubjectReport } from "../../../api/Student/StudentApis";
+import { useStudent } from "../../../context/StudentContext";
 
 // File ke top mein add karein:
 // File ke top mein add karein:
@@ -42,14 +43,20 @@ const SubjectReport = () => {
 
 
   const { userData } = useUser();
+  const { allSubjects } = useStudent();
   const location = useLocation();
   //console.log("location state in subject report is : ", location?.state);
 
+  const foundSubject = allSubjects?.subjects?.find(s => (s.name || s.subject?.name) === subject);
+  const subjectId = location?.state?.id || location?.state?.subject?.id || foundSubject?.id || foundSubject?.subject?.id;
+
   const reportQuery = useQuery({
-    queryKey: ["reports"], queryFn: async () => {
-      const result = await getStudentSubjectReport(userData._id, location?.state?.subject?._id);
+    queryKey: ["reports", subjectId],
+    queryFn: async () => {
+      const result = await getStudentSubjectReport(userData.id, subjectId);
       return result;
-    }
+    },
+    enabled: !!userData?.id && !!subjectId
   })
 
   //console.log("query for subject report data is : ", reportQuery.data);

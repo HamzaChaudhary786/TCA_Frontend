@@ -16,11 +16,11 @@ const Deliverables = () => {
 
 
   const matchedAssignments = allAssignments?.filter(assignment =>
-    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(assignment.subjectID._id)
+    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(assignment.subjectID.id)
   );
 
   const matchedAQuizes = allQuizes?.filter(quiz =>
-    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(quiz.subjectID._id)
+    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(quiz.subjectID.id)
   );
 
 
@@ -92,7 +92,7 @@ const Deliverables = () => {
         {(!quizIsPending && !assignmentIsPending) && (
           <div className="flex flex-col gap-1 px-4 py-4 bg-white overflow-y-auto register-scrollbar border-t-4 h-72 rounded-xl border-t-[#0B1053]">
             {allDeliverables.length > 0 ? (
-              allDeliverables.map((item) => <Deliverable item={item} key={item._id} />)
+              allDeliverables.map((item) => <Deliverable item={item} key={item.id} />)
             ) : (
               <div className="flex flex-1 justify-center items-center">
                 <p className="text-sm text-gray-500">

@@ -16,8 +16,8 @@ const Assignments = () => {
   const { userData } = useUser();
 
 
-  const studentAssignments = allAssignments.filter(assignment =>
-    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(assignment.subjectID._id)
+  const studentAssignments = allAssignments?.filter(assignment =>
+    !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(assignment?.subject?.id || assignment?.subjectID?.id || assignment?.subjectID)
   );
   //console.log("Filtered Assignments:", studentAssignments);
   return (
@@ -50,15 +50,15 @@ const Assignments = () => {
                     alldata={assignment}
                     isQuiz={false}
                     index={index + 1}
-                    id={assignment._id}
-                    key={assignment._id}
-                    subject={assignment?.subjectID.name}
+                    id={assignment.id}
+                    key={assignment.id}
+                    subject={assignment?.subject?.name || assignment?.subjectID?.name}
                     title={assignment?.title}
                     deadline={assignment?.dueDate}
                     bgColor={"#FFFFFF"}
                     header={false}
                     total_marks={assignment?.totalMarks}
-                    download={assignment?.files[0]?.url}
+                    download={assignment?.files?.[0]?.url}
                     upload={true}
                     text={assignment?.text}
                   />

@@ -32,39 +32,41 @@ export const CustomEvent = ({ event, setevents }) => {
 
   return (
     <div className="relative flex flex-1 w-full overflow-visible">
-      <ViewEventDetailsModal
+      {detailsModalOpen && <ViewEventDetailsModal
         setevents={setevents}
         event={event}
         open={detailsModalOpen}
         setopen={setdetailsModalOpen}
-      />
+      />}
       <div
-        className={`cursor-pointer rounded-lg w-full transition-all duration-200 hover:shadow-md hover:scale-[1.02] mb-1 ${event.teacher.teacherID.name
+        className={`cursor-pointer rounded-lg w-full transition-all duration-200 hover:shadow-md hover:scale-[1.02] mb-1 ${event?.teacher?.name
           ? "bg-gradient-to-br from-[#38bdf8] to-[#0ea5e9] text-white border border-[#0284c7]"
           : "bg-gradient-to-br from-[#38bdf8] to-[#0ea5e9] text-white border border-[#0284c7]"
           }`}
         style={{ height: `${eventHeight - 4}px`, minHeight: `${eventHeight - 4}px` }}
         onClick={() => {
-          return event.teacher.teacherID.name ? setdetailsModalOpen(true) : null;
+          if (event?.teacher?.name) {
+            setdetailsModalOpen(true);
+          }
         }}
       >
         <div className="flex flex-col h-full justify-start p-[2px] sm:p-2 space-y-1">
           <div className="text-[9.5px] sm:text-[10px] leading-tight">
             <span className="font-bold text-blue-50">Teacher:</span>
             <div className="font-semibold text-white truncate">
-              {event.teacher ? event.teacher.teacherID.name : ""}
+              {event?.teacher?.name || ""}
             </div>
           </div>
           <div className="text-[9.5px] sm:text-[10px] leading-tight">
             <span className="font-bold text-blue-50">Title:</span>
             <div className="font-semibold text-white truncate">
-              {event.title ? event.title : ""}
+              {event?.title || ""}
             </div>
           </div>
           <div className="text-[9.5px] sm:text-[10px] leading-tight">
             <span className="font-bold text-blue-50">Subject:</span>
             <div className="font-semibold text-white truncate">
-              {event.subjectID.name ? event.subjectID.name : ""}
+              {event?.subject?.name || ""}
             </div>
           </div>
         </div>

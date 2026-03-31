@@ -56,26 +56,26 @@ export default function ViewEventDetailsModal({
     oneTime: true,
     meetingUrl: event.meetingUrl || "",
     classroomID: event.classroomID,
-    subjectID: event.subjectID._id,
+    subjectID: event.subjectID,
     startEventDate: event.startEventDate,
     endEventDate: event.endEventDate,
-    teacher: { teacherID: event.teacher.teacherID._id, status: "absent" },
+    teacher: { teacherID: event.teacherID, status: "absent" },
     updateSeries: eventType
   });
 
   const [selectedTeacher, setSelectedTeacher] = useState(
-    JSON.stringify(event.teacher.teacherID)
+    JSON.stringify(event.teacher)
   );
   const [selectedSubject, setSelectedSubject] = useState(
-    JSON.stringify(event.subjectID)
+    JSON.stringify(event.subject)
   );
 
   // const parsedTeacher = selectedTeacher ? JSON.parse(selectedTeacher) : null;
-  // const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
+  // const { teacherSubject } = useGetTeacherSubject(parsedTeacher?.id);
   const parsedTeacher = selectedTeacher 
   ? (typeof selectedTeacher === 'string' ? JSON.parse(selectedTeacher) : selectedTeacher) 
   : null;
-const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
+const { teacherSubject } = useGetTeacherSubject(parsedTeacher?.id);
 
   useClickOutside(ref, () => setopen(false));
 
@@ -142,11 +142,11 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
     );
 
     const obj = {
-      classID: event._id,
+      classID: event.id,
       title: classObj.title,
       meetingUrl: classObj.meetingUrl,
-      teacher: { teacherID: parsedTeacher._id, status: "absent" },
-      subjectID: JSON.parse(selectedSubject)._id,
+      teacher: { teacherID: parsedTeacher.id, status: "absent" },
+      subjectID: JSON.parse(selectedSubject).id,
       startTime: isoFormattedStringStartTime,
       endTime: isoFormattedStringEndTime,
       startEventDate: startDate,
@@ -180,7 +180,7 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
 
   const handleCancelMeeting = async () => {
     setLoading(true);
-    const response = await cancelClass(event._id);
+    const response = await cancelClass(event.id);
     if (response != "error") {
       await refetch();
       setLoading(false);
@@ -229,7 +229,7 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
             <div className="flex items-center justify-between w-full mb-2">
               <div className="flex-1">
                 <h2 className="text-xl font-semibold text-gray-800">
-                  {event.subjectID.name}
+                  {event.subject?.name}
                 </h2>
               </div>
               <div className="flex items-center gap-3">
@@ -265,7 +265,7 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
                   <div className="flex flex-col flex-1 gap-1">
                     <p className="text-xs font-semibold text-grey_700">Teacher</p>
                     <div className="flex justify-between border-[1.5px] py-2 px-4 rounded-lg w-full items-center border-grey/50">
-                      <p className="text-sm text-custom-gray-3">{event.teacher.teacherID.name}</p>
+                      <p className="text-sm text-custom-gray-3">{event.teacher?.name}</p>
                     </div>
                   </div>
                 </div>
@@ -282,7 +282,7 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
                     <p className="text-xs font-semibold text-grey_700">Date</p>
                     <div className="flex justify-between border-[1.5px] py-2 px-4 rounded-lg w-full items-center border-grey/50">
                       <p className="text-sm text-custom-gray-3">
-                        {moment.utc(event.start).format("DD MMMM, YYYY")}
+                        {moment.utc(event.startTime).format("DD MMMM, YYYY")}
                       </p>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
                     <p className="text-xs font-semibold text-grey_700">Start Time</p>
                     <div className="flex items-center justify-between gap-3 px-3 py-2 border-[1.5px] rounded-lg w-36 border-grey/30">
                       <p className="text-sm text-custom-gray-3">
-                        {formatTimeInPKT(event.start, "hh:mm a")}
+                        {formatTimeInPKT(event.startTime, "hh:mm a")}
                       </p>
                     </div>
                   </div>
@@ -305,7 +305,7 @@ const { teacherSubject } = useGetTeacherSubject(parsedTeacher?._id);
                     <p className="text-xs font-semibold text-grey_700">End Time</p>
                     <div className="flex items-center justify-between gap-3 px-3 py-2 border-[1.5px] rounded-lg w-36 border-grey/30">
                       <p className="text-sm text-custom-gray-3">
-                        {formatTimeInPKT(event.end, "hh:mm a")}
+                        {formatTimeInPKT(event.endTime, "hh:mm a")}
                       </p>
                     </div>
                   </div>

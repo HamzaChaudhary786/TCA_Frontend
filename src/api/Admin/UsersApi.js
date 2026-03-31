@@ -61,6 +61,12 @@ export const deleteUser = apiRequest(async (id) => {
     return response;
 })
 
+export const updateSelfProfile = apiRequest(async (data) => {
+    const url = `${BACKEND_URL}/user/update`
+    const response = await axios.put(url, data);
+    return response;
+})
+
 export const getStudentSubjectsForAdmin = apiRequest(async (id) => {
     const url = `${BACKEND_URL}/user/student-subjects/${id}`
     const response = await axios.get(url);

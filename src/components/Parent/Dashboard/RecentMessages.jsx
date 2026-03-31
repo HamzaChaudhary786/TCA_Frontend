@@ -16,6 +16,7 @@ import { BACKEND_URL_SOCKET } from "../../../constants/api";
 import { getChatsRoomData, getMyChats } from "../../../api/UserApis";
 import { getAllTeachers } from "../../../api/Admin/AdminApi";
 import { getTeachersForChat } from "../../../api/Parent/ParentApi";
+import useClickOutside from "../../../hooks/useClickOutlise";
 
 
 const RecentMessages = ({ onclose, dashboard }) => {
@@ -34,22 +35,25 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
   const { userData } = useUser();
 
+  const containerRef = useRef(null);
   const msgEndRef = useRef(null);
 
-  const toggleIndividualActive = () => {
-    setIndividualActive(!individualActive);
-    setGroupActive(false);
-  };
+  useClickOutside(containerRef, () => {
+    onclose()
+  });
 
   const handleSendMessage = (msgstr) => {
-    console.log("");
     const messageObj = {
-      sentBy: userData._id,
+      sentBy: userData.id,
       time: new Date(),
       type: "text",
       message: msgstr,
     };
-    localSocket.emit("message", { members: [userData._id, selectedChat._id], message: messageObj });
+
+    // Optimistic update
+    setMsgArray((prev) => [...prev, { ...messageObj, sentBy: userData }]);
+    
+    localSocket.emit("message", { members: [userData.id, selectedChat.id], message: messageObj });
   }
 
 
@@ -66,9 +70,9 @@ const RecentMessages = ({ onclose, dashboard }) => {
     setLocalSocket(conn);
     setSelectedChat(data);
     //console.log("parent data is : ", data);
-    conn.emit("join", [userData._id, data._id])
+    conn.emit("join", [userData.id, data.id])
     console.log("join room emit")
-    conn.emit("get-chats", [userData._id, data._id]);
+    conn.emit("get-chats", [userData.id, data.id]);
     conn.on("chat-history", (chats) => {
       //console.log("parent full chat values is ", chats);
       setSelectedChatParticipants(chats?.participants);
@@ -82,7 +86,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
     //console.log("id sent is : ", pid);
     let user = {};
     selectedChatParticipants?.forEach((item) => {
-      if (item._id === pid) {
+      if (item.id === pid) {
         user = item;
         console.log("selected");
       }
@@ -92,14 +96,15 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
   useEffect(() => {
     if (localSocket) {
-      localSocket?.on("receive-message", (data) => {
-        //console.log("data snd by student is  : ", data);
+      localSocket?.on("message", (data) => {
+        // If the message is from us, we already added it optimistically
+        if (data.message.sentBy === userData.id) return;
+        
         let user = getParticipantData(data?.message?.sentBy);
-        //console.log("user after compare is : ", user);
         setMsgArray((prev) => [...prev, { ...data?.message, sentBy: user }]);
       });
     }
-  }, [localSocket])
+  }, [localSocket, userData.id])
 
 
 
@@ -131,7 +136,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
   const GroupMsg = ({ msg }) => {
     return <>
       <div className="px-10 py-5">
-        {msg?.sentBy?._id !== userData?._id ?
+        {msg?.sentBy?.id !== userData?.id ?
           <div className="flex items-start gap-4 py-2">
             <div>
               <img src={msg?.sentBy?.profilePic || IMAGES.ProfilePic} alt="alt" className="w-10 h-10 rounded-full object-cover" />
@@ -172,11 +177,12 @@ const RecentMessages = ({ onclose, dashboard }) => {
       if (e.key === "Enter") {
         e.preventDefault();
         handleSendMessage(msgstr);
+        setmsgStr("");
       }
     }
 
     return <>
-      <div className="w-96 top-20 flex flex-col justify-between pb-10 absolute bg-white z-50 h-[90vh] fixed ">
+      <div className="w-96 flex flex-col justify-between pb-5 bg-white shadow-xl z-50 pointer-events-auto">
 
         <div className="h-full">
           <div className="shadow-xl">
@@ -202,9 +208,9 @@ const RecentMessages = ({ onclose, dashboard }) => {
         <div ref={msgEndRef} />
         <div className="px-10">
           <div className="flex items-center gap-2">
-            <input type="text" value={msgstr} onChange={(e) => { setmsgStr(e.target.value) }} onKeyDown={handleKeyDown} placeholder="Message" className="border-black/20 border rounded-lg py-2 px-2 outline-none" />
-            <RiAttachment2 className=" text-[#0B1053] cursor-pointer" size={24} />
-            <BsFillSendFill className="bg-[#0B1053] text-white p-2 rounded-md cursor-pointer" size={34} onClick={() => { msgstr == "" ? toast.error("Cannot send an empty message") : handleSendMessage(msgstr) }} />
+            <input type="text" value={msgstr} onChange={(e) => { setmsgStr(e.target.value) }} onKeyDown={handleKeyDown} placeholder="Message" className="flex-1 border-black/20 border rounded-lg py-2 px-2 outline-none w-full" />
+            <RiAttachment2 className=" text-[#0B1053] cursor-pointer shrink-0" size={24} />
+            <BsFillSendFill className="bg-[#0B1053] text-white p-2 rounded-md cursor-pointer shrink-0" size={34} onClick={() => { msgstr == "" ? toast.error("Cannot send an empty message") : handleSendMessage(msgstr); setmsgStr(""); }} />
           </div>
         </div>
 
@@ -226,11 +232,16 @@ const RecentMessages = ({ onclose, dashboard }) => {
     }
   }, [chatquery.isPending])
 
+  const toggleIndividualActive = () => {
+    setIndividualActive(!individualActive);
+    setGroupActive(false);
+  };
+
   return (
-    <>
+    <div ref={containerRef} className="fixed top-0 right-0 z-50 flex flex-row-reverse items-start pointer-events-none h-screen">
       <div
         className={` ${!dashboard ? "mt-10" : "mt-0"
-          } fixed z-10 flex h-screen px-5 overflow-auto bg-white border-r border-black/20 shadow-xl top-20 ${showFullChat ? "sm:right-96" : "right-0"} w-96`}
+          } flex flex-col px-5 overflow-auto bg-white border-l border-black/20 shadow-xl w-96 pointer-events-auto h-full`}
       >
         <div className={`flex flex-col flex-1 font-poppins`}>
           <div className="flex justify-between py-5 ">
@@ -256,8 +267,8 @@ const RecentMessages = ({ onclose, dashboard }) => {
           </div>
         </div>
       </div>
-      {showFullChat && <FullChat onclose={handleShowFullChat} data={selectedChat} />}
-    </>
+      {showFullChat && <FullChat onclose={() => setShowFullChat(false)} data={selectedChat} />}
+    </div>
   );
 };
 

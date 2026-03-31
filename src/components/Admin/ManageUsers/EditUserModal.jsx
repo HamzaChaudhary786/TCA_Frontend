@@ -37,7 +37,7 @@ const EditUserModal = ({ closeModal, refetch, data }) => {
 
     const ref = useRef(null); // Reference to the modal container
     const { toggleBlur } = useBlur(); // Access toggleBlur from the context
-     const { allLevels } = useAdmin();
+    const { allLevels } = useAdmin();
 
     // Use the hook with the modal's reference and callback function
     useClickOutside(ref, () => {
@@ -75,7 +75,7 @@ const EditUserModal = ({ closeModal, refetch, data }) => {
 
     const mutation = useMutation({
         mutationFn: async (updateData) => {
-            let result = await updateUser(updateData, data._id);
+            let result = await updateUser(updateData, data.id);
             console.log("user updatd ", result);
             await refetch();
             toast.success(`User updated successfully!`);
@@ -117,21 +117,21 @@ const EditUserModal = ({ closeModal, refetch, data }) => {
 
                     {data.userType == "student" &&
                         <>
-                            <InputFiled label={"Roll No."} req={false} val={userObj.rollNo} name={"rollNo"} setDataObj={setUsrObj}/>
+                            <InputFiled label={"Roll No."} req={false} val={userObj.rollNo} name={"rollNo"} setDataObj={setUsrObj} />
                             {/* <InputFiled label={"Enroll In."} req={false} val={data.levelID} /> */}
                             <label className='font-medium'>Enroll in</label>
-                        <select
-                            value={userObj.levelID || ""}
-                            onChange={(e) => setUsrObj({ ...userObj, levelID: e.target.value })}
-                            className="border outline-none rounded-md border-black/20 px-4 w-full py-[8px]"
-                        >
-                            <option value="" disabled hidden>Enroll in</option>
-                            {allLevels.map((item) => (
-                                <option key={item._id} value={item._id}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </select>
+                            <select
+                                value={userObj.levelID || ""}
+                                onChange={(e) => setUsrObj({ ...userObj, levelID: e.target.value })}
+                                className="border outline-none rounded-md border-black/20 px-4 w-full py-[8px]"
+                            >
+                                <option value="" disabled hidden>Enroll in</option>
+                                {allLevels.map((item) => (
+                                    <option key={item.id} value={item.id}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </select>
                             <InputFiled label={"Guardian Name"} req={false} val={data.guardianName} />
                             <InputFiled label={"Guardian Email"} req={false} val={data.guardianEmail} />
                         </>

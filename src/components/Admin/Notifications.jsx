@@ -84,7 +84,7 @@ const Notifications = ({ onclose, dashboard }) => {
         </div>
         <div className="w-full">
           {data && data?.map((item) => {
-            return <Notification key={item._id} item={item} />;
+            return <Notification key={item.id} item={item} />;
           })}
         </div>
       </div>

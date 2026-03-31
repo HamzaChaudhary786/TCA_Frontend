@@ -32,7 +32,7 @@ const HeadAttendence = () => {
   }
 
   const handleDeleteClass = async () => {
-    classroomDellMutate.mutate(editClassData.data._id);
+    classroomDellMutate.mutate(editClassData.data.id);
   }
 
 
@@ -65,7 +65,7 @@ const HeadAttendence = () => {
     if (data) {
       const HeadTeacherClass = data.filter((item) =>
         item.teachers.some(
-          (teach) => teach.type === "head" && teach?.teacher === userData?._id
+          (teach) => teach.type === "head" && (teach?.teacherID === (userData?.id || userData?._id) || teach?.teacher === (userData?.id || userData?._id))
         )
       );
       setClassOfHeadTeacher(HeadTeacherClass)

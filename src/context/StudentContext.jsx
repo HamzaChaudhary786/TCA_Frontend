@@ -60,6 +60,31 @@ export const StudentProvider = ({ children }) => {
         }
     }, [quizQuery.isSuccess, quizQuery.data]);
 
+    useEffect(() => {
+        if (allClasses.length === 0) return;
+
+        const checkCurrentClass = () => {
+            const now = new Date();
+            const currentClass = allClasses.find(cls => {
+                const start = new Date(cls.startTime);
+                const end = new Date(cls.endTime);
+                return now >= start && now <= end;
+            });
+
+            if (currentClass) {
+                if (meetingStart.event?.id !== currentClass.id) {
+                    setMeetingStart({ start: true, event: currentClass });
+                }
+            } else if (meetingStart.start) {
+                setMeetingStart({ start: false, event: null });
+            }
+        };
+
+        checkCurrentClass();
+        const interval = setInterval(checkCurrentClass, 60000); // Check every minute
+        return () => clearInterval(interval);
+    }, [allClasses, meetingStart.start, meetingStart.event?.id]);
+
     return (
         <StudentContext.Provider value={{
 

@@ -13,7 +13,7 @@ import { BsFillSendFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../../context/UserContext";
 import { BACKEND_URL_SOCKET } from "../../../constants/api";
-import { getChatsRoomData, getMyChats } from "../../../api/UserApis";
+import { getChatsRoomData, getMyChats, getTeachersForChat } from "../../../api/UserApis";
 import { useBlur } from "../../../context/BlurContext";
 import useClickOutside from "../../../hooks/useClickOutlise";
 
@@ -39,8 +39,12 @@ const RecentMessages = ({ onclose, dashboard }) => {
   const [selectedChatParticipants, setSelectedChatParticipants] = useState([]);
 
   const [msgArray, setMsgArray] = useState([]);
+  const [msgArrayDirect, setMsgArrayDirect] = useState([]);
   const [localSocket, setLocalSocket] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [showDirectChat, setShowDirectChat] = useState(false);
+  const [subTab, setSubTab] = useState("recent"); // "recent" or "teachers"
+
 
   const { socketContext, setSocketContext, userData } = useUser();
 
@@ -58,15 +62,27 @@ const RecentMessages = ({ onclose, dashboard }) => {
     if (msgstr == "") {
       toast.error("Cannot send empty message!")
     } else {
-
-      console.log("");
       const messageObj = {
-        sentBy: userData._id,
+        sentBy: userData.id,
         time: new Date(),
         type: "text",
         message: msgstr,
       };
-      socketContext.emit("message", { room: selectedChat?._id, message: messageObj });
+
+      // Optimistic update
+      if (showFullChat) {
+         setMsgArray((prev) => [...prev, { ...messageObj, sentBy: userData }]);
+      } else if (showDirectChat) {
+         setMsgArrayDirect((prev) => [...prev, { ...messageObj, sentBy: userData }]);
+      }
+      
+      if (localSocket) {
+        if (showFullChat) {
+          localSocket.emit("message", { room: selectedChat?.id, message: messageObj });
+        } else if (showDirectChat) {
+          localSocket.emit("message", { members: [userData?.id, selectedChat?.id], message: messageObj });
+        }
+      }
     }
   }
 
@@ -80,23 +96,41 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
   const openFullchat = async (data) => {
     setLoading(true);
+    setShowDirectChat(false);
     setShowFullChat(true);
     let conn = io(`${BACKEND_URL_SOCKET}/chatroom`);
     setSocketContext(conn);
     setLocalSocket(conn);
     setSelectedChat(data);
     setSelectedChatParticipants(data.participants);
-    conn.emit("join", { room: data._id });
-    const result = await getChatsRoomData(data._id);
+    conn.emit("join", { room: data.id });
+    const result = await getChatsRoomData(data.id);
     //console.log("result form sever is : ", result);
     setMsgArray(result.messages);
     setLoading(false);
   }
 
+  const openDirectChat = async (data) => {
+    setLoading(true);
+    setShowFullChat(false);
+    setShowDirectChat(true);
+    const conn = io(`${BACKEND_URL_SOCKET}/one-to-one`);
+    setLocalSocket(conn);
+    setSelectedChat(data);
+    conn.emit("join", [userData.id, data.id]);
+    conn.emit("get-chats", [userData.id, data.id]);
+    conn.on("chat-history", (chats) => {
+      setSelectedChatParticipants(chats?.participants);
+      setMsgArrayDirect(chats?.messages);
+    });
+    setLoading(false);
+  }
+
   const getParticipantData = (pid) => {
+    if (pid === userData.id) return userData;
     let user = {};
     selectedChatParticipants.forEach((item) => {
-      if (item._id === pid) {
+      if (item.id === pid) {
         user = item;
       }
     })
@@ -108,13 +142,19 @@ const RecentMessages = ({ onclose, dashboard }) => {
   useEffect(() => {
     if (localSocket) {
       localSocket.on("message", (data) => {
-        //console.log("data sent by teacher is  : ", data);
+        // If the message is from us, we already added it optimistically
+        if (data.message.sentBy === userData.id) return;
+        
         let user = getParticipantData(data.message.sentBy);
-        //console.log("user after compare is : ", user);
-        setMsgArray((prev) => [...prev, { ...data.message, sentBy: user }]);
+        
+        if (showFullChat) {
+          setMsgArray((prev) => [...prev, { ...data.message, sentBy: user }]);
+        } else if (showDirectChat) {
+          setMsgArrayDirect((prev) => [...prev, { ...data.message, sentBy: user }]);
+        }
       })
     }
-  }, [localSocket]);
+  }, [localSocket, showFullChat, showDirectChat, userData.id]);
 
   const Message = ({ data, onpress }) => {
     return (
@@ -145,7 +185,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
     return <>
       <div className="px-10 py-5">
-        {msg?.sentBy?._id !== userData._id ?
+        {msg?.sentBy?.id !== userData.id ?
           <div className="flex items-start gap-4 py-2">
             <div>
               <img src={msg.sentBy.profilePic || IMAGES.ProfilePic} alt="alt" className="w-10 h-10 rounded-full object-cover" />
@@ -179,7 +219,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
     </>
   }
 
-  const FullChat = ({ onclose, data }) => {
+  const FullChat = ({ onclose, data, type }) => {
     const [msgstr, setmsgStr] = useState("");
 
 
@@ -187,11 +227,14 @@ const RecentMessages = ({ onclose, dashboard }) => {
       if (e.key === "Enter") {
         e.preventDefault();
         handleSendMessage(msgstr);
+        setmsgStr("");
       }
     }
 
+    const currentMsgArray = type === "group" ? msgArray : msgArrayDirect;
+
     return <>
-      <div className="w-72 sm:w-96 top-20 flex flex-col justify-between pb-10 right-0 absolute bg-white z-50 h-[90vh]" >
+      <div className="w-72 sm:w-96 flex flex-col justify-between pb-5 bg-white shadow-xl z-50 pointer-events-auto" >
 
         <div className="h-full">
           <div className="shadow-xl">
@@ -206,8 +249,8 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
           {loading ? <div><Loader /></div> :
             <div className="h-[70vh] overflow-y-auto register-scrollbar">
-              {msgArray.map((item) => {
-                return <GroupMsg msg={item} />
+              {currentMsgArray.map((item, index) => {
+                return <GroupMsg key={index} msg={item} />
               })}
             </div>
           }
@@ -217,7 +260,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
           <div className="flex items-center gap-2">
             <input type="text" value={msgstr} onChange={(e) => { setmsgStr(e.target.value) }} onKeyDown={handleKeyDown} placeholder="Message" className="flex-1 border-black/20 border rounded-lg py-2 px-2 outline-none w-full" />
             <RiAttachment2 className=" text-[#0B1053] cursor-pointer shrink-0" size={24} />
-            <BsFillSendFill className="bg-[#0B1053] text-white p-2 rounded-md cursor-pointer shrink-0" size={34} onClick={() => { handleSendMessage(msgstr) }} />
+            <BsFillSendFill className="bg-[#0B1053] text-white p-2 rounded-md cursor-pointer shrink-0" size={34} onClick={() => { handleSendMessage(msgstr); setmsgStr(""); }} />
           </div>
         </div>
 
@@ -226,6 +269,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
   }
 
   const chatquery = useQuery({ queryKey: ["chat"], queryFn: getMyChats, staleTime: 30000, enabled: enableChatQuery });
+  const teacherquery = useQuery({ queryKey: ["teachers-for-chat"], queryFn: getTeachersForChat, staleTime: 30000, enabled: individualActive });
 
   useEffect(() => {
     console.log("now rendering navbar")
@@ -240,11 +284,10 @@ const RecentMessages = ({ onclose, dashboard }) => {
   }, [chatquery.isPending])
 
   return (
-    <>
+    <div ref={ref} className="fixed  right-0 z-50 flex flex-row-reverse items-start pointer-events-none h-screen">
       <div
         className={` ${!dashboard ? "mt-10" : "mt-0"
-          } fixed z-10 flex h-screen px-5 overflow-auto bg-white border-r border-black/20  shadow-xl top-20 ${showFullChat ? "sm:right-96" : "sm:right-0"} sm:w-96 w-72`}
-        ref={ref}
+          } flex flex-col px-5 overflow-auto bg-white border-l border-black/20 shadow-xl sm:w-96 w-72 pointer-events-auto h-full`}
       >
         <div className={`flex flex-col flex-1 font-poppins`}>
           <div className="flex justify-between py-5 ">
@@ -262,10 +305,23 @@ const RecentMessages = ({ onclose, dashboard }) => {
               </div>
             </div>
           </div>
+          {individualActive && (
+             <div className="flex gap-4 py-2 border-b border-black/5 justify-around">
+               <p 
+                className={`text-sm cursor-pointer ${subTab === "recent" ? "text-[#0B1053] font-bold border-b-2 border-[#0B1053]" : "text-grey"}`}
+                onClick={() => setSubTab("recent")}
+               >Group Chats</p>
+               <p 
+                className={`text-sm cursor-pointer ${subTab === "teachers" ? "text-[#0B1053] font-bold border-b-2 border-[#0B1053]" : "text-grey"}`}
+                onClick={() => setSubTab("teachers")}
+               >Teachers</p>
+            </div>
+          )}
 
-          {chatquery.isPending && <div className=""> <Loader /> </div>}
+          {chatquery.isPending && subTab === "recent" && <div className=""> <Loader /> </div>}
+          {teacherquery.isPending && subTab === "teachers" && <div className=""> <Loader /> </div>}
 
-          {!chatquery.isPending &&
+          {!chatquery.isPending && subTab === "recent" &&
             <div className="py-2">
               {chatquery?.data?.map((item) => {
                 return <Message data={item} onpress={() => { openFullchat(item) }} />;
@@ -273,10 +329,19 @@ const RecentMessages = ({ onclose, dashboard }) => {
             </div>
           }
 
+          {!teacherquery.isPending && subTab === "teachers" &&
+            <div className="py-2">
+              {teacherquery?.data?.map((item) => {
+                return <Message data={item} onpress={() => { openDirectChat(item) }} />;
+              })}
+            </div>
+          }
+
         </div>
       </div>
-      {showFullChat && <FullChat onclose={handleShowFullChat} data={selectedChat} />}
-    </>
+      {showFullChat && <FullChat onclose={() => setShowFullChat(false)} data={selectedChat} type="group" />}
+      {showDirectChat && <FullChat onclose={() => setShowDirectChat(false)} data={selectedChat} type="direct" />}
+    </div>
   );
 };
 

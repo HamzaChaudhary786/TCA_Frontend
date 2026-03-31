@@ -37,7 +37,7 @@ const Classroom = () => {
   }
 
   const handleDeleteClass = async () => {
-    classroomDellMutate.mutate(editClassData._id);
+    classroomDellMutate.mutate(editClassData.id);
   }
 
 
@@ -127,7 +127,7 @@ const Classroom = () => {
                         data.map((cls, index) => (
                           <DataRow
                             data={cls}
-                            key={cls._id}
+                            key={cls.id}
                             header={false}
                             index={index + 1}
                             bgColor={"#FFFFFF"}
@@ -149,7 +149,7 @@ const Classroom = () => {
                             return (
                               <DataRow
                                 data={cls}
-                                key={cls._id}
+                                key={cls.id}
                                 header={false}
                                 index={index + 1}
                                 bgColor={"#FFFFFF"}

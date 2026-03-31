@@ -82,7 +82,7 @@ const GradingAssignments = () => {
           grade: item.grade,
           marks: item.marks,
           feedback: item.feedback,
-          studentID: item.studentID._id
+          studentID: item.studentID.id
         }
         objArray.push(obj);
       }
@@ -94,7 +94,7 @@ const GradingAssignments = () => {
   const setInputField = useCallback((studentID, field, value) => {
 
     setGradingData(prev => prev.map(inp => {
-      if (inp?.studentID._id == studentID) {
+      if (inp?.studentID.id == studentID) {
         return { ...inp, [field]: value }
       }
       return inp;
@@ -107,7 +107,7 @@ const GradingAssignments = () => {
     // mutationKey: ["submissions"],
     mutationFn: async (data) => {
       console.log("data being sent is : ", data);
-      let result = await gradeAssignments({ submissions: data }, location.state._id);
+      let result = await gradeAssignments({ submissions: data }, location.state.id);
       return result;
     }, onSuccess: () => {
       toast.dismiss();
@@ -126,9 +126,9 @@ const GradingAssignments = () => {
   });
 
   const allAssignmentsQuery = useQuery({
-    queryKey: ["submissions", "assignment", location.state._id],
+    queryKey: ["submissions", "assignment", location.state.id],
     queryFn: async () => {
-      let result = await getMultipleAssignmentsForGrading(location.state._id);
+      let result = await getMultipleAssignmentsForGrading(location.state.id);
       return result;
     },
     staleTime: 0 // always fetch fresh grades
@@ -277,7 +277,7 @@ const GradingAssignments = () => {
                   marks={submission?.marks}
                   profileLink={submission.studentID.profilePic || IMAGES.Profile || "http://bit.ly/4gcOBHl"}
                   setInputField={setInputField}
-                  id={submission?.studentID?._id}
+                  id={submission?.studentID?.id}
                   feedback={submission?.feedback}
                   name={submission?.studentID?.name}
                   marksObtained={submission?.marksObtained}

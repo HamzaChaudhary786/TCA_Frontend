@@ -40,7 +40,7 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
           <div className="text-[10px] leading-tight">
             <span className="font-normal text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>T.Name:</span>
             <div className="font-normal text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
-              {event.teacher ? event.teacher.teacherID.name : ""}
+              {event?.teacher?.name ?? ""}
             </div>
           </div>
           <div className="text-[10px] leading-tight">
@@ -52,7 +52,7 @@ export const CustomEvent = ({ event, setevents, refetch, isRefetching }) => {
           <div className="text-[10px] leading-tight overflow-hidden">
             <span className="font-normal text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>Subject:</span>
             <div className="font-normal text-slate-900 truncate" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
-              {event.subjectID?.name ?? ""}
+              {event?.subject?.name ?? ""}
             </div>
           </div>
         </div>
@@ -225,7 +225,7 @@ export const CustomToolbar = (props) => {
                 </option>
 
                 {adminUsersData?.allTeachers?.map((item) => (
-                  <option key={JSON.stringify(item)} className="p-2" value={item._id}>{item?.name}</option>
+                  <option key={JSON.stringify(item)} className="p-2" value={item.id}>{item?.name}</option>
                 ))}
               </select>
             </div>

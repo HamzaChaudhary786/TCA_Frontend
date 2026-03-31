@@ -33,7 +33,7 @@ const SubjectsEnrolled = () => {
 
   const subjectQuery = useQuery({
     queryKey: ["subjects"], queryFn: async () => {
-      const results = await getAllSubjects(userData._id);
+      const results = await getAllSubjects(userData.id);
       setAllSubjects(results);
       console.log("inside dashboard")
       return results
@@ -44,7 +44,7 @@ const SubjectsEnrolled = () => {
 
   const assignedSubjects = subjectQuery?.data?.assignedSubjects || userData.subjects;
   const filteredSubjects = subjectQuery?.data?.subjects?.filter((item) =>
-    !assignedSubjects || assignedSubjects.length === 0 || assignedSubjects.includes(item.subject._id)
+    !assignedSubjects || assignedSubjects.length === 0 || assignedSubjects.includes(item?.subject?.id || item?.id)
   );
 
   //console.log(filteredSubjects, "Filtered Subjects for Student");
@@ -84,7 +84,7 @@ const SubjectsEnrolled = () => {
                         <tr className="flex text-xs border-t border-t-black/10" key={index + 1}>
                           <td className="flex-[1] py-2 lg:py-3 flex justify-center">{index + 1}.</td>
                           <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                            {item?.subject?.name}
+                            {item?.subject?.name || item?.name}
                           </td>
                           <td
                             onClick={() => toggleClickTeacher(item)}

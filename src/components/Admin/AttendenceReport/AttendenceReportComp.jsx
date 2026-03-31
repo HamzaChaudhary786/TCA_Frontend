@@ -45,7 +45,7 @@ const AttendanceReportComp = () => {
     const availableSubjects = useMemo(() => {
         if (!filters.classroomId || !classrooms.length) return [];
 
-        const selectedClassroom = classrooms.find(classroom => classroom._id === filters.classroomId);
+        const selectedClassroom = classrooms.find(classroom => classroom.id === filters.classroomId);
         if (!selectedClassroom?.teachers) return [];
 
         const subjects = selectedClassroom.teachers
@@ -53,7 +53,7 @@ const AttendanceReportComp = () => {
             .filter(Boolean);
 
         return subjects.reduce((acc, current) => {
-            const exists = acc.find(item => item._id === current._id);
+            const exists = acc.find(item => item.id === current.id);
             if (!exists) acc.push(current);
             return acc;
         }, []);
@@ -108,13 +108,13 @@ const AttendanceReportComp = () => {
     // Get display names
     const selectedClassroomName = useMemo(() => {
         if (!filters.classroomId) return '';
-        const classroom = classrooms.find(c => c._id === filters.classroomId);
+        const classroom = classrooms.find(c => c.id === filters.classroomId);
         return classroom ? `${classroom.name} - ${classroom.level?.name || 'N/A'}` : '';
     }, [filters.classroomId, classrooms]);
 
     const selectedSubjectName = useMemo(() => {
         if (!filters.subjectId) return '';
-        const subject = availableSubjects.find(s => s._id === filters.subjectId);
+        const subject = availableSubjects.find(s => s.id === filters.subjectId);
         return subject?.name || '';
     }, [filters.subjectId, availableSubjects]);
 
@@ -206,7 +206,7 @@ const AttendanceReportComp = () => {
                                 >
                                     <option value="">Choose a classroom...</option>
                                     {classrooms.map(classroom => (
-                                        <option key={classroom._id} value={classroom._id}>
+                                        <option key={classroom.id} value={classroom.id}>
                                             {classroom.name} - {classroom.level?.name || 'N/A'} ({classroom.students?.length || 0} students)
                                         </option>
                                     ))}
@@ -229,7 +229,7 @@ const AttendanceReportComp = () => {
                                 >
                                     <option value="">Choose a subject...</option>
                                     {availableSubjects.map(subject => (
-                                        <option key={subject._id} value={subject._id}>
+                                        <option key={subject.id} value={subject.id}>
                                             {subject.name}
                                         </option>
                                     ))}

@@ -1,7 +1,7 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import FilterClassesModal from "./components/FilterClassesModal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Header,
   SideTime,
@@ -107,7 +107,7 @@ const MyCalendar = () => {
           className="w-full"
         step={60}
         timeslots={1}
-        components={{
+        components={useMemo(() => ({
           toolbar: (toolbar) => (
             <CustomToolbar
               loading={loading}
@@ -121,13 +121,12 @@ const MyCalendar = () => {
             />
           ),
           event: (e) => {
-            //console.log("event is : ", e);
             return <CustomEvent setevents={setEvents} event={e.event} />;
           },
           timeGutterHeader: SideTimeHeader,
           timeGutterWrapper: SideTime,
           header: Header,
-        }}
+        }), [loading, activeFilteredField, data, addModalOpen])}
         dayLayoutAlgorithm={"no-overlap"}
       />
       </div>

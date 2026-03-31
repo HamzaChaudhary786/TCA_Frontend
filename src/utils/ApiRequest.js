@@ -7,7 +7,8 @@ const apiRequest = (apiCall) => {
       return response?.data;
     } catch (error) {
       console.error(`Error in API call: `, error);
-      toast.error(error?.response?.data || "An unexpected error occurred");
+      const errMsg = error?.response?.data?.message || error?.response?.data?.error || (typeof error?.response?.data === 'string' ? error?.response?.data : "An unexpected error occurred");
+      toast.error(errMsg);
       throw error;
     }
   };

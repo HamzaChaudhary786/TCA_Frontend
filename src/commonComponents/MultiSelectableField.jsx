@@ -27,13 +27,13 @@ const CustomMultiSelectableField = ({
         ) : options.length > 0 ? (
           options.map((item) => (
             <label
-              key={item._id}
+              key={item.id}
               className="flex items-center space-x-2 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded"
             >
               <input
                 type="checkbox"
-                checked={selectedOption.includes(item._id)}
-                onChange={() => toggleSelection(item._id)}
+                checked={selectedOption.includes(item.id)}
+                onChange={() => toggleSelection(item.id)}
                 className="accent-blue-500"
               />
               <span className="text-sm text-gray-800">{item.name}</span>

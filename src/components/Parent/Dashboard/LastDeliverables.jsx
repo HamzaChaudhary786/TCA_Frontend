@@ -19,7 +19,7 @@ const LastDeliverables = () => {
 
   const subjectQuery = useQuery({
     queryKey: ["subjects"], queryFn: async () => {
-      const results = await getAllSubjects(selectedChild?._id);
+      const results = await getAllSubjects(selectedChild?.id);
       //console.log("subject in enrolled classes is : ", results);
       setAllSubjects(results);
       return results
@@ -35,17 +35,18 @@ const LastDeliverables = () => {
   }, []);
 
   const lastDeliveredAssignmentreportQuery = useQuery({
-    queryKey: ["report", selectedChild?._id],
+    queryKey: ["report", selectedChild?.id],
     queryFn: async () => {
       //console.log("selected child is : ", selectedChild);
       const results = await getChildLastDeliveredAssignmentReport(
-        selectedChild?._id,
+        selectedChild?.id,
       );
       //console.log("report result is : ", results);
       return results;
     },
-    enabled: !!selectedChild?._id,
-    staleTime: 30000, // Cache for 30 seconds
+    enabled: !!selectedChild?.id,
+    retry: false,
+    staleTime: 60000, // Cache for 60 seconds
   });
 
   // Check if data is available or fallback to default values

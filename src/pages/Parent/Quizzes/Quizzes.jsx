@@ -107,7 +107,7 @@ const Quizzes = () => {
 
     const subjectQuery = useQuery({
         queryKey: ["subjects"], queryFn: async () => {
-            const results = await getAllSubjects(selectedChild._id);
+            const results = await getAllSubjects(selectedChild.id);
             setAllSubjects(results);
             return results
         }, staleTime: 300000, enabled: enableQuery

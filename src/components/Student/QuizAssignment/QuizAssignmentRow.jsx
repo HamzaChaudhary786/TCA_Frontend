@@ -32,9 +32,9 @@ const QuizAssignmentRow = (props) => {
 
             let results;
             if (props.isQuiz) {
-                results = await submitQiuz({ file: fileUrl }, props.alldata._id)
+                results = await submitQiuz({ file: fileUrl }, props.alldata.id)
             } else {
-                results = await submitAssignment({ file: fileUrl }, props.alldata._id)
+                results = await submitAssignment({ file: fileUrl }, props.alldata.id)
             }
             return results;
         }, onSettled: (data, error) => {
@@ -58,11 +58,15 @@ const QuizAssignmentRow = (props) => {
 
         setSelectedFile(file);
 
-        await handleProfileImageUpdate(file, (url) => {
-            console.log("Submission Cloudinary URL:", url);
-            setUploadedFileUrl(url);
-            quizAssignmentMutation.mutate(url);
-        }, setIsUploading, 'auto');
+        await handleProfileImageUpdate(
+            file,
+            (url) => {
+                console.log("Submission Cloudinary URL:", url);
+                setUploadedFileUrl(url);
+                quizAssignmentMutation.mutate(url);
+            },
+            setIsUploading
+        );
     };
 
     const compareDateAndTime = (dateTimeString) => {
@@ -85,7 +89,7 @@ const QuizAssignmentRow = (props) => {
     useEffect(() => {
 
         props?.alldata?.submissions?.map((item) => {
-            if (item?.studentID === userData?._id) {
+            if (item?.studentID === userData?.id) {
                 setIsUploadded(true);
             }
         })

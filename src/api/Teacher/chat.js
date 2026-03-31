@@ -9,3 +9,9 @@ export const getParentsForChat = apiRequest(async() =>{
     const response = await axios.get(url);
     return response;
 })
+
+export const getStudentsForChat = apiRequest(async() =>{
+    const url = `${BACKEND_URL}/chatroom/chat/students`
+    const response = await axios.get(url);
+    return response;
+})

@@ -31,7 +31,7 @@ const Selectable = ({ options = [], setSelectedOption, selectedOption }) => (
         if (!e.target.value) return setSelectedOption(null);
         const parsed = JSON.parse(e.target.value);
         // Toggle off if same item selected again
-        if (selectedOption?._id === parsed._id) return setSelectedOption(null);
+        if (selectedOption?.id === parsed.id) return setSelectedOption(null);
         setSelectedOption(parsed);
       }}
       className="w-full px-4 py-2.5 pr-10 text-sm text-gray-700 bg-white border border-gray-200 rounded-xl
@@ -40,7 +40,7 @@ const Selectable = ({ options = [], setSelectedOption, selectedOption }) => (
     >
       <option value="">— Select —</option>
       {options.map((item) => (
-        <option key={item._id} value={JSON.stringify(item)}>
+        <option key={item.id} value={JSON.stringify(item)}>
           {item.name}
         </option>
       ))}
@@ -77,7 +77,7 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, editData, type,
       const key = type === "teachers" ? "teachers" : "students";
       const preselected = options.filter(option =>
         editData[key]?.some(item =>
-          (key === "teachers" ? item?.teacher?._id : item?._id) === option?._id
+          (key === "teachers" ? item?.teacher?.id : item?.id) === option?.id
         )
       );
       setSelectedOptions(preselected);
@@ -92,8 +92,8 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, editData, type,
 
   const toggle = useCallback((option) => {
     setSelectedOptions(prev => {
-      const next = prev.some(o => o._id === option._id)
-        ? prev.filter(o => o._id !== option._id)
+      const next = prev.some(o => o.id === option.id)
+        ? prev.filter(o => o.id !== option.id)
         : [...prev, option];
       onSelect(next);
       return next;
@@ -141,7 +141,7 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, editData, type,
         <div className="flex flex-wrap gap-1.5">
           {selectedOptions.map(opt => (
             <span
-              key={opt._id}
+              key={opt.id}
               onClick={() => toggle(opt)}
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#6A00FF]/8 border border-[#6A00FF]/20
                          text-xs text-[#6A00FF] cursor-pointer hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all group"
@@ -157,10 +157,10 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, editData, type,
       {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-44 overflow-y-auto custom-scrollbar pr-1">
         {filtered.map(option => {
-          const checked = selectedOptions.some(o => o._id === option._id);
+          const checked = selectedOptions.some(o => o.id === option.id);
           return (
             <div
-              key={option._id}
+              key={option.id}
               onClick={() => toggle(option)}
               className={`flex items-center gap-2 p-2 rounded-xl cursor-pointer transition-all border text-sm
                 ${checked
@@ -219,12 +219,12 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
   );
   const [headTeacher, setHeadTeacher] = useState(() =>
     adminUsersData?.allTeachers?.find(t =>
-      editData?.teachers?.some(et => et?.type === 'head' && et.teacher?._id === t?._id)
+      editData?.teachers?.some(et => et?.type === 'head' && et.teacher?.id === t?.id)
     ) || null
   );
 
-  const { studentWithLevel = [], isLoading: studentsLoading } = useGetAllStudentsWithLevel(selectedLevel?._id);
-  const { subjectWithLevel = [], isLoading: subjectsLoading } = useGetAllSubjectsWithLevel(selectedLevel?._id);
+  const { studentWithLevel = [], isLoading: studentsLoading } = useGetAllStudentsWithLevel(selectedLevel?.id);
+  const { subjectWithLevel = [], isLoading: subjectsLoading } = useGetAllSubjectsWithLevel(selectedLevel?.id);
 
   const [newSelectedTeachers, setNewSelectedTeachers] = useState([]);
   const [newSelectedStudents, setNewSelectedStudents] = useState([]);
@@ -242,11 +242,11 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
     const initialTeacherArr = [];
 
     editData.teachers?.forEach(item => {
-      const teacherId = item.teacher?._id;
-      const subjectId = item.subject?._id;
+      const teacherId = item.teacher?.id;
+      const subjectId = item.subject?.id;
       if (!teacherId) return;
 
-      if (!initialTeachers.some(t => t._id === teacherId)) {
+      if (!initialTeachers.some(t => t.id === teacherId)) {
         initialTeachers.push(item.teacher);
       }
       if (subjectId) {
@@ -268,7 +268,7 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
     setTeachersArr(prev =>
       prev.map(entry => ({
         ...entry,
-        type: headTeacher?._id && entry.teacher?.toString() === headTeacher._id.toString()
+        type: headTeacher?.id && entry.teacher?.toString() === headTeacher.id.toString()
           ? "head"
           : "teacher",
       }))
@@ -300,7 +300,7 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
         const newPairs = updated.map(s => ({
           teacher: teacherId,
           subject: s,
-          type: headTeacher?._id && teacherId?.toString() === headTeacher._id.toString()
+          type: headTeacher?.id && teacherId?.toString() === headTeacher.id.toString()
             ? "head" : "teacher",
         }));
         return [...filtered, ...newPairs];
@@ -330,11 +330,11 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
     updateClassroomMutation.mutate({
       data: {
         name: classroomName.trim(),
-        levelID: selectedLevel._id,
-        students: newSelectedStudents.map(s => s._id),
+        levelID: selectedLevel.id,
+        students: newSelectedStudents.map(s => s.id),
         teachers: teacherArr,
       },
-      id: editData?._id,
+      id: editData?.id,
     });
   }, [classroomName, selectedLevel, newSelectedStudents, newSelectedTeachers, teacherArr, updateClassroomMutation, editData]);
 
@@ -441,11 +441,11 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                     <SectionLabel icon="📚" text="Assign Subjects to Teachers" />
                     <div className="space-y-3">
                       {newSelectedTeachers.map(teacher => (
-                        <div key={teacher._id} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div key={teacher.id} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
                           <div className="flex items-center gap-2 mb-3">
                             <Avatar name={teacher.name} src={teacher.profilePic} />
                             <span className="text-sm font-semibold text-gray-700">{teacher.name}</span>
-                            {headTeacher?._id === teacher._id && (
+                            {headTeacher?.id === teacher.id && (
                               <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-600 font-semibold">
                                 HEAD
                               </span>
@@ -459,10 +459,10 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                           ) : (
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                               {subjectWithLevel.map(subject => {
-                                const checked = selectedSubjects[teacher._id]?.includes(subject._id) ?? false;
+                                const checked = selectedSubjects[teacher.id]?.includes(subject.id) ?? false;
                                 return (
                                   <label
-                                    key={subject._id}
+                                    key={subject.id}
                                     className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer border text-xs transition-all
                                       ${checked
                                         ? 'bg-[#6A00FF]/8 border-[#6A00FF]/30 text-[#6A00FF]'
@@ -472,7 +472,7 @@ const EditClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                                     <input
                                       type="checkbox"
                                       checked={checked}
-                                      onChange={() => toggleSubject(teacher._id, subject._id)}
+                                      onChange={() => toggleSubject(teacher.id, subject.id)}
                                       className="sr-only"
                                     />
                                     <div className={`w-3.5 h-3.5 rounded flex-shrink-0 flex items-center justify-center border transition-all ${

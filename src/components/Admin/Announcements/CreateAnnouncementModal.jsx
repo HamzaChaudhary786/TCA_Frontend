@@ -47,7 +47,7 @@ const CreateAnnouncementModal = ({
             setopen(false);
             let results;
             if (isEditTrue) {
-                results = await editAnnouncements({ ...announcemnetObj, date: datetime }, announcementData._id);
+                results = await editAnnouncements({ ...announcemnetObj, date: datetime }, announcementData.id);
             } else {
                 results = await createAnnouncements({ ...announcemnetObj, date: datetime }, sendOnWhatsapp);
             }

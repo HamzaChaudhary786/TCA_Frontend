@@ -75,7 +75,7 @@ const Submissions = () => {
   const { data, isPending, isSuccess, isError, refetch, isRefetching } = useQuery({
     queryKey: ["submissions"],
     queryFn: async () => {
-      let result = await getMultipleAssignmentsForGrading(location.state._id);
+      let result = await getMultipleAssignmentsForGrading(location.state.id);
       return result;
     }
   });
@@ -234,7 +234,7 @@ const Submissions = () => {
                       header={false}
                       index={index + 1}
                       bgColor={"#FFFFFF"}
-                      key={submission?.studentID?._id || index}
+                      key={submission?.studentID?.id || index}
                       name={submission?.studentID?.name}
                       submissionData={submission?.submission}
                       submission={submission?.submission?.submittedAt}

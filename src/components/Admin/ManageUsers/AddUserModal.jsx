@@ -94,7 +94,7 @@ const LevelSelectable = ({ label, alllevels, defaultValue }) => {
                         className='border outline-none rounded-md border-black/20 px-4 w-full py-[8px]'>
                         <option value="">Enroll in</option>
                         {alllevels.map((item) => {
-                            return <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
+                            return <option key={item.id} value={JSON.stringify(item)}>{item.name}</option>
                         })}
                     </select>
                 </div>
@@ -220,7 +220,7 @@ const AddUserModal = ({ closeModal, refetch }) => {
                     gender: e.target.gender.value, // Capture gender from select dropdown
                     bio: e.target[6].value,
                     phoneNumber: e.target[7].value,
-                    levelID: JSON.parse(e.target[8].value)._id,
+                    levelID: JSON.parse(e.target[8].value).id,
                     isAccepted: true,
                     guardianName: e.target[9].value,
                     guardianEmail: e.target[10].value,
@@ -232,7 +232,7 @@ const AddUserModal = ({ closeModal, refetch }) => {
                 const response = await registerStudent(dataBody);
                 console.log(response, "user response data");
 
-                if (response?._id) {
+                if (response?.id) {
                     toast.success("User added successfully!");
                     localStorage.removeItem('addUserFormData');
                     await refetch();
@@ -270,7 +270,7 @@ const AddUserModal = ({ closeModal, refetch }) => {
                 };
 
                 const response = await registerStudent(dataBody);
-                if (response?._id) {
+                if (response?.id) {
                     toast.success("User added successfully!");
                     localStorage.removeItem('addUserFormData');
                     await refetch();

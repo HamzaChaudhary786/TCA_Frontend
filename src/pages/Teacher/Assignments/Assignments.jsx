@@ -96,13 +96,13 @@ const Assignments = () => {
                   {isSuccess && data.map((assignment, index) => {
                     const expectedCount = assignment?.classroomID?.students?.filter(student => (
                       (!student?.subjects || student?.subjects?.length === 0) ||
-                      student?.subjects?.some(sub => (sub?._id || sub)?.toString() === (assignment?.subjectID?._id || assignment?.subjectID)?.toString())
+                      student?.subjects?.some(sub => (sub?.id || sub)?.toString() === (assignment?.subjectID?.id || assignment?.subjectID)?.toString())
                     ))?.length || 0;
 
                     return (
                       <QuizAssignmentRow
-                        key={assignment._id}
-                        id={assignment._id}
+                        key={assignment.id}
+                        id={assignment.id}
                         alldata={assignment}
                         toggleAssignmentMenu={(e) => toggleAssignmentMenuOpen(e)}
                         data={assignment}
@@ -113,7 +113,7 @@ const Assignments = () => {
                         deadline={assignment.dueDate}
                         bgColor={"#FFFFFF"}
                         header={false}
-                        submissions={`${assignment.submissions.length} / ${expectedCount}`}
+                        submissions={`${assignment.submissions?.length || 0} / ${expectedCount}`}
                       actions={
                         <div className="flex gap-1 lg:gap-3 justify-center items-center">
                           <span className="text-[blue] cursor-pointer" onClick={() => {
@@ -127,7 +127,7 @@ const Assignments = () => {
                             toggleBlur();
                           }}><FaEye className="w-6 h-6" /></span>
                           <span className="text-red cursor-pointer " onClick={() => {
-                            assignmentDellMutate.mutate(assignment?._id);
+                            assignmentDellMutate.mutate(assignment?.id);
                           }}><MdDelete className="w-6 h-6" /></span>
                         </div>
                       }

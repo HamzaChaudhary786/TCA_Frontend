@@ -19,7 +19,7 @@ const DataRow = (props) => {
     // Set the initial state based on attendance data
     if (props.attendeceData) {
       const studentAttendance = props.attendeceData.find(
-        (item) => item.studentID === props.data?._id
+        (item) => item.studentID === props.data?.id
       );
 
       if (studentAttendance) {
@@ -36,7 +36,7 @@ const DataRow = (props) => {
     let temparray = props.attendeceData;
     console.log(temparray);
     console.log(props.index);
-    temparray[props.index - 1] = { studentID: props?.data?._id, isPresent: true, late: false };
+    temparray[props.index - 1] = { studentID: props?.data?.id, isPresent: true, late: false };
     // temparray[props.index-1] = {studentID: props.classname, status: "present" } ;
     console.log("after : ", temparray)
     props.setAttendenceData(temparray);
@@ -48,7 +48,7 @@ const DataRow = (props) => {
 
   const onAbsentClick = () => {
     let temparray = props.attendeceData;
-    temparray[props.index - 1] = { studentID: props?.data?._id, isPresent: false, late: false };
+    temparray[props.index - 1] = { studentID: props?.data?.id, isPresent: false, late: false };
     props.setAttendenceData(temparray);
     setPresent(false);
     setAbsent(true);
@@ -58,7 +58,7 @@ const DataRow = (props) => {
 
   const onLateClick = () => {
     let temparray = props.attendeceData;
-    temparray[props.index - 1] = { studentID: props?.data?._id, isPresent: true, late: true };
+    temparray[props.index - 1] = { studentID: props?.data?.id, isPresent: true, late: true };
     props.setAttendenceData(temparray);
     setPresent(false);
     setLate(true);

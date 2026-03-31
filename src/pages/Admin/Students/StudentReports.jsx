@@ -58,7 +58,7 @@ const StudentReports = () => {
                             return <option className="text-black" value={JSON.stringify(item)}>{item.name}</option>
                           })} */}
                           {allLevels.map((item) => {
-                            return <option key={item._id} className="text-black" value={JSON.stringify(item)}>{item.name}</option>
+                            return <option key={item.id} className="text-black" value={JSON.stringify(item)}>{item.name}</option>
                           })}
                         </select>
                       </div>
@@ -86,8 +86,8 @@ const StudentReports = () => {
                         bgColor={"#FFFFFF"}
                         studentName={std.name}
                         contact={std.phoneNumber}
-                        studentClass={std?.class}
-                        studentRollno={std?.rollno}
+                        studentClass={std.level?.name || "N/A"}
+                        studentRollno={std.rollNo || "N/A"}
                         studentProfile={std?.profilePic}
                         onClickFunction={handleFunctionClick(std)}
                       />
@@ -116,7 +116,7 @@ const StudentReports = () => {
 
                     {/* When only class filter is applied */}
                     {adminUsersData.allStudents.map((std, index) => {
-                      if (classFilter && (JSON.parse(classFilter)._id == std.levelID)) {
+                      if (classFilter && (JSON.parse(classFilter).id == std.levelID)) {
                         return <DataRows
                           key={index}
                           header={false}

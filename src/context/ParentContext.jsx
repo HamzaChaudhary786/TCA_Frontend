@@ -29,12 +29,12 @@ export const ParentProvider = ({ children }) => {
     // });
 
     const assignmentQuery = useQuery({
-        queryKey: ["assignment", selectedChild?._id], queryFn: async () => {
-            const results = await getChildAssignments(selectedChild?._id);
+        queryKey: ["assignment", selectedChild?.id], queryFn: async () => {
+            const results = await getChildAssignments(selectedChild?.id);
             if (results?.assignments) setAllAssignments(results.assignments);
             if (results?.quizzes) setAllQuizes(results.quizzes);
             return results;
-        }, staleTime: 300000, enabled: parentLogedIn && !!selectedChild?._id
+        }, staleTime: 300000, enabled: parentLogedIn && !!selectedChild?.id
     });
 
     const quizQuery = useQuery({

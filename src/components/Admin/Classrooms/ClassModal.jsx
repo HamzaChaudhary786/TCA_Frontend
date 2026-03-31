@@ -37,7 +37,7 @@ const Selectable = ({ label, options = [], setSelectedOption, selectedOption }) 
       >
         <option value="">— Select —</option>
         {options.map((item) => (
-          <option key={item._id} value={JSON.stringify(item)}>
+          <option key={item.id} value={JSON.stringify(item)}>
             {item.name}
           </option>
         ))}
@@ -122,7 +122,7 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, isLoading }) =>
         <div className="flex flex-wrap gap-1.5">
           {selectedOptions.map(opt => (
             <span
-              key={opt._id}
+              key={opt.id}
               onClick={() => toggle(opt)}
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#6A00FF]/8 border border-[#6A00FF]/20 text-xs text-[#6A00FF] cursor-pointer hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all group"
             >
@@ -139,7 +139,7 @@ const MultiSelectField = ({ options = [], placeholder, onSelect, isLoading }) =>
           const checked = selectedOptions.includes(option);
           return (
             <div
-              key={option._id}
+              key={option.id}
               onClick={() => toggle(option)}
               className={`flex items-center gap-2 p-2 rounded-xl cursor-pointer transition-all border text-sm
                 ${checked
@@ -198,8 +198,8 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
   const { adminUsersData, allLevels } = useAdmin();
   const { toggleBlur } = useBlur();
 
-  const { studentWithLevel = [], isLoading: studentsLoading } = useGetAllStudentsWithLevel(selectedLevel?._id);
-  const { subjectWithLevel = [], isLoading: subjectsLoading } = useGetAllSubjectsWithLevel(selectedLevel?._id);
+  const { studentWithLevel = [], isLoading: studentsLoading } = useGetAllStudentsWithLevel(selectedLevel?.id);
+  const { subjectWithLevel = [], isLoading: subjectsLoading } = useGetAllSubjectsWithLevel(selectedLevel?.id);
 
   const handleClose = useCallback(() => {
     setopen(false);
@@ -229,7 +229,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
       const curr = prev[teacherId] || [];
       const updatedSubjects = isChecked
         ? [...curr, subject]
-        : curr.filter(s => s._id !== subject._id);
+        : curr.filter(s => s.id !== subject.id);
 
       const newSubjectsState = { ...prev, [teacherId]: updatedSubjects };
 
@@ -238,8 +238,8 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
         Object.entries(newSubjectsState).flatMap(([tid, subjects]) =>
           subjects.map(subj => ({
             teacher: tid,
-            subject: subj._id,
-            type: headTeacher?._id === tid ? "head" : "teacher",
+            subject: subj.id,
+            type: headTeacher?.id === tid ? "head" : "teacher",
           }))
         )
       );
@@ -274,10 +274,10 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
 
     createClassroomMutation.mutate({
       name: classroomName.trim(),
-      levelID: selectedLevel._id,
-      students: selectedStudents.map(s => s._id),
+      levelID: selectedLevel.id,
+      students: selectedStudents.map(s => s.id),
       teachers: teacherArr,
-      headTeacher: headTeacher?._id || "",
+      headTeacher: headTeacher?.id || "",
     });
   };
 
@@ -391,11 +391,11 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                     <SectionLabel icon={<IoBook className="w-4 h-4 text-[#6A00FF]" />} text="Assign Subjects to Teachers" />
                     <div className="space-y-3">
                       {selectedTeachers.map(teacher => (
-                        <div key={teacher._id} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+                        <div key={teacher.id} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
                           <div className="flex items-center gap-2 mb-3">
                             <Avatar name={teacher.name} src={teacher.profilePic} />
                             <span className="text-sm font-semibold text-gray-700">{teacher.name}</span>
-                            {headTeacher?._id === teacher._id && (
+                            {headTeacher?.id === teacher.id && (
                               <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-600 font-semibold">
                                 HEAD
                               </span>
@@ -408,10 +408,10 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                           ) : (
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                               {subjectWithLevel.map(subject => {
-                                const checked = selectedSubjects[teacher._id]?.some(s => s._id === subject._id) ?? false;
+                                const checked = selectedSubjects[teacher.id]?.some(s => s.id === subject.id) ?? false;
                                 return (
                                   <label
-                                    key={subject._id}
+                                    key={subject.id}
                                     className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer border text-xs transition-all
                                       ${checked
                                         ? 'bg-[#6A00FF]/8 border-[#6A00FF]/30 text-[#6A00FF]'
@@ -421,7 +421,7 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch, editData }) => {
                                     <input
                                       type="checkbox"
                                       checked={checked}
-                                      onChange={e => handleSubjectCheckboxChange(teacher._id, subject, e.target.checked)}
+                                      onChange={e => handleSubjectCheckboxChange(teacher.id, subject, e.target.checked)}
                                       className="sr-only"
                                     />
                                     <div className={`w-3.5 h-3.5 rounded flex-shrink-0 flex items-center justify-center border transition-all ${checked ? 'bg-[#6A00FF] border-[#6A00FF]' : 'border-gray-300 bg-white'

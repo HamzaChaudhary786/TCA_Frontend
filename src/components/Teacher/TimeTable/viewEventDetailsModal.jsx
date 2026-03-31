@@ -73,10 +73,10 @@ export default function ViewEventDetailsModal({
     oneTime: true,
     meetingUrl: event.meetingUrl,
     classroomID: event.classroomID,
-    subjectID: event.subjectID._id,
+    subjectID: event.subjectID,
     startEventDate: event.startEventDate,
     endEventDate: event.endEventDate,
-    teacher: { teacherID: userData._id, status: "absent" },
+    teacher: { teacherID: userData.id, status: "absent" },
     updateSeries: eventType
   })
 
@@ -105,7 +105,7 @@ export default function ViewEventDetailsModal({
 
   const handleTeacherAttendance = async () => {
     console.log("teacher attendnece clicked");
-    const respo = await teacherPresent(event._id);
+    const respo = await teacherPresent(event.id);
     console.log("teaccher attendance result : ", respo);
   }
 
@@ -144,7 +144,7 @@ export default function ViewEventDetailsModal({
 
   const handleCancelMeeting = async () => {
     setLoading(true);
-    const response = await cancelClass(event._id);
+    const response = await cancelClass(event.id);
     if (response != "error") {
       await classesRefetch();
       setLoading(false);
@@ -164,17 +164,17 @@ export default function ViewEventDetailsModal({
         oneTime: true,
         meetingUrl: event.meetingUrl,
         classroomID: event.classroomID,
-        subjectID: event.subjectID._id,
+        subjectID: event.subjectID,
         startEventDate: event.startEventDate,
         endEventDate: event.endEventDate,
-        teacher: { teacherID: userData._id, status: "absent" },
+        teacher: { teacherID: userData.id, status: "absent" },
         updateSeries: false,
       });
 
       setStartDate(moment(event.startTime).format("YYYY-MM-DD"));
       setEventType(false); // reset checkbox too
     }
-  }, [open, event, userData._id]);
+  }, [open, event, userData.id]);
 
 
 
@@ -197,7 +197,7 @@ export default function ViewEventDetailsModal({
     const endEventDate = new Date(classObj.endEventDate).toISOString().split('T')[0];
     // Construct the payload object
     const obj = {
-      classID: event._id,
+      classID: event.id,
       title: classObj.title,
       startTime: isoFormattedStringStartTime,
       endTime: isoFormattedStringEndTime,
@@ -207,7 +207,7 @@ export default function ViewEventDetailsModal({
       subjectID: classObj.subjectID,
       startEventDate: startDate,
       endEventDate: endEventDate,
-      teacher: { teacherID: userData._id, status: classObj.status },
+      teacher: { teacherID: userData.id, status: classObj.status },
       updateSeries: eventType,
     };
 
@@ -265,7 +265,7 @@ export default function ViewEventDetailsModal({
                 ref={eventNameRef}
                 contentEditable={editingName}
                 onClick={(e) => e.stopPropagation()}
-                dangerouslySetInnerHTML={{ __html: event.subjectID.name }}
+                dangerouslySetInnerHTML={{ __html: event.subject?.name || "No Subject" }}
                 className={`text-lg md:text-xl font-medium px-4 py-2 rounded-lg transition-all duration-200 ${editingName
                   ? "bg-[#E5E7EB] border border-[#D1D5DB] shadow-sm focus:outline-none"
                   : "hover:bg-[#EDEEF0] cursor-pointer"
@@ -290,7 +290,7 @@ export default function ViewEventDetailsModal({
             <div className="flex flex-col w-full gap-1">
               <p className="text-xs font-semibold text-grey_700">Instructor</p>
               <div className="flex justify-between border-[1.5px] py-2 px-4 rounded-lg w-full items-center border-grey/50">
-                <p className="text-sm text-custom-gray-3">{event.teacher.teacherID.name}</p>
+                <p className="text-sm text-custom-gray-3">{event.teacher?.name || "No Teacher"}</p>
               </div>
             </div>
           </div>

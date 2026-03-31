@@ -39,7 +39,7 @@ const Announcements = () => {
       </div>
       <div className="flex flex-col w-full px-6 bg-white h-80 overflow-y-auto register-scrollbar border-t-4 rounded-lg md:py-4 border-t-[#0B1053">
 
-        {announcementByUsertype?.map((item) => <Announcement item={item} />)}
+        {announcementByUsertype?.map((item, index) => <Announcement key={item.id || index} item={item} />)}
         {announcementByUsertype?.length == 0 && <div>No Announcements to display</div>}
 
       </div>

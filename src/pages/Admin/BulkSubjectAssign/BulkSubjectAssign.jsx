@@ -81,7 +81,7 @@ const UnifiedSubjectAssign = () => {
   const { classrooms, classroomsLoading } = useGetClassroomsByLevel(selectedLevel);
   const { subjects: levelSubjects, subjectsLoading } = useGetSubjectsOfLevel(selectedLevel);
 
-  const currentClassroomData = classrooms?.find((c) => c._id === selectedClassroom);
+  const currentClassroomData = classrooms?.find((c) => c.id === selectedClassroom);
   const activeStudents = currentClassroomData?.students || [];
 
   const getInitials = (name = "") =>
@@ -100,7 +100,7 @@ const UnifiedSubjectAssign = () => {
     if (activeStudents.length > 0) {
       const map = {};
       activeStudents.forEach((s) => {
-        map[s._id] = s.subjects?.map((x) => (typeof x === "string" ? x : x._id)) || [];
+        map[s.id] = s.subjects?.map((x) => (typeof x === "string" ? x : x.id)) || [];
       });
       setIndividualAssignments(map);
     } else {
@@ -115,7 +115,7 @@ const UnifiedSubjectAssign = () => {
     );
 
   const handleSelectAll = () => {
-    const allIds = levelSubjects?.map((s) => s._id) || [];
+    const allIds = levelSubjects?.map((s) => s.id) || [];
     const allSelected = allIds.every((id) => bulkSelectedSubjects.includes(id));
     setBulkSelectedSubjects(allSelected ? [] : allIds);
   };
@@ -129,7 +129,7 @@ const UnifiedSubjectAssign = () => {
     });
     if (selectedClassroom) {
       const map = {};
-      activeStudents.forEach((s) => (map[s._id] = [...bulkSelectedSubjects]));
+      activeStudents.forEach((s) => (map[s.id] = [...bulkSelectedSubjects]));
       setIndividualAssignments(map);
     }
     setBulkSelectedSubjects([]);
@@ -163,7 +163,7 @@ const UnifiedSubjectAssign = () => {
 
   const allSelected =
     levelSubjects?.length > 0 &&
-    levelSubjects.every((s) => bulkSelectedSubjects.includes(s._id));
+    levelSubjects.every((s) => bulkSelectedSubjects.includes(s.id));
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
@@ -209,7 +209,7 @@ const UnifiedSubjectAssign = () => {
                   >
                     <option value="">Select a level…</option>
                     {levels?.map((lvl) => (
-                      <option key={lvl._id} value={lvl._id}>{lvl.name}</option>
+                      <option key={lvl.id} value={lvl.id}>{lvl.name}</option>
                     ))}
                   </select>
                   <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]">
@@ -232,7 +232,7 @@ const UnifiedSubjectAssign = () => {
                   >
                     <option value="">Select a classroom…</option>
                     {classrooms?.map((cls) => (
-                      <option key={cls._id} value={cls._id}>{cls.name}</option>
+                      <option key={cls.id} value={cls.id}>{cls.name}</option>
                     ))}
                   </select>
                   <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#94A3B8]">
@@ -309,10 +309,10 @@ const UnifiedSubjectAssign = () => {
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
                     {levelSubjects?.map((sub) => {
-                      const isChecked = bulkSelectedSubjects.includes(sub._id);
+                      const isChecked = bulkSelectedSubjects.includes(sub.id);
                       return (
                         <label
-                          key={sub._id}
+                          key={sub.id}
                           className={[
                             "flex items-center gap-2 border-[1.5px] rounded-[10px]",
                             "px-3 py-2.5 cursor-pointer select-none transition-all duration-150",
@@ -323,7 +323,7 @@ const UnifiedSubjectAssign = () => {
                         >
                           <input type="checkbox" className="hidden"
                             checked={isChecked}
-                            onChange={() => handleBulkSubjectToggle(sub._id)} />
+                            onChange={() => handleBulkSubjectToggle(sub.id)} />
                           <span className={[
                             "w-[18px] h-[18px] flex-shrink-0 rounded-[5px] flex items-center justify-center",
                             "border-[1.5px] transition-all duration-150",
@@ -380,7 +380,7 @@ const UnifiedSubjectAssign = () => {
                   <>
                     {activeStudents.map((student) => (
                       <div
-                        key={student._id}
+                        key={student.id}
                         className="bg-white border border-[#E2E8F0] rounded-[20px] px-5 py-4
                                    shadow-[0_1px_3px_rgba(15,23,42,0.06)]
                                    hover:shadow-[0_4px_16px_rgba(15,23,42,0.08)]
@@ -411,10 +411,10 @@ const UnifiedSubjectAssign = () => {
                             <Loader />
                           ) : (
                             levelSubjects?.map((sub) => {
-                              const checked = individualAssignments[student._id]?.includes(sub._id);
+                              const checked = individualAssignments[student.id]?.includes(sub.id);
                               return (
                                 <label
-                                  key={sub._id}
+                                  key={sub.id}
                                   className={[
                                     "inline-flex items-center gap-[5px] px-3 py-1 rounded-full",
                                     "border-[1.5px] text-[12.5px] font-medium cursor-pointer select-none",
@@ -426,7 +426,7 @@ const UnifiedSubjectAssign = () => {
                                 >
                                   <input type="checkbox" className="hidden"
                                     checked={checked || false}
-                                    onChange={() => handleIndividualToggle(student._id, sub._id)} />
+                                    onChange={() => handleIndividualToggle(student.id, sub.id)} />
                                   <span className={[
                                     "w-[7px] h-[7px] rounded-full flex-shrink-0",
                                     checked ? "bg-[#2563EB]" : "bg-[#CBD5E1]",

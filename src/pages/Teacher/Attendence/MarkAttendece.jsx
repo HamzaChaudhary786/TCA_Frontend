@@ -28,7 +28,7 @@ const MarkAttendence = () => {
 
 
         mutationKey: ["mark-attendence"], mutationFn: async () => {
-            const result = await markAttendence(attendeceData, location?.state?._id, location?.state?.
+            const result = await markAttendence(attendeceData, location?.state?.id, location?.state?.
                 classroomID, location?.state?.startTime
             );
             return result;
@@ -63,31 +63,31 @@ const MarkAttendence = () => {
             const existingAttendance = location.state.attendance || [];
             let temparray = [];
 
-            const subjectId = location.state?.subjectID?._id;
-            const matchedStudentsList = location.state?.classroom?.studentdetails?.filter(student =>
+            const subjectId = location.state?.subject?.id || location.state?.subjectID?.id || location.state?.subjectID;
+            const matchedStudentsList = (location.state?.classroom?.students || location.state?.classroom?.studentDetails || location.state?.classroom?.studentdetails || []).filter(student =>
                 student.subjects?.includes(subjectId)
-            ) || [];
+            );
 
             if (existingAttendance.length > 0) {
                 console.log("Existing attendance found, pre-filling data:", existingAttendance);
                 temparray = matchedStudentsList.map(student => {
                     const studentData = existingAttendance.find(
-                        item => (item.studentID._id || item.studentID) === student._id
+                        item => (item.studentID.id || item.studentID) === student.id
                     );
                     if (studentData) {
                         return {
-                            studentID: studentData.studentID._id || studentData.studentID,
+                            studentID: studentData.studentID.id || studentData.studentID,
                             isPresent: studentData.isPresent,
                             late: studentData.late || false
                         };
                     } else {
-                        return { studentID: student._id, isPresent: true, late: false };
+                        return { studentID: student.id, isPresent: true, late: false };
                     }
                 });
             } else {
                 console.log("No existing attendance, defaulting all present.");
                 temparray = matchedStudentsList.map(student => ({
-                    studentID: student._id,
+                    studentID: student.id,
                     isPresent: true,
                     late: false
                 }));
@@ -102,10 +102,10 @@ const MarkAttendence = () => {
 
 
 
-    const subjectId = classData?.subjectID?._id;
+    const subjectIdCheck = classData?.subject?.id || classData?.subjectID?.id || classData?.subjectID;
 
-    const matchedStudents = classData?.classroom?.studentdetails?.filter(student =>
-        student.subjects?.includes(subjectId)
+    const matchedStudents = (classData?.classroom?.students || classData?.classroom?.studentDetails || classData?.classroom?.studentdetails || []).filter(student =>
+        student.subjects?.includes(subjectIdCheck)
     );
 
     // Example output:

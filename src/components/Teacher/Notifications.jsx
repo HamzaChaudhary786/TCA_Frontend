@@ -74,13 +74,13 @@ const Notifications = ({ onclose, dashboard }) => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">📢 Announcements</h2>
             {announcementByUsertype && announcementByUsertype.length > 0 ? announcementByUsertype?.map((announcement) => (
               <div
-                key={announcement._id}
+                key={announcement.id}
                 className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300" // Card styles
               >
                 {/* Announcement Header */}
                 <div
                   className="p-5 cursor-pointer flex flex-col justify-between items-center hover:bg-gray-50 transition-colors duration-200" // Header styles
-                  onClick={() => handleToggleDetails(announcement._id)}
+                  onClick={() => handleToggleDetails(announcement.id)}
                 >
                   <div>
                     <p className="text-xs text-center font-medium text-indigo-600 uppercase tracking-wide">{announcement.type}</p>
@@ -90,7 +90,7 @@ const Notifications = ({ onclose, dashboard }) => {
                 </div>
 
                 {/* Announcement Details */}
-                {activeAnnouncement === announcement._id && (
+                {activeAnnouncement === announcement.id && (
                   <div className="p-5 bg-gray-50 border-t border-gray-200"> {/* Details styles */}
                     <p className="text-sm text-gray-700 leading-relaxed">{announcement.description}</p>
                   </div>
@@ -135,7 +135,7 @@ const Notifications = ({ onclose, dashboard }) => {
               <p className="text-center text-gray-500 py-4">Loading notifications...</p>
             ) : notifications && notifications.length > 0 ? (
               notifications.map((notification) => (
-                <Notification key={notification._id} data={notification} />
+                <Notification key={notification.id} data={notification} />
               ))
             ) : (
               <p className="text-center text-gray-500 py-4">No notifications</p>

@@ -47,7 +47,7 @@ const AnnouncementCard = ({ announcement, deleteAnnouncement, editAnnouncement, 
                                 <p>Edit</p>
                             </div>
                             <div className='border-b border-b-black/10'></div>
-                            <div onClick={() => { deleteAnnouncement(announcement._id), toggleMenu(); refetch() }} className='cursor-pointer flex gap-2 items-center py-2 px-2 text-maroon'>
+                            <div onClick={() => { deleteAnnouncement(announcement.id), toggleMenu(); refetch() }} className='cursor-pointer flex gap-2 items-center py-2 px-2 text-maroon'>
                                 <RiDeleteBin6Line size={20} />
                                 <p>Delete</p>
                             </div>

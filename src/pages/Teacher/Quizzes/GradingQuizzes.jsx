@@ -83,7 +83,7 @@ const GradingQuizzes = () => {
           grade: item.grade,
           marks: item.marks,
           feedback: item.feedback,
-          studentID: item.studentID._id
+          studentID: item.studentID.id
         }
         objArray.push(obj);
       }
@@ -93,7 +93,7 @@ const GradingQuizzes = () => {
 
   const setInputField = useCallback((studentID, field, value) => {
     setGradingData(prev => prev.map(inp => {
-      if (inp?.studentID._id == studentID) {
+      if (inp?.studentID.id == studentID) {
         return { ...inp, [field]: value }
       }
       return inp;
@@ -103,7 +103,7 @@ const GradingQuizzes = () => {
   const gradeMutation = useMutation({
     mutationFn: async (data) => {
       console.log("data being sent is : ", data);
-      let result = await gradeQuizes({ submissions: data }, location.state._id);
+      let result = await gradeQuizes({ submissions: data }, location.state.id);
       return result;
     }, onSuccess: () => {
       toast.dismiss();
@@ -122,9 +122,9 @@ const GradingQuizzes = () => {
   });
 
   const allQuizQuery = useQuery({
-    queryKey: ["submissions", "quiz", location.state._id],
+    queryKey: ["submissions", "quiz", location.state.id],
     queryFn: async () => {
-      let result = await getMultipleQuizesForGrading(location.state._id);
+      let result = await getMultipleQuizesForGrading(location.state.id);
       return result;
     },
     staleTime: 0 // always fetch fresh grades
@@ -270,7 +270,7 @@ const GradingQuizzes = () => {
                   marks={submission?.marks}
                   profileLink={submission.studentID.profilePic || IMAGES.Profile}
                   setInputField={setInputField}
-                  id={submission?.studentID?._id}
+                  id={submission?.studentID?.id}
                   feedback={submission?.feedback}
                   name={submission?.studentID?.name}
                   marksObtained={submission?.marksObtained}

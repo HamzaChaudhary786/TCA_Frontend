@@ -20,7 +20,7 @@ const Teachers = () => {
 
   const handleFunctionClick = (thr) => {
     return () => {
-      navigate(`/admin/teachers/${thr.name}`, { state: thr });
+      navigate(`/admin/teachers/${thr.teacher.name}`, { state: thr });
     };
   };
 
@@ -125,7 +125,7 @@ const Teachers = () => {
                               key={JSON.stringify(item)}
                               index={index + 1}
                               teacherName={item.teacher.name}
-                              teacherId={item.teacher._id.slice(0, 4)}
+                              teacherId={item.teacher.id.slice(0, 4)}
                               subject={item.subject.name}
                               classAvg={item.classAvg}
                               attendance={

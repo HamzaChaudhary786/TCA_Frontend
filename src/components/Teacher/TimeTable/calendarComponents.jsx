@@ -42,7 +42,7 @@ export const CustomEvent = ({ event, setevents, refetch }) => {
           }`}
         style={{ height: `${eventHeight - 4}px`, minHeight: `${eventHeight - 4}px` }}
         onClick={() => {
-          return event.teacher.teacherID.name ? setdetailsModalOpen(true) : null;
+          return event.teacher?.name ? setdetailsModalOpen(true) : null;
         }}
       >
         <div className="flex flex-col h-full justify-start p-3 space-y-2">
@@ -63,7 +63,7 @@ export const CustomEvent = ({ event, setevents, refetch }) => {
           <div className="text-[11px] leading-tight">
             <span className="font-bold text-slate-800" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>Subject:</span>
             <div className="font-semibold text-slate-900 truncate mt-0.5" style={{ textShadow: '0 1px 2px rgba(255,255,255,0.6)' }}>
-              {event.subjectID.name ? event.subjectID.name : ""}
+              {event.subject?.name ? event.subject.name : ""}
             </div>
           </div>
         </div>

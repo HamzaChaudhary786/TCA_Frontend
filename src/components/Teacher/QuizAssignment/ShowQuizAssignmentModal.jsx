@@ -84,7 +84,7 @@ const ShowQuizAssignmentModal = ({ data, isQuiz, setIsShow }) => {
                     {files?.length > 0 ? (
                         <ul className="space-y-2">
                             {files.map((file) => (
-                                <li key={file._id} className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
+                                <li key={file.id} className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
                                     <span className="truncate text-sm">{file.name}</span>
                                     <a
                                         href={file.url}
@@ -107,17 +107,17 @@ const ShowQuizAssignmentModal = ({ data, isQuiz, setIsShow }) => {
                 <div>
                     <h3 className="font-semibold text-lg mb-2">👨‍🏫 Assigned Teachers</h3>
                     {classroomID?.teachers?.some(
-                        (t) => t.teacher._id === userData._id && t.subject._id === subjectID._id
+                        (t) => t.teacher.id === userData.id && t.subject.id === subjectID.id
                     ) ? (
                         <ul className="space-y-1 text-sm">
                             {classroomID.teachers
                                 .filter(
                                     (t) =>
-                                        t.teacher._id === userData._id &&
-                                        t.subject._id === subjectID._id
+                                        t.teacher.id === userData.id &&
+                                        t.subject.id === subjectID.id
                                 )
                                 .map((t) => (
-                                    <li key={t._id} className="bg-gray-50 px-3 py-2 rounded-md">
+                                    <li key={t.id} className="bg-gray-50 px-3 py-2 rounded-md">
                                         👤 <span className="font-medium">Name:</span> {t.teacher.name}
                                         <br />
                                         📘 <span className="font-medium">Subject:</span> {t.subject.name}
@@ -138,7 +138,7 @@ const ShowQuizAssignmentModal = ({ data, isQuiz, setIsShow }) => {
                         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-sm">
                             {classroomID.students.map((student) => (
                                 <li
-                                    key={student._id}
+                                    key={student.id}
                                     className="bg-blue-50 text-blue-800 px-3 py-2 rounded-md"
                                 >
                                     👤 {student.name}<br />

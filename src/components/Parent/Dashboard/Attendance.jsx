@@ -6,7 +6,7 @@ import { useGetAllSubjectAttendence } from "../../../api/Parent/OverallAttendenc
 
 const Attendance = () => {
     const { selectedChild } = useParent();
-    const { studentAllSubjectsAttendence } = useGetAllSubjectAttendence(selectedChild?._id);
+    const { studentAllSubjectsAttendence } = useGetAllSubjectAttendence(selectedChild?.id);
 
     // Loading state to ensure the component waits for data
     const [isLoading, setIsLoading] = useState(true);

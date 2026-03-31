@@ -95,7 +95,7 @@ const CreateQuizAssignmentModal = ({
             ? new Date(`${QADate}T${QATime}`).toISOString()
             : data?.dueDate || new Date().toISOString(),
           files: filesArr,
-          id: data?._id,
+          id: data?.id,
         };
         assignmentUpdateMutate.mutate(payload);
         return;
@@ -108,12 +108,12 @@ const CreateQuizAssignmentModal = ({
 
       // 3) loop sequentially
       for (const classroom of selectedClassroom) {
-        const classroomID = classroom._id;
+        const classroomID = classroom.id;
 
         // pick the right subject for this teacher + classroom
         let subjectID = selectedSubject;
         // const teachEntry = classroom.teachers.find(
-        //   t => t.teacher === userData._id
+        //   t => t.teacher === userData.id
         // );
         // if (teachEntry) subjectID = teachEntry.subject;
 
@@ -176,20 +176,20 @@ const CreateQuizAssignmentModal = ({
           ...quizAssignmentDataObj,
           dueDate,
           files: filesArr,
-          id: data?._id,
+          id: data?.id,
         };
 
         quizEditMutate.mutate(sendingObj);
       } else {
         // Loop through all selected classrooms for quiz creation
         for (const classroom of selectedClassroom) {
-          const classroomID = classroom._id;
+          const classroomID = classroom.id;
 
           let subjectID = selectedSubject;
 
           // (Optional) Dynamic subject detection based on teacher
           // const teachEntry = classroom.teachers.find(
-          //   t => t.teacher === userData._id
+          //   t => t.teacher === userData.id
           // );
           // if (teachEntry) subjectID = teachEntry.subject;
 
@@ -223,7 +223,7 @@ const CreateQuizAssignmentModal = ({
 
   const assignmentUpdateMutate = useMutation({
     mutationFn: async (dataobj) => {
-      const id = dataobj?.id || data?._id;
+      const id = dataobj?.id || data?.id;
       if (!id) {
         throw new Error("Assignment ID is missing");
       }
@@ -262,7 +262,7 @@ const CreateQuizAssignmentModal = ({
 
   const quizEditMutate = useMutation({
     mutationFn: async (dataobj) => {
-      const id = dataobj?.id || data?._id;
+      const id = dataobj?.id || data?.id;
       if (!id) {
         throw new Error("Quiz ID is missing");
       }
@@ -303,9 +303,9 @@ const CreateQuizAssignmentModal = ({
     isSuccess: teacherIsSuccess,
     isPending: teacherSubjectPending
   } = useQuery({
-    queryKey: ["teacherSubjectsOfClassrooms", selectedClassroom.map(c => c._id)],
+    queryKey: ["teacherSubjectsOfClassrooms", selectedClassroom.map(c => c.id)],
     queryFn: async () => {
-      const classroomIDs = selectedClassroom.map(c => c._id);
+      const classroomIDs = selectedClassroom.map(c => c.id);
       return await getTeacherSubjectsOfClassroom({ classroomIDs });
     },
     enabled: selectedClassroom.length > 0,
@@ -334,7 +334,7 @@ const CreateQuizAssignmentModal = ({
     await handleProfileImageUpdate(file, (url) => {
       console.log("Uploaded File URL:", url);
       setUploadedFileUrl(url);
-    }, setLoading, 'auto');
+    }, setLoading);
   };
 
   const handleRemoveFile = () => {
@@ -424,10 +424,10 @@ const CreateQuizAssignmentModal = ({
                       }}
                     >
                       {allClassrooms?.map(item => {
-                        const isChecked = selectedClassroom.some(selected => selected._id === item._id);
+                        const isChecked = selectedClassroom.some(selected => selected.id === item.id);
                         return (
                           <label
-                            key={item._id}
+                            key={item.id}
                             style={{
                               display: "flex",
                               alignItems: "center",
@@ -441,10 +441,10 @@ const CreateQuizAssignmentModal = ({
                               type="checkbox"
                               checked={isChecked}
                               onChange={() => {
-                                const exists = selectedClassroom.some(c => c._id === item._id);
+                                const exists = selectedClassroom.some(c => c.id === item.id);
                                 if (exists) {
                                   setSelectedClassroom(prev =>
-                                    prev.filter(c => c._id !== item._id)
+                                    prev.filter(c => c.id !== item.id)
                                   );
                                 } else {
                                   setSelectedClassroom(prev => [...prev, item]);

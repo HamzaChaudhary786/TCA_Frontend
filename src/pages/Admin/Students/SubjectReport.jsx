@@ -32,27 +32,29 @@ const SubjectReport = () => {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
 
   useEffect(() => {
+    console.log("location.state in SubjectReport:", location.state);
     setStudentData(location.state);
   }, [location.state])
 
   const { data: report, isPending, isError } = useQuery({
-    queryKey: ["report"], queryFn: async () => {
-      if (studentData) {
-        return await getStudentReport(location.state?._id);
-      }
-    }
+    queryKey: ["report", location.state?.id],
+    queryFn: async () => await getStudentReport(location.state?.id),
+    enabled: !!location.state?.id
   });
 
-  const { data: subjects, isSuccess, isPending: subjectPending } = useQuery({ 
-    queryKey: ["subjectofstudents", location.state?._id], 
-    queryFn: async () => await getStudentSubjectsForAdmin(location.state?._id),
-    enabled: !!location.state?._id
+  const { data: subjects, isSuccess, isPending: subjectPending } = useQuery({
+    queryKey: ["subjectofstudents", location.state?.id],
+    queryFn: async () => await getStudentSubjectsForAdmin(location.state?.id),
+    enabled: !!location.state?.id
   });
 
-  const { data: subjectReport, isPending: subjectReportPending } = useQuery({ 
-    queryKey: ["student-assignments-quizes", location.state?._id, selectedSubject && JSON.parse(selectedSubject).subject?._id], 
-    queryFn: async () => await getStudentSubjectReport(location.state?._id, JSON.parse(selectedSubject).subject._id), 
-    enabled: !!selectedSubject && !!location.state?._id
+  console.log(subjects, "hahahhahahahhahahahhaha");
+
+
+  const { data: subjectReport, isPending: subjectReportPending } = useQuery({
+    queryKey: ["student-assignments-quizes", location.state?.id, selectedSubject && JSON.parse(selectedSubject).id],
+    queryFn: async () => await getStudentSubjectReport(location.state?.id, JSON.parse(selectedSubject).id),
+    enabled: !!selectedSubject && !!location.state?.id
   });
 
   useEffect(() => {
@@ -66,8 +68,9 @@ const SubjectReport = () => {
   }, [selectedSubject, subjectReport, subjectReportPending])
 
   const { data: studentSubjectWithLevel, isSuccess: studentIsSuccess, isPending: studentSubjectPending } = useQuery({
-    queryKey: ["studentSubjectwithLevel"], 
-    queryFn: async () => await getStudentSubjectsWithLevel(studentData?.levelID)
+    queryKey: ["studentSubjectwithLevel", studentData?.levelID],
+    queryFn: async () => await getStudentSubjectsWithLevel(studentData?.levelID),
+    enabled: !!studentData?.levelID
   });
 
   console.log(studentSubjectWithLevel, "student subject with level ");
@@ -85,14 +88,14 @@ const SubjectReport = () => {
     onSuccess: (data) => {
       console.log("Subjects assigned successfully!", data);
       toast.success("Subjects assigned successfully!");
-      
+
       // Invalidate specific queries to trigger refetch
-      queryClient.invalidateQueries({ queryKey: ["subjectofstudents", studentData?._id] });
-      queryClient.invalidateQueries({ queryKey: ["studentSubjects", studentData?._id] });
-      
+      queryClient.invalidateQueries({ queryKey: ["subjectofstudents", studentData?.id] });
+      queryClient.invalidateQueries({ queryKey: ["studentSubjects", studentData?.id] });
+
       // Refetch the student subjects manually
       refetchStudentSubjects();
-      
+
       // Don't close modal immediately, let the data update first
       setTimeout(() => {
         setEditSubject(false);
@@ -105,14 +108,14 @@ const SubjectReport = () => {
   });
 
   // Get student subjects with proper query key
-  const { studentSubject, refetch: refetchStudentSubjects } = useGetAllSubjectOfStudent(studentData?._id);
+  const { studentSubject, refetch: refetchStudentSubjects } = useGetAllSubjectOfStudent(studentData?.id);
 
   // This effect runs when editSubject opens OR when studentSubject data changes
   useEffect(() => {
     if (editSubject && studentSubject?.subjects) {
       console.log("Setting selected subjects:", studentSubject.subjects);
       // Initialize selectedSubjects with already assigned subjects
-      const assignedSubjects = studentSubject.subjects.map((subj) => subj._id);
+      const assignedSubjects = studentSubject.subjects.map((subj) => subj.id);
       setSelectedSubjects(assignedSubjects || []);
     }
   }, [editSubject, studentSubject]); // Added studentSubject as dependency
@@ -120,7 +123,7 @@ const SubjectReport = () => {
   // Additional effect to handle when studentSubject changes while modal is open
   useEffect(() => {
     if (editSubject && studentSubject?.subjects) {
-      const assignedSubjects = studentSubject.subjects.map((subj) => subj._id);
+      const assignedSubjects = studentSubject.subjects.map((subj) => subj.id);
       setSelectedSubjects(assignedSubjects || []);
     }
   }, [studentSubject]); // This will run whenever studentSubject data changes
@@ -160,9 +163,9 @@ const SubjectReport = () => {
                     <div className="flex flex-col sm:flex-row justify-between">
                       <p className="md:text-[20px]">Overview</p>
                       <div className="flex items-center gap-4 border bg-white border-[#00000020] px-4 py-2 rounded-3xl">
-                        <select className="outline-none w-full sm:w-60" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} >
+                        <select className="outline-none w-full sm:w-60 text-black font-semibold" value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)} >
                           <option value={""}>Select Subject</option>
-                          {isSuccess && subjects?.subjects?.map((sub) => <option key={sub._id} value={JSON.stringify(sub)}>{sub.subject?.name}</option>)}
+                          {isSuccess && subjects?.subjects?.map((sub, index) => <option key={sub.id || index} className="text-black" value={JSON.stringify(sub)}>{sub?.name}</option>)}
                         </select>
                       </div>
                     </div>
@@ -245,14 +248,14 @@ const SubjectReport = () => {
                 <div className="space-y-2 max-h-60 overflow-y-auto">
                   {studentSubjectWithLevel?.subjects.map((subject) => (
                     <label
-                      key={subject._id}
+                      key={subject.id}
                       className="flex items-center space-x-2 cursor-pointer hover:bg-white/10 px-2 py-1 rounded-md"
                     >
                       <input
                         type="checkbox"
                         className="w-4 h-4 text-[#0B1053] focus:ring-[#0B1053]"
-                        checked={selectedSubjects.includes(subject._id)}
-                        onChange={() => handleCheckboxChange(subject._id)}
+                        checked={selectedSubjects.includes(subject.id)}
+                        onChange={() => handleCheckboxChange(subject.id)}
                       />
                       <span className="text-sm">{subject.subjectName}</span>
                     </label>
@@ -263,13 +266,13 @@ const SubjectReport = () => {
                   onClick={() => {
                     console.log(selectedSubjects, "selected subject");
 
-                    if (!studentData?._id) {
+                    if (!studentData?.id) {
                       console.error("Student ID is missing");
                       return;
                     }
 
                     mutation.mutate({
-                      studentId: studentData?._id,
+                      studentId: studentData?.id,
                       subjects: selectedSubjects,
                     });
                   }}

@@ -21,3 +21,15 @@ export const getChatsRoomData = apiRequest(async(id) =>{
     const response = await axios.get(url);
     return response;
 })
+
+export const sendQuickMessage = apiRequest(async (data) => {
+    const url = `${BACKEND_URL}/chatroom/message`;
+    const response = await axios.post(url, data);
+    return response;
+});
+
+export const getTeachersForChat = apiRequest(async () => {
+    const url = `${BACKEND_URL}/chatroom/chat/teachers`;
+    const response = await axios.get(url);
+    return response;
+});

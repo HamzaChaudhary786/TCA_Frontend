@@ -96,7 +96,7 @@ const Submissions = () => {
   const { data, isPending, isSuccess, isError, refetch, isRefetching } = useQuery({
     queryKey: ["submissions"],
     queryFn: async () => {
-      let result = await getMultipleQuizesForGrading(location.state._id);
+      let result = await getMultipleQuizesForGrading(location.state.id);
       return result;
     }
   });
@@ -252,7 +252,7 @@ const Submissions = () => {
                     .map((submission, index) => (
                       <SubmissionRow
                         isQuiz={true}
-                        key={submission?.studentID?._id || index}
+                        key={submission?.studentID?.id || index}
                         header={false}
                         index={index + 1}
                         bgColor={"#FFFFFF"}

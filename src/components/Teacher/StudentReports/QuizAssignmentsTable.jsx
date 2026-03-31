@@ -62,7 +62,7 @@ const QuizAssignmentsTable = ({ data, type }) => {
 
                                 return (
                                     <tr
-                                        key={item._id || index}
+                                        key={item.id || index}
                                         style={{ cursor: "pointer" }}
                                         onClick={() => navigate(`/reports/${params.subject}/${item.title}`, { state: { ...item, grade: displayGrade } })}
                                         className="flex flex-1 w-full border-t border-t-black/10 items-stretch"

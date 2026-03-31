@@ -43,7 +43,7 @@ const CreateQuoteModal = ({
             setopen(false);
             let results;
             if (isEditTrue) {
-                results = await editAnnouncements({ ...quoteObj, date: datetime }, quoteData._id);
+                results = await editAnnouncements({ ...quoteObj, date: datetime }, quoteData.id);
                 toast.success("Quote updated successfully");
             } else {
                 results = await createAnnouncements({ ...quoteObj, date: datetime });

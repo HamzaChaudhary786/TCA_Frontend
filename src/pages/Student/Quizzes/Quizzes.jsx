@@ -15,7 +15,7 @@ const Quizzes = () => {
 
 
     const studentQuiz = allQuizes?.filter(quiz =>
-        !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(quiz.subjectID._id)
+        !userData.subjects || userData.subjects.length === 0 || userData.subjects.includes(quiz?.subject?.id || quiz?.subjectID?.id || quiz?.subjectID)
     );
     //console.log("Filtered Assignments:", studentQuiz);
     const { isBlurred } = useBlur();
@@ -48,19 +48,19 @@ const Quizzes = () => {
                                 />
                                 { studentQuiz?.map((quiz, index) => {
                                     return <QuizAssignmentRow
-                                        id={quiz._id}
+                                        id={quiz.id}
                                         isQuiz={true}
                                         upload={true}
                                         header={false}
-                                        key={quiz._id}
+                                        key={quiz.id}
                                         alldata={quiz}
                                         index={index + 1}
                                         title={quiz.title}
                                         bgColor={"#FFFFFF"}
-                                        download={quiz?.files[0]?.url}
+                                        download={quiz?.files?.[0]?.url}
                                         deadline={quiz.dueDate}
                                         total_marks={quiz.totalMarks}
-                                        subject={quiz?.subjectID.name}
+                                        subject={quiz?.subject?.name || quiz?.subjectID?.name}
                                         text={quiz?.text}
                                     />
                                 })}

@@ -98,7 +98,7 @@ const SignUp = () => {
           email: e.target[2].value,
           phoneNumber: e.target[3].value,
           gender: e.target[4].value,
-          levelID: JSON.parse(e.target[5].value)._id,
+          levelID: JSON.parse(e.target[5].value).id,
           guardianName: e.target[6].value,
           guardianEmail: e.target[7].value,
           guardianPhoneNumber: e.target[8].value,

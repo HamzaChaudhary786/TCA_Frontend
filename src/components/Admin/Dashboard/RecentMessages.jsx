@@ -41,10 +41,10 @@ const RecentMessages = ({ onclose, dashboard }) => {
     setSelectedChat(chatData);
     let result;
     if (isGroup) {
-      result = await getChatroomData(chatData?._id);
+      result = await getChatroomData(chatData?.id);
       setMsgArray(result[0]?.messages || []);
     } else {
-      result = await getChatsRoomData(chatData?._id);
+      result = await getChatsRoomData(chatData?.id);
       setMsgArray(result?.messages || []);
     }
     console.log("result form server is : ", result);
@@ -210,11 +210,11 @@ const RecentMessages = ({ onclose, dashboard }) => {
             {(individualIsPending || groupIsPending) && <div><Loader /> </div>}
             {individualActive && !individualIsPending &&
               individualChats?.map((item) => {
-                return <Message key={item._id} data={item} onpress={() => { openFullchat(item, false) }} />
+                return <Message key={item.id} data={item} onpress={() => { openFullchat(item, false) }} />
               })}
             {groupActive && !groupIsPending &&
               groupChats?.map((item) => {
-                return <Message key={item._id} data={item} onpress={() => { openFullchat(item, true) }} />
+                return <Message key={item.id} data={item} onpress={() => { openFullchat(item, true) }} />
               })}
           </div>
         </div>

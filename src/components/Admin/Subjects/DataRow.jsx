@@ -22,7 +22,7 @@ const DataRow = (props) => {
 
 
     allLevels.map((item) => {
-      if (item._id == props.levelID) {
+      if (item.id == props.levelID) {
         setLevel(item.name);
       }
     })
@@ -67,7 +67,7 @@ const DataRow = (props) => {
               {menu && <SubjectMenu
                 isopen={menu}
                 editSubject={toggleEditeMenu}
-                deleteSubject={() => props.deleteSubject(props.data._id)}
+                deleteSubject={() => props.deleteSubject(props.data.id)}
                 setIsOpen={setMenu}
               />}
               <BsThreeDotsVertical />

@@ -24,7 +24,7 @@ const FeedbackCard = ({ feedback, onAccept, onReject, onDelete }) => {
                         {menuOpen && (
                             <div className='absolute right-0 top-7 bg-white border border-black/10 rounded-md shadow-md z-10 text-xs w-28'>
                                 <p
-                                    onClick={() => { onDelete(feedback._id); setMenuOpen(false); }}
+                                    onClick={() => { onDelete(feedback.id); setMenuOpen(false); }}
                                     className='px-4 py-2 hover:bg-red-50 text-red-500 cursor-pointer rounded-md'
                                 >
                                     Delete
@@ -54,7 +54,7 @@ const FeedbackCard = ({ feedback, onAccept, onReject, onDelete }) => {
                     {/* Accept / Reject */}
                     <div className='flex gap-2 ml-auto'>
                         <p
-                            onClick={() => onAccept(feedback._id)}
+                            onClick={() => onAccept(feedback.id)}
                             className={`py-1 px-6 rounded-3xl cursor-pointer ${feedback?.accepted ? "bg-green-100 text-green-700" : "bg-[#2C9B2214] text-[#2C9B22]"}`}>
                             {feedback?.accepted ? "Accepted" : "Accept"}
                         </p>
@@ -80,7 +80,7 @@ const FeedbackCard = ({ feedback, onAccept, onReject, onDelete }) => {
                             Cancel
                         </button>
                         <button
-                            onClick={() => { onReject(feedback._id); setShowRejectConfirm(false); }}
+                            onClick={() => { onReject(feedback.id); setShowRejectConfirm(false); }}
                             className='py-1.5 px-6 rounded-3xl text-xs bg-[#A41D30] text-white hover:bg-[#8a1828] transition cursor-pointer'
                         >
                             Confirm

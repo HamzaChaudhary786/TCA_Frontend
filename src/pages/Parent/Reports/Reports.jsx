@@ -101,7 +101,7 @@ const Reports = () => {
 
   const subjectQuery = useQuery({
     queryKey: ["subjects"], queryFn: async () => {
-      const results = await getAllSubjects(selectedChild._id);
+      const results = await getAllSubjects(selectedChild.id);
       setAllSubjects(results);
       console.log("inside dashboard");
       //console.log("subject report data is  : ", results);

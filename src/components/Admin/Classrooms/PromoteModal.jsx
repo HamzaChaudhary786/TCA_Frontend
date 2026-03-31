@@ -24,7 +24,7 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
   };
 
   const handleSelectAll = () => {
-    const allIds = students.map((s) => s._id);
+    const allIds = students.map((s) => s.id);
     setSelectedStudentIds(selectAll ? [] : allIds);
     setSelectAll(!selectAll);
   };
@@ -35,9 +35,9 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
 
   const handleSubmit = () => {
     const selectedStudents = students
-      .filter((s) => selectedStudentIds.includes(s._id))
+      .filter((s) => selectedStudentIds.includes(s.id))
       .map((s) => ({
-        id: s._id,
+        id: s.id,
         name: s.name,
         rollNo: s.rollNo,
       }));
@@ -84,7 +84,7 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
             >
               <option value="">-- Select --</option>
               {classrooms.map((c) => (
-                <option key={c._id} value={c._id}>{c.name}</option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
@@ -98,7 +98,7 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
             >
               <option value="">-- Select --</option>
               {allLevels.map((l) => (
-                <option key={l._id} value={l._id}>{l.name}</option>
+                <option key={l.id} value={l.id}>{l.name}</option>
               ))}
             </select>
           </div>
@@ -112,7 +112,7 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
             >
               <option value="">-- Select --</option>
               {classrooms.map((c) => (
-                <option key={c._id} value={c._id}>{c.name}</option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
@@ -126,7 +126,7 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
             >
               <option value="">-- Select --</option>
               {allLevels.map((l) => (
-                <option key={l._id} value={l._id}>{l.name}</option>
+                <option key={l.id} value={l.id}>{l.name}</option>
               ))}
             </select>
           </div>
@@ -169,16 +169,16 @@ const PromoteModal = ({ classrooms = [], classroomStudents = {}, setPromotePopup
           ) : (
             students.map((student) => (
               <label
-                key={student._id}
-                className={`block p-2 rounded border mb-1 ${selectedStudentIds.includes(student._id) ? 'bg-blue-100 border-blue-400' : 'border-gray-200'
+                key={student.id}
+                className={`block p-2 rounded border mb-1 ${selectedStudentIds.includes(student.id) ? 'bg-blue-100 border-blue-400' : 'border-gray-200'
                   }`}
               >
                 <div className="flex justify-between items-center">
                   <span>{student.name} ({student.rollNo})</span>
                   <input
                     type="checkbox"
-                    checked={selectedStudentIds.includes(student._id)}
-                    onChange={() => handleStudentToggle(student._id)}
+                    checked={selectedStudentIds.includes(student.id)}
+                    onChange={() => handleStudentToggle(student.id)}
                   />
                 </div>
               </label>

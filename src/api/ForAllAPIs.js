@@ -18,17 +18,21 @@ export const userLogout = apiRequest(async () => {
 });
 
 
-export const getAllClasses = apiRequest(async (teacherID) => {
+export const getAllClasses = apiRequest(async (params) => {
+    const { teacherID, startDate: customStartDate, endDate: customEndDate } = params || {};
 
-    let endDate = new Date(Date.now());
-    endDate.setDate(endDate.getDate() - 15);
-    let startDate = new Date(Date.now());
-    startDate.setDate(startDate.getDate() + 15);
+    let startDate = customStartDate ? new Date(customStartDate) : new Date(Date.now());
+    if (!customStartDate) startDate.setDate(startDate.getDate() - 15);
 
-    // const url = `${BACKEND_URL}/class?startDate=${endDate}&endDate=${startDate}${teacherID ? `&teacherID=${teacherID}` : ''}`;
-    const id = typeof teacherID === 'object' ? teacherID?._id : teacherID;
-    const url = `${BACKEND_URL}/class?startDate=${endDate}&endDate=${startDate}${id ? `&teacherID=${id}` : ''}`;
+    let endDate = customEndDate ? new Date(customEndDate) : new Date(Date.now());
+    if (!customEndDate) endDate.setDate(endDate.getDate() + 15);
+
+    // Extract ID safely: either from teacherID property or params if it's a string/ID
+    let id = teacherID;
+    if (typeof id === 'object') id = id?.id;
+    if (!id && typeof params !== 'object') id = params;
+
+    const url = `${BACKEND_URL}/class?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}${id ? `&teacherID=${id}` : ''}`;
     const response = await axios.get(url);
-    return response
-
+    return response;
 })

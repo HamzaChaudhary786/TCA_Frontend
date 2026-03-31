@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../../context/UserContext";
 import { BACKEND_URL_SOCKET } from "../../../constants/api";
 import { getChatsRoomData, getMyChats } from "../../../api/UserApis";
-import { getParentsForChat } from "../../../api/Teacher/chat";
+import { getParentsForChat, getStudentsForChat } from "../../../api/Teacher/chat";
 import useClickOutside from "../../../hooks/useClickOutlise";
 import { useBlur } from "../../../context/BlurContext";
 
@@ -24,11 +24,14 @@ const RecentMessages = ({ onclose, dashboard }) => {
   const [loading, setLoading] = useState(false);
   const [queryData, setQueryData] = useState(null);
   const [parentqueryData, setParentQueryData] = useState(null);
+  const [studentQueryData, setStudentQueryData] = useState(null);
   const [groupActive, setGroupActive] = useState(false);
   const [showFullChat, setShowFullChat] = useState(false);
   const [enableChatQuery, setEnableChatQuery] = useState(true);
   const [enableParentChatQuery, setEnableParentChatQuery] = useState(true);
+  const [enableStudentChatQuery, setEnableStudentChatQuery] = useState(true);
   const [individualActive, setIndividualActive] = useState(true);
+  const [subTab, setSubTab] = useState("parents"); // "parents" or "students"
   const [selectedChatParticipants, setSelectedChatParticipants] = useState([]);
 
   const [msgArray, setMsgArray] = useState([]);
@@ -39,13 +42,12 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
   const { socketContext, setSocketContext, userData } = useUser();
 
+  const containerRef = useRef(null);
   const msgEndRef = useRef(null);
 
   const { toggleBlur } = useBlur(); // Using toggleBlur for blur control
 
-
-
-  useClickOutside(msgEndRef, () => {
+  useClickOutside(containerRef, () => {
     onclose()
   });
 
@@ -65,22 +67,26 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
   const handleSendMessage = (msgstr) => {
     const messageObj = {
-      sentBy: userData._id,
+      sentBy: userData.id,
       time: new Date(),
       type: "text",
       message: msgstr,
     };
-    localSocket.emit("message", { room: selectedChat?._id, message: messageObj });
+    localSocket.emit("message", { room: selectedChat?.id, message: messageObj });
   }
 
   const handleSendMessageParent = (msgstr) => {
     const messageObj = {
-      sentBy: userData._id,
+      sentBy: userData.id,
       time: new Date(),
       type: "text",
       message: msgstr,
     };
-    localSocket.emit("message", { message: messageObj, members: [userData?._id, selectedChat?._id] });
+
+    // Optimistic update
+    setMsgArrayParent((prev) => [...prev, { ...messageObj, sentBy: userData }]);
+    
+    localSocket.emit("message", { message: messageObj, members: [userData?.id, selectedChat?.id] });
   }
 
   // close full chat modal
@@ -104,8 +110,8 @@ const RecentMessages = ({ onclose, dashboard }) => {
     setLocalSocket(conn);
     setSelectedChat(data);
     setSelectedChatParticipants(data.participants);
-    conn.emit("join", { room: data._id });
-    const result = await getChatsRoomData(data._id);
+    conn.emit("join", { room: data.id });
+    const result = await getChatsRoomData(data.id);
     console.log("result form sever is : ", result);
     setMsgArray(result.messages);
     setLoading(false);
@@ -119,9 +125,9 @@ const RecentMessages = ({ onclose, dashboard }) => {
     setLocalSocket(conn);
     setSelectedChat(data);
     console.log("parent data is : ", data);
-    conn.emit("join", [userData._id, data._id])
+    conn.emit("join", [userData.id, data.id])
     console.log("join room emit")
-    conn.emit("get-chats", [userData._id, data._id]);
+    conn.emit("get-chats", [userData.id, data.id]);
     conn.on("chat-history", (chats) => {
       console.log("parent full chat values is ", chats);
       setSelectedChatParticipants(chats.participants);
@@ -136,7 +142,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
     console.log("pid is : ", pid)
     console.log("selected partiicapntisn : ", selectedChatParticipants);
     selectedChatParticipants.forEach((item) => {
-      if (item._id === pid) {
+      if (item.id === pid) {
         user = item;
       }
     })
@@ -147,24 +153,22 @@ const RecentMessages = ({ onclose, dashboard }) => {
   useEffect(() => {
     if (localSocket) {
       localSocket.on("message", (data) => {
-        console.log("data snd by student is  : ", data);
-        let user = getParticipantData(data.message.sentBy);
-        console.log("user after compare is : ", user);
-        setMsgArray((prev) => [...prev, { ...data.message, sentBy: user }]);
-      });
-    }
-  }, [localSocket])
+        console.log("message received : ", data);
+        
+        // If the message is from us, we already added it optimistically
+        if (data.message.sentBy === userData.id) return;
 
-  useEffect(() => {
-    if (localSocket) {
-      localSocket.on("receive-message", (data) => {
-        console.log("data snd by student is  : ", data);
         let user = getParticipantData(data.message.sentBy);
-        console.log("user after compare is : ", user);
-        setMsgArrayParent((prev) => [...prev, { ...data.message, sentBy: user }]);
+        
+        // Check if it's for the current open chat (handles both namespaces)
+        if (showFullChat) {
+          setMsgArray((prev) => [...prev, { ...data.message, sentBy: user }]);
+        } else if (showParentChat) {
+          setMsgArrayParent((prev) => [...prev, { ...data.message, sentBy: user }]);
+        }
       });
     }
-  }, [localSocket])
+  }, [localSocket, showFullChat, showParentChat, userData.id])
 
   const Message = ({ data, onpress }) => {
     return (
@@ -193,7 +197,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
   const ChatMsgParent = ({ msg }) => {
     return <>
       <div className="px-10 py-5">
-        {msg?.sentBy?._id !== userData._id ?
+        {msg?.sentBy?.id !== userData.id ?
           <div className="flex items-start gap-4 py-2">
             <div>
               <img src={msg?.sentBy?.profilePic || IMAGES.ProfilePic} alt="alt" className="w-10 h-10 rounded-full object-cover" />
@@ -230,7 +234,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
   const GroupMsg = ({ msg }) => {
     return <>
       <div className="px-10 py-5">
-        {msg?.sentBy?._id !== userData._id ?
+        {msg?.sentBy?.id !== userData.id ?
           <div className="flex items-start gap-4 py-2">
             <div>
               <img src={msg?.sentBy?.profilePic || IMAGES.ProfilePic} alt="alt" className="w-10 h-10 rounded-full object-cover" />
@@ -275,8 +279,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
     }
 
     return <>
-      <div className="w-96 top-20 flex flex-col justify-between pb-10 right-0 absolute bg-white z-50 h-[90vh]">
-
+      <div className="w-96 flex flex-col justify-between pb-5 bg-white shadow-xl z-50 pointer-events-auto">
         <div className="h-full">
           <div className="shadow-xl">
             <div className="flex justify-between px-10 py-5 items-center">
@@ -318,7 +321,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
     }
 
     return <>
-      <div className="sm:w-96 w-72 top-20 flex flex-col justify-between pb-10 right-0 absolute bg-white z-50 h-[90vh]">
+      <div className="sm:w-96 w-72 flex flex-col justify-between pb-5 bg-white shadow-xl z-50  pointer-events-auto">
         <div className="h-full">
           <div className="shadow-xl">
             <div className="flex justify-between px-10 py-5 items-center">
@@ -353,6 +356,8 @@ const RecentMessages = ({ onclose, dashboard }) => {
 
   const parentchatquery = useQuery({ queryKey: ["parent-chat"], queryFn: getParentsForChat, staleTime: 30000, enabled: enableParentChatQuery });
 
+  const studentchatquery = useQuery({ queryKey: ["student-chat"], queryFn: getStudentsForChat, staleTime: 30000, enabled: enableStudentChatQuery });
+
   useEffect(() => {
     console.log("now rendering navbar")
     if (!queryData) {
@@ -361,24 +366,28 @@ const RecentMessages = ({ onclose, dashboard }) => {
     if (!parentqueryData) {
       setEnableParentChatQuery(true);
     }
+    if (!studentQueryData) {
+      setEnableStudentChatQuery(true);
+    }
     if (!parentchatquery.isPending) {
       setParentQueryData(parentchatquery.data);
-      console.log("parent query data is : ", parentchatquery.data);
       setEnableParentChatQuery(false);
+    }
+    if (!studentchatquery.isPending) {
+      setStudentQueryData(studentchatquery.data);
+      setEnableStudentChatQuery(false);
     }
     if (!chatquery.isPending) {
       setQueryData(chatquery?.data);
-      console.log("query data is : ", chatquery.data);
       setEnableChatQuery(false);
     }
-  }, [chatquery.isPending, parentchatquery.isPending])
+  }, [chatquery.isPending, parentchatquery.isPending, studentchatquery.isPending])
 
   return (
-    <>
+    <div ref={containerRef} className="fixed right-0 z-50 flex flex-row-reverse items-start pointer-events-none h-screen">
       <div
         className={` ${!dashboard ? "mt-10" : "mt-0"
-          } fixed z-10 flex h-screen px-5 overflow-auto bg-white border-r border-black/20  shadow-xl top-20 ${showFullChat || showParentChat ? "sm:right-96 right-0" : "right-0"} sm:w-96 w-full`}
-        ref={msgEndRef}
+          } flex flex-col px-5 overflow-auto bg-white border-l border-black/20 shadow-xl sm:w-96 w-full pointer-events-auto h-full`}
       >
         <div className={`flex flex-col flex-1 font-poppins`}>
           <div className="flex justify-between py-5 ">
@@ -393,9 +402,6 @@ const RecentMessages = ({ onclose, dashboard }) => {
                   } rounded-md`}
               >
                 <p className="">Recent</p>
-                {/* <div className="p-1 text-xs badge bg-yellow_green_light rounded-xl">
-                  <p className="">2</p>
-                </div> */}
               </div>
               <div
                 onClick={toggleGroupActive}
@@ -406,8 +412,21 @@ const RecentMessages = ({ onclose, dashboard }) => {
               </div>
             </div>
           </div>
+          {individualActive && (
+            <div className="flex gap-4 py-2 border-b border-black/5 justify-around">
+               <p 
+                className={`text-sm cursor-pointer ${subTab === "parents" ? "text-maroon font-bold border-b-2 border-maroon" : "text-grey"}`}
+                onClick={() => setSubTab("parents")}
+               >Parents</p>
+               <p 
+                className={`text-sm cursor-pointer ${subTab === "students" ? "text-maroon font-bold border-b-2 border-maroon" : "text-grey"}`}
+                onClick={() => setSubTab("students")}
+               >Students</p>
+            </div>
+          )}
           {chatquery.isPending && <div className=""> <Loader /> </div>}
           {parentchatquery.isPending && <div className=""> <Loader /> </div>}
+          {studentchatquery.isPending && <div className=""> <Loader /> </div>}
           {/* {!chatquery.isPending && !parentchatquery.isPending &&
         } */}
           <div className="py-2">
@@ -415,8 +434,12 @@ const RecentMessages = ({ onclose, dashboard }) => {
               chatquery?.data?.map((item) => {
                 return <Message data={item} onpress={() => { openFullchat(item) }} />
               })}
-            {individualActive && !parentchatquery.isPending &&
+            {individualActive && subTab === "parents" && !parentchatquery.isPending &&
               parentchatquery?.data?.map((item) => {
+                return <Message data={item} onpress={() => { openParentChat(item) }} />;
+              })}
+            {individualActive && subTab === "students" && !studentchatquery.isPending &&
+              studentchatquery?.data?.map((item) => {
                 return <Message data={item} onpress={() => { openParentChat(item) }} />;
               })}
           </div>
@@ -424,7 +447,7 @@ const RecentMessages = ({ onclose, dashboard }) => {
       </div>
       {showFullChat && <FullChat onclose={handleShowFullChat} data={selectedChat} />}
       {showParentChat && <ParentCHat onclose={handleShowParentChat} data={selectedChat} />}
-    </>
+    </div>
   );
 };
 

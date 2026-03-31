@@ -29,7 +29,7 @@ const SchedualClasses = ({ refetch, data, isPending, addScheduleModalOpen, setAd
     const { allSubjects, allClassrooms, classesRefetch } = useTeacher();
     const { userData } = useUser();
 
-    const { teacherSubjects, isLoading } = useGetAllTeacherSubjects(userData._id)
+    const { teacherSubjects, isLoading } = useGetAllTeacherSubjects(userData.id)
 
     console.log(allSubjects, "allSubjects");
     console.log(teacherSubjects, "teacher subject");
@@ -58,7 +58,7 @@ const SchedualClasses = ({ refetch, data, isPending, addScheduleModalOpen, setAd
       subjectID: "",
       startEventDate: "",
       endEventDate: "",
-      teacher: { teacherID: userData._id, status: "absent" }
+      teacher: { teacherID: userData.id, status: "absent" }
     })
 
 
@@ -75,7 +75,7 @@ const SchedualClasses = ({ refetch, data, isPending, addScheduleModalOpen, setAd
       selectedClassrooms.forEach((classroomID) => {
         const myobj = {
           ...classObj,
-          subjectID: JSON.parse(selectedSubject)._id,
+          subjectID: JSON.parse(selectedSubject).id,
           classroomID, // Send one by one
           startTime: isoFormattedStringStartTime,
           endTime: isoFormattedStringEndTime,

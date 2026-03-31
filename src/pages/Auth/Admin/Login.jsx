@@ -61,7 +61,8 @@ const Login = () => {
         setLoading(true);
         try {
             const dataBody = {
-                email: e.target[0].value, password: e.target[1].value
+                email: e.target[0].value.trim().toLowerCase(), 
+                password: e.target[1].value
             }
             const response = await studentLogin(dataBody);
 

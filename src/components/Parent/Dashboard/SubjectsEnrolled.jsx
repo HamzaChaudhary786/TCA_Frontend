@@ -22,18 +22,18 @@ const SubjectsEnrolled = () => {
   };
 
   const subjectQuery = useQuery({
-    queryKey: ["subjects", selectedChild?._id],
+    queryKey: ["subjects", selectedChild?.id],
     queryFn: async () => {
-      const results = await getAllSubjects(selectedChild?._id);
+      const results = await getAllSubjects(selectedChild?.id);
       setAllSubjects(results);
       return results;
     },
     staleTime: 300000,
-    enabled: enableQuery && !!selectedChild?._id,
+    enabled: enableQuery && !!selectedChild?.id,
   });
 
   useEffect(() => {
-    if (allSubjects.length === 0 && selectedChild?._id) {
+    if (allSubjects.length === 0 && selectedChild?.id) {
       setEnableQuery(true);
     }
   }, [allSubjects, selectedChild]);

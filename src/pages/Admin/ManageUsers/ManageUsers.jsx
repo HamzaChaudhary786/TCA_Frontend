@@ -47,9 +47,9 @@ const ManageUsers = () => {
     mutationKey: ["access", "fees"], mutationFn: async () => {
       let result;
       if (!editData.isBlocked && editData.feesPaid) {
-        result = await updateUser({ isBlocked: true, feesPaid: false }, editData._id);
+        result = await updateUser({ isBlocked: true, feesPaid: false }, editData.id);
       } else {
-        result = await updateUser({ isBlocked: false, feesPaid: true }, editData._id);
+        result = await updateUser({ isBlocked: false, feesPaid: true }, editData.id);
       }
       await adminUsersRefecth();
       return result;
@@ -84,7 +84,7 @@ const ManageUsers = () => {
   }, [adminUsersData.allUsers])
 
   const handleDeleteUser = async () => {
-    userDellMutation.mutate(editData._id);
+    userDellMutation.mutate(editData.id);
   }
 
   const userDellMutation = useMutation({
@@ -204,7 +204,7 @@ const ManageUsers = () => {
                       .map((usr, index) => (
                         <DataRows
                           data={usr}
-                          key={usr._id}
+                          key={usr.id}
                           header={false}
                           index={index + 1}
                           bgColor={"#FFFFFF"}
@@ -216,7 +216,7 @@ const ManageUsers = () => {
                             usr?.userType === "teacher"
                               ? `${usr.referenceNo}`
                               : usr?.userType === "parent"
-                                ? usr?._id.slice(0, 5)
+                                ? usr?.id.slice(0, 5)
                                 : usr?.rollNo || "not assign"
                           }
                           toggleClassMenu={(e) => toggleMenu(e)}

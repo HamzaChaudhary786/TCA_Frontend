@@ -23,8 +23,8 @@ const ClassroomAttendence = () => {
   const allData = location?.state;
 
   // ✅ Find the logged-in teacher's subject
-  const matchedTeacher = allData?.teachers?.find((t) => t.teacher === userData._id);
-  const subjectId = matchedTeacher?.subject;
+  const matchedTeacher = allData?.teachers?.find((t) => t.teacherID === (userData?.id || userData?._id) || t.teacher === (userData?.id || userData?._id));
+  const subjectId = matchedTeacher?.subjectID || matchedTeacher?.subject;
   console.log(matchedTeacher, "matched teacher");
   console.log(subjectId, "subject id");
 
@@ -34,7 +34,7 @@ const ClassroomAttendence = () => {
   const [currentDate, setCurrentDate] = useState(new Date().toISOString().split("T")[0]);
   const [showPopup, setShowPopup] = useState(false);
 
-  const { getAttandence } = useGetAttandenceOfClassroom(location?.state?._id, currentDate);
+  const { getAttandence } = useGetAttandenceOfClassroom(location?.state?.id, currentDate);
   const { updateAttandence } = useUpdateAttandenceOfClassroom();
 
   // ✅ Fetch and filter students based on subject
@@ -56,7 +56,7 @@ const ClassroomAttendence = () => {
       setFilteredStudents(matchedStudents);
     } else {
       const initialAttendanceData = matchedStudents.map((student) => ({
-        studentID: student._id,
+        studentID: student.id,
         isPresent: true,
         late: false
       }));
@@ -85,7 +85,7 @@ const ClassroomAttendence = () => {
     mutationFn: async () => {
       const result = await markHeadAttendence(
         attendenceData,
-        location?.state?._id,
+        location?.state?.id,
         currentDate
       );
       console.log(result, "result");
@@ -119,7 +119,7 @@ const ClassroomAttendence = () => {
 
       updateAttandence({
         data: attendenceData,
-        classroomID: location?.state?._id,
+        classroomID: location?.state?.id,
         date: currentDate
       });
       console.log("Attendance updated!");

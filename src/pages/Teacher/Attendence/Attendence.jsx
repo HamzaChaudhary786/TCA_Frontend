@@ -41,8 +41,8 @@ const Attendence = () => {
   }
 
   const handleDeleteClass = async () => {
-    console.log("Cancelling attendance for:", editClassData?.allData?._id);
-    cancelAttendenceMutation.mutate(editClassData?.allData?._id);
+    console.log("Cancelling attendance for:", editClassData?.allData?.id);
+    cancelAttendenceMutation.mutate(editClassData?.allData?.id);
   }
 
   const { isBlurred, toggleBlur } = useBlur();
@@ -65,7 +65,7 @@ const Attendence = () => {
     if (!isLoadingClassroom && classrooms) {
       // Check if any teacher has type "head"
       const hasHeadTeacher = classrooms.some((classroom) =>
-        classroom.teachers.some((teacher) => teacher.type === "head")
+        classroom?.teachers?.some((teacher) => teacher.type === "head" && (teacher.teacherID === (userData?.id || userData?._id) || teacher.teacher === (userData?.id || userData?._id)))
       );
       setHead(hasHeadTeacher);
     }
@@ -130,14 +130,14 @@ const Attendence = () => {
                     />
                     {searchText == "" && data?.map((cls, index) => (
                       <DataRow
-                        key={cls._id || index}
+                        key={cls.id || index}
                         data={cls}
                         allData={cls}
                         toggleClassMenu={toggleClassMenuOpen}
                         index={index + 1}
                         classname={cls.title}
-                        subject={cls.subjectID.name}
-                        students={cls.classroom.studentdetails.length}
+                        subject={cls?.subject?.name || cls?.subjectID?.name || "N/A"}
+                        students={cls?.classroom?.students?.length || cls?.classroom?.studentDetails?.length || cls?.classroom?.studentdetails?.length || 0}
                         teachers={cls?.classroom?.name}
                         startDate={cls.startTime}
                         bgColor={"#FFFFFF"}
@@ -147,16 +147,16 @@ const Attendence = () => {
                     ))}
                     {searchText && data?.map((cls, index) => {
                       if (cls.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                        return <div key={cls._id || index}>
+                        return <div key={cls.id || index}>
                           <DataRow
                             data={cls}
-                            subject={cls.subjectID.name}
+                            subject={cls?.subject?.name || cls?.subjectID?.name || "N/A"}
                             allData={cls}
                             toggleClassMenu={toggleClassMenuOpen}
                             index={index + 1}
                             classname={cls.title}
-                            students={cls.classroom.studentdetails.length}
-                            teachers={cls.teacher.teacherID.name}
+                            students={cls?.classroom?.students?.length || cls?.classroom?.studentDetails?.length || cls?.classroom?.studentdetails?.length || 0}
+                            teachers={cls?.classroom?.name}
                             startDate={cls.startTime}
                             bgColor={"#FFFFFF"}
                             header={false}

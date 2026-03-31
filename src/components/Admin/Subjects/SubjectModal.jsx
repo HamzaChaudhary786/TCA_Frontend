@@ -53,7 +53,7 @@ const SubjectModal = ({ open, setopen, refetch, isEditTrue, subjectData, allLeve
       let result;
       console.log(" sending obj is : ", { name: subjectValue, levelID: levelValue })
       if (isEditTrue) {
-        result = await editSubject({ name: subjectValue, levelID: levelValue }, subjectData?.data._id);
+        result = await editSubject({ name: subjectValue, levelID: levelValue }, subjectData?.data.id);
         console.log("subject updatd ", result);
       } else {
         result = await createSubject({ name: subjectValue, levelID: levelValue });
@@ -77,7 +77,7 @@ const SubjectModal = ({ open, setopen, refetch, isEditTrue, subjectData, allLeve
     if (isEditTrue && subjectData) {
       // Find the matching level ID
       const matchingLevel = allLevels?.find(item => item.name === subjectData.levelName);
-      setLevelValue(matchingLevel?._id || "");
+      setLevelValue(matchingLevel?.id || "");
     }
   }, [isEditTrue, subjectData, allLevels]);
   console.log("hahhahahaha", levelValue);
@@ -135,7 +135,7 @@ const SubjectModal = ({ open, setopen, refetch, isEditTrue, subjectData, allLeve
                 >
                   <option value="">Select Level</option>
                   {allLevels?.map((item) => (
-                    <option key={item?._id} value={item?._id}>
+                    <option key={item?.id} value={item?.id}>
                       {item.name}
                     </option>
                   ))}

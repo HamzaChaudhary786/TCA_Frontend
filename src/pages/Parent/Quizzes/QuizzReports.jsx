@@ -23,7 +23,7 @@ const QuizzReports = () => {
   const reportQuery = useQuery({
     queryKey: ["report"], queryFn: async () => {
       //console.log("selected child is : ", selectedChild);
-      let results = await getChildReport(selectedChild._id, location?.state?.classroom?._id, location?.state?.subject?._id, location?.state?.teacher?._id);
+      let results = await getChildReport(selectedChild.id, location?.state?.classroom?.id, location?.state?.subject?.id, location?.state?.teacher?.id);
       //console.log(" report result is : ", results);
       return results;
     },

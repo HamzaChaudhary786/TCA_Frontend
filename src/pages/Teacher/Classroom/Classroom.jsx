@@ -32,7 +32,7 @@ const Classroom = () => {
   }
 
   const handleDeleteClass = async () => {
-    classroomDellMutate.mutate(editClassData.data._id);
+    classroomDellMutate.mutate(editClassData.data.id);
   }
 
 
@@ -122,7 +122,7 @@ const Classroom = () => {
                           students={cls.students.length}
                           teachers={cls.teachers.length}
                           levelName={cls.levelName || "Admin not add level yet"}
-                          createdBy={cls.createdBy.userType}
+                          createdBy={cls.creator?.userType || cls.createdBy?.userType}
                           bgColor={"#FFFFFF"}
                           header={false}
                           threeDots={true}
@@ -138,7 +138,7 @@ const Classroom = () => {
                           classesSchedualled={cls.classes.length}
                           students={cls.students.length}
                           teachers={cls.teachers.length}
-                          createdBy={cls.createdBy.userType}
+                          createdBy={cls.creator?.userType || cls.createdBy?.userType}
                           bgColor={"#FFFFFF"}
                           header={false}
                         />

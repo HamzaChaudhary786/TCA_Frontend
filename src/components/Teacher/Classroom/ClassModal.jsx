@@ -59,12 +59,12 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch }) => {
   const handleCreateClass = async () => {
 
     if (selectedLevel && newSelectedStudents.length > 0) {
-      let students = newSelectedStudents.map((item) => item._id);
+      let students = newSelectedStudents.map((item) => item.id);
       let data = {
         name: classObj.title,
         students,
-        teachers: [userData._id],
-        subject: JSON.parse(selectedSubject)._id,
+        teachers: [userData.id],
+        subject: JSON.parse(selectedSubject).id,
       }
 
       createClassroomMutation.mutate(data);

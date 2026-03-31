@@ -59,19 +59,19 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
       setDueDate(formattedDueDate.toISOString().split("T")[0]);
       setDueTime(formattedDueDate.toISOString().split("T")[1].slice(0, 5));
       setSelectedClassroom(classroomID);
-      setSelectedSubject(subjectID?._id || "");
+      setSelectedSubject(subjectID?.id || "");
       setUploadedFileUrl(files?.[0]?.url || "");
     }
   }, [isEditTrue, data]);
 
   // Fetch teacher subjects for the selected classroom
   const { data: teacherSubjects, isPending: isSubjectsPending } = useQuery({
-    queryKey: ["teacherSubjectsOfClassrooms", selectedClassroom?._id],
+    queryKey: ["teacherSubjectsOfClassrooms", selectedClassroom?.id],
     queryFn: async () => {
-      if (!selectedClassroom?._id) return null;
-      return await getTeacherSubjectsOfClassroom({ classroomIDs: [selectedClassroom._id] });
+      if (!selectedClassroom?.id) return null;
+      return await getTeacherSubjectsOfClassroom({ classroomIDs: [selectedClassroom.id] });
     },
-    enabled: !!selectedClassroom?._id,
+    enabled: !!selectedClassroom?.id,
   });
 
   // Close modal on outside click
@@ -129,7 +129,7 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
         return;
       }
 
-      if (!selectedClassroom?._id) {
+      if (!selectedClassroom?.id) {
         toast.error("Please select a classroom");
         setIsLoading(false);
         return;
@@ -142,14 +142,14 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
       const payload = {
         ...formData,
         subjectID: selectedSubject,
-        classroomID: selectedClassroom._id,
+        classroomID: selectedClassroom.id,
         files,
         dueDate: finalDueDate,
       };
 
       const response = isQuiz
-        ? await editQuiz(payload, data?._id)
-        : await editAssignment(payload, data?._id);
+        ? await editQuiz(payload, data?.id)
+        : await editAssignment(payload, data?.id);
 
       // Wait for refetch to complete before closing modal
       await refetch();
@@ -203,7 +203,7 @@ const EditQuizAssignmentModal = ({ isEditTrue, refetch, data, setIsEdit, isQuiz 
               <div className="absolute z-10 w-full max-h-40 overflow-y-auto border border-gray-300 rounded-lg bg-white mt-1">
                 {allClassrooms?.map((classroom) => (
                   <div
-                    key={classroom._id}
+                    key={classroom.id}
                     onClick={() => {
                       setSelectedClassroom(classroom);
                       setIsDropdownOpen(false);

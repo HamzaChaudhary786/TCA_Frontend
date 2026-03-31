@@ -39,12 +39,12 @@ const FilterPopup = ({
     data: teacherSubjectOfClassroom,
 
   } = useQuery({
-    queryKey: ["teacherSubjectsOfClassrooms", classroom?._id,],
+    queryKey: ["teacherSubjectsOfClassrooms", classroom?.id,],
     queryFn: async () => {
 
-      return await getTeacherSubjectsOfClassroom({ classroomIDs: [classroom._id] });
+      return await getTeacherSubjectsOfClassroom({ classroomIDs: [classroom.id] });
     },
-    enabled: !!classroom?._id,
+    enabled: !!classroom?.id,
   });
 
   console.log(teacherSubjectOfClassroom, "teacherSubjectOfClassroom");
@@ -87,7 +87,7 @@ const FilterPopup = ({
                 >
                   <option value="">Select Class</option>
                   {allClassrooms?.map((item) => (
-                    <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
+                    <option key={item.id} value={JSON.stringify(item)}>{item.name}</option>
                   ))}
                 </select>
 
@@ -105,7 +105,7 @@ const FilterPopup = ({
                 >
                   <option value="">Select Subject</option>
                   {teacherSubjectOfClassroom?.subjects?.map((item) => (
-                    <option key={item._id} value={JSON.stringify(item)}>{item.subjectName}</option>
+                    <option key={item.id} value={JSON.stringify(item)}>{item.subjectName}</option>
                   ))}
                 </select>
               </div>
@@ -169,8 +169,8 @@ const StudentReports = () => {
 
       let temparr = data?.filter((item) => {
         if (
-          item?.classroom?._id === classroom?._id &&
-          item?.subject?._id === subject?.subjectId
+          item?.classroom?.id === classroom?.id &&
+          item?.subject?.id === subject?.subjectId
 
         ) {
           return item;
@@ -241,7 +241,7 @@ const StudentReports = () => {
                         console.log(std, "fileter");
                         return (
                           <DataRows
-                            key={std._id}
+                            key={std.id}
                             header={false}
                             index={index + 1}
                             bgColor={"#FFFFFF"}
@@ -255,31 +255,6 @@ const StudentReports = () => {
                         );
                       })}
 
-                  {!filterActive &&
-                    searchText &&
-                    data?.map((std, index) => {
-                      if (
-                        std?.classroom?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
-                        std?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) ||
-                        std?.subject?.name?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
-                      ) {
-                        return (
-                          <DataRows
-                            key={std._id}
-                            header={false}
-                            index={index + 1}
-                            bgColor={"#FFFFFF"}
-                            studentName={std.name}
-                            subject={std.subject.name}
-                            attendance={std.avgAttendancePer}
-                            studentClass={std.classroom.name}
-                            onClickFunction={handleFunctionClick(std)}
-                            studentProfile={std.profilePic || IMAGES.Profile}
-                          />
-                        );
-                      }
-                    })}
-
                     {!filterActive &&
                       searchText &&
                       data?.map((std, index) => {
@@ -290,20 +265,37 @@ const StudentReports = () => {
                         ) {
                           return (
                             <DataRows
-                              key={std._id}
+                              key={std.id}
                               header={false}
                               index={index + 1}
                               bgColor={"#FFFFFF"}
                               studentName={std.name}
                               subject={std.subject.name}
-                              attendance={std.attendance}
+                              attendance={std.avgAttendancePer}
                               studentClass={std.classroom.name}
                               onClickFunction={handleFunctionClick(std)}
                               studentProfile={std.profilePic || IMAGES.Profile}
                             />
                           );
                         }
+                        return null;
                       })}
+
+                    {filterActive &&
+                      filteredData?.map((std, index) => (
+                        <DataRows
+                          key={std.id}
+                          header={false}
+                          index={index + 1}
+                          bgColor={"#FFFFFF"}
+                          studentName={std.name}
+                          subject={std.subject.name}
+                          attendance={std.avgAttendancePer}
+                          studentClass={std.classroom.name}
+                          onClickFunction={handleFunctionClick(std)}
+                          studentProfile={std.profilePic || IMAGES.Profile}
+                        />
+                      ))}
 
                     {data?.length == 0 && (
                       <div className="text-center py-4 text-3xl font-medium">

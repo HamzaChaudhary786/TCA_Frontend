@@ -42,7 +42,7 @@ const QuizAssignmentRow = (props) => {
               moment(props.deadline).format("Do MMM YYYY hh:mm a")
             }
           </p>
-          <p
+          <div
             className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${props.header
               ? "font-semibold"
               : "justify-center items-center flex"
@@ -54,8 +54,8 @@ const QuizAssignmentRow = (props) => {
             >
               {props.submissions}
             </p>
-          </p>
-          <p
+          </div>
+          <div
             className={`w-full md:flex-[3] my-1 md:my-0 text-center md:text-center md:text-[14px]  text-[11px] ${props.header
               ? "font-semibold"
               : "justify-center items-center flex"
@@ -67,7 +67,7 @@ const QuizAssignmentRow = (props) => {
             >
               {props.actions}
             </p>
-          </p>
+          </div>
         </div>
         <div className="flex ml-6 lg:mr-5 cursor-pointer">
           <p

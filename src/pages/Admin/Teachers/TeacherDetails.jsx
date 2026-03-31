@@ -25,7 +25,7 @@ const TeacherDetails = () => {
 
   console.log("location is : ", location.state);
 
-  const teacherId = location?.state?.teacher?._id;
+  const teacherId = location?.state?.teacher?.id;
   console.log("--- FRONTEND DEBUG ---");
   console.log("TeacherDetails teacherId:", teacherId);
   console.log("location.state:", location.state);
@@ -37,6 +37,24 @@ const TeacherDetails = () => {
   });
 
   const queryClient = useQueryClient();
+
+  if (!location.state || !location.state.teacher) {
+    return (
+      <div className="flex flex-1 bg-[#F9F9F9] font-poppins h-screen">
+        <div className="flex flex-1 items-center justify-center lg:ml-72">
+          <div className="text-center">
+            <p className="text-2xl font-semibold text-maroon mb-4">Teacher data lost due to page refresh.</p>
+            <button 
+              onClick={() => window.history.back()} 
+              className="bg-[#0B1053] text-white px-6 py-2 rounded-full"
+            >
+              Go Back to Teachers List
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const acceptMutation = useMutation({
     mutationFn: acceptFeedback,

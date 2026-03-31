@@ -82,43 +82,34 @@ const UpcomingClasses = () => {
   const handleJoinClass = () => { };
 
   const filterClasses = () => {
-
-    console.log("selected Date is : ", selectedDate);
-    let arr = []
-    arr = allClasses.filter((item) => new Date(item.startTime).toDateString() == selectedDate);
-    console.log("arr is : ", arr)
+    if (!allClasses) return;
+    const targetDate = new Date(selectedDate).toDateString();
+    let arr = allClasses.filter((item) => new Date(item.startTime).toDateString() === targetDate);
     setFilteredClasses(arr);
   }
 
   useEffect(() => {
-    if (!classesIsPending) {
-      filterClasses();
-    }
-  }, [selectedDate])
-
-  useEffect(() => {
-    filterClasses()
-  }, [])
-
-  if (!classesIsPending) {
-    console.log(allClasses);
-  }
+    filterClasses();
+  }, [allClasses, selectedDate, classesIsPending])
 
   const EventComponet = ({ item }) => {
+    const subjectName = item.subject?.name || "";
+    const classroomName = item.classroom?.name || "";
+    
     return (
       <div
-        className={`flex flex-col  w-full text-xs border-l-2 gap-1 ${item.subject == "Physics"
+        className={`flex flex-col  w-full text-xs border-l-2 gap-1 ${subjectName == "Physics"
           ? "border-l-[#0B1053] bg-maroon_100"
-          : item.subjectID.name == "AI"
+          : subjectName == "AI"
             ? "border-l-orange bg-orange_light"
-            : item.subject == "Biology"
+            : subjectName == "Biology"
               ? "border-l-green bg-green/10"
               : "border-l-green bg-green/10"
           }  px-2 py-2 rounded-lg w-60`}
       >
         <div className="flex justify-between">
-          <p>{item.subjectID.name}</p>
-          <p>{item.classroom.name}</p>
+          <p>{subjectName}</p>
+          <p>{classroomName}</p>
         </div>
         <div className="text-sm font-medium">
           <p>{item.title} </p>
@@ -267,7 +258,7 @@ const UpcomingClasses = () => {
           <div className="flex flex-col flex-1 gap-1">
             {filteredclasses && filteredclasses.length > 0 ? "" : "No Scheduled classes right now"}
             {filteredclasses && filteredclasses.map((item) => (
-              <EventComponet item={item} key={item} />
+              <EventComponet item={item} key={item.id} />
             ))}
           </div>
         </div>

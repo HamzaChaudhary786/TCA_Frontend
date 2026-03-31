@@ -42,10 +42,10 @@ const ScheduledClasses = () => {
 
     return (
       <div className="flex flex-col w-full px-6 text-xs border-l-2 gap-1 py-2 rounded-lg lg:w-60"
-        style={{ borderLeftColor: item.subjectID.color, backgroundColor: `${item.subjectID.color}10` }}>
+        style={{ borderLeftColor: item.subject?.color || item.subjectID?.color || "#6A00FF", backgroundColor: `${item.subject?.color || item.subjectID?.color || "#6A00FF"}10` }}>
         <div className="flex justify-between">
-          <p>{item.subjectID.name}</p>
-          <p>{item.teacher.teacherID.name}</p>
+          <p>{item.subject?.name || item.subjectID?.name || "Subject"}</p>
+          <p>{item.teacher?.name || item.teacher?.teacherID?.name || "Teacher"}</p>
         </div>
         <div className="text-sm font-medium">
           <p>{item.title}</p>
@@ -133,7 +133,7 @@ const ScheduledClasses = () => {
           </div>
           <div className="flex flex-col flex-1 gap-1">
             {filteredClasses.length > 0 ? (
-              filteredClasses.map((item) => <EventComponent item={item} key={item._id} />)
+              filteredClasses.map((item) => <EventComponent item={item} key={item.id} />)
             ) : (
               <p>No Scheduled classes today</p>
             )}

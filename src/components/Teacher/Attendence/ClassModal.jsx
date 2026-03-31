@@ -72,7 +72,7 @@ const MultiSelect = ({ options, placeholder, onChange, onSelect }) => {
         <div className="absolute z-10 w-full h-60 overflow-y-auto register-scrollbar bg-white border border-[#00000020] rounded shadow-md">
           {options.map((option) => (
             <div
-              key={option._id}
+              key={option.id}
               className={`p-2 cursor-pointer hover:bg-gray-100 ${selectedOptions.includes(option) ? 'bg-gray-500' : ''
                 }`}
               onClick={() => handleOptionClick(option)}
@@ -102,7 +102,7 @@ const CustomSelectable = ({ label, options, setSelectedOption, selectedOption })
             className='border outline-none rounded-md border-black/20 px-4 w-full py-2'>
             <option value={""}>Select</option>
             {options.map((item) => {
-              return <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
+              return <option key={item.id} value={JSON.stringify(item)}>{item.name}</option>
             })}
           </select>
         </div>
@@ -163,13 +163,13 @@ const ClassModal = ({ open, setopen, isEditTrue, refetch }) => {
     
     if (selectedLevel && newSelectedStudents.length > 0) {
 
-      let students = newSelectedStudents.map((item) => item._id);
+      let students = newSelectedStudents.map((item) => item.id);
 
       let data = {
         students,
         name: className,
-        teachers: [userData._id],
-        subject: JSON.parse(selectedSubject)._id,
+        teachers: [userData.id],
+        subject: JSON.parse(selectedSubject).id,
       }
 
       createClassroomMutation.mutate(data);

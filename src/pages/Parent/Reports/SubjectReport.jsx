@@ -18,18 +18,18 @@ const SubjectReport = () => {
   const reportQuery = useQuery({
     queryKey: [
       "report",
-      selectedChild?._id,
-      location?.state?.classroom?._id,
-      location?.state?.subject?._id,
-      location?.state?.teacher?._id,
+      selectedChild?.id,
+      location?.state?.classroom?.id,
+      location?.state?.subject?.id,
+      location?.state?.teacher?.id,
     ],
     queryFn: async () => {
       //console.log("selected child is : ", selectedChild);
       const results = await getChildReport(
-        selectedChild._id,
-        location?.state?.classroom?._id,
-        location?.state?.subject?._id,
-        location?.state?.teacher?._id
+        selectedChild.id,
+        location?.state?.classroom?.id,
+        location?.state?.subject?.id,
+        location?.state?.teacher?.id
       );
       //console.log("report result is : ", results);
       return results;

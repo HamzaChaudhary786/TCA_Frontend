@@ -20,12 +20,12 @@ const Reports = () => {
 
   const handleFunctionClick = (report) => {
     console.log("i am click")
-      navigate(`/reports/${report.subject.name}`, { state: report });
+    navigate(`/reports/${report.name}`, { state: report });
   };
 
   const subjectQuery = useQuery({
     queryKey: ["subjects"], queryFn: async () => {
-      const results = await getAllSubjects(userData._id);
+      const results = await getAllSubjects(userData.id);
       console.log("inside reports")
       setAllSubjects(results);
       return results
@@ -53,7 +53,7 @@ const Reports = () => {
                       <DataRows
                         index={index + 1}
                         key={index + 1}
-                        subject={report.subject.name}
+                        subject={report.name}
                         instructor={report.teacher}
                         attendance={report.avgAttendancePer}
                         bgColor={"#FFFFFF"}

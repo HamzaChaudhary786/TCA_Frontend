@@ -9,7 +9,7 @@ import profile from "../../assets/images/profilepic.png"
 import { RiGraduationCapLine } from "react-icons/ri";
 import { useUser } from "../../context/UserContext";
 import { useMutation } from "@tanstack/react-query";
-import { updateUser } from "../../api/Admin/UsersApi";
+import { updateUser, updateSelfProfile } from "../../api/Admin/UsersApi";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useBlur } from "../../context/BlurContext";
 import useClickOutside from "../../hooks/useClickOutlise";
@@ -87,7 +87,7 @@ const ProfileDetails = ({ onClose }) => {
 
   const updateUserMutation = useMutation({
     mutationFn: async (data) => {
-      return updateUser(data, userData._id);
+      return updateSelfProfile(data);
     },
     onSuccess: (data) => {
       setUserData(data)

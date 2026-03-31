@@ -8,6 +8,8 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { useStudent } from "../../../../../../context/StudentContext";
 import moment from "moment";
+import { getAllClasses } from "../../../../../../api/ForAllAPIs";
+import { toast } from "react-toastify";
 
 
 const FilterClassesModal = ({ addModalOpen, setaddModalOpen }) => {
@@ -16,23 +18,35 @@ const FilterClassesModal = ({ addModalOpen, setaddModalOpen }) => {
   const [filterEndDate, setFilterEndDate] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
   const [filterActive, setFilterActive] = useState(false);
-  const [filterStartDate, setFilterSatrtDate] = useState();
+  const [filterStartDate, setFilterStartDate] = useState("");
   const [filteredclasses, setFilteredClasses] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleJoinClass = () => { };
 
   const filterClasses = () => {
+    if (!allClasses) return;
+    
     let arr = [];
-    arr = allClasses && allClasses.filter((item) => new Date(item.startTime).getDate() == new Date(selectedDate).getDate());
-    if (filterActive) {
-      arr = allClasses && allClasses.filter((item) => new Date(item.startTime).getDate() >= new Date(filterStartDate).getDate() && new Date(item.startTime).getDate() <= new Date(filterEndDate).getDate());
+    if (filterActive && filterStartDate && filterEndDate) {
+      const start = moment(filterStartDate).startOf("day");
+      const end = moment(filterEndDate).endOf("day");
+      arr = allClasses.filter((item) => {
+        const itemDate = moment(item.startTime);
+        return itemDate.isBetween(start, end, null, "[]");
+      });
+    } else if (selectedDate) {
+      const selected = moment(new Date(selectedDate)).startOf("day");
+      arr = allClasses.filter((item) => {
+        return moment(item.startTime).isSame(selected, "day");
+      });
     }
     setFilteredClasses(arr);
   };
 
   useEffect(() => {
     filterClasses();
-  }, [selectedDate, filterActive]);
+  }, [allClasses, selectedDate, filterActive, filterStartDate, filterEndDate]);
 
 
   const EventComponet = ({ item }) => {
@@ -63,8 +77,8 @@ const FilterClassesModal = ({ addModalOpen, setaddModalOpen }) => {
           </div>
           <div className="flex flex-col justify-between">
             <div className="flex justify-between">
-              <p className="text-sm font-semibold">{item.subjectID.name}</p>
-              <p className="text-maroon">{item.classroom.name}</p>
+              <p className="text-sm font-semibold">{item?.subject?.name || "Unknown Subject"}</p>
+              <p className="text-maroon">{item?.classroom?.name || ""}</p>
             </div>
             <div className="flex gap-2 text-xs font-light">
               <p className="flex items-center gap-1">
@@ -188,7 +202,7 @@ const FilterClassesModal = ({ addModalOpen, setaddModalOpen }) => {
         <div className="flex w-full gap-2 my-3 text-xs">
           <div className="flex justify-around gap-2 flex-1 w-full">
             <div className="flex px-4 py-2 border rounded-lg border-grey/50">
-              <input type="date" value={filterStartDate} onChange={(e) => setFilterSatrtDate(e.target.value)} placeholder="Jan 19, 2024" className={"w-24 outline-none"} />
+              <input type="date" value={filterStartDate} onChange={(e) => setFilterStartDate(e.target.value)} placeholder="Jan 19, 2024" className={"w-24 outline-none"} />
             </div>
             <p className="flex items-center">-</p>
             <div className="flex px-4 py-2 border rounded-lg border-grey/50">
@@ -227,10 +241,28 @@ const FilterClassesModal = ({ addModalOpen, setaddModalOpen }) => {
     );
   };
 
-  const handleApplyFilters = () => {
-    //console.log("start date is : ", filterStartDate);
-    //console.log("end date is : ", filterEndDate);
-    setFilterActive(true);
+  const handleApplyFilters = async () => {
+    if (!filterStartDate || !filterEndDate) {
+      toast.warning("Please select both start and end dates");
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const response = await getAllClasses({
+        startDate: filterStartDate,
+        endDate: filterEndDate
+      });
+      
+      if (response) {
+        setFilteredClasses(response);
+        setFilterActive(true);
+      }
+    } catch (error) {
+      console.error("Error filtering classes:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -267,9 +299,11 @@ const FilterClassesModal = ({ addModalOpen, setaddModalOpen }) => {
               <p className="flex justify-center text-xl font-semibold">
                 Classes
               </p>
-              {filteredclasses && filteredclasses.length > 0
+              {loading ? (
+                "Loading classes..."
+              ) : filteredclasses && filteredclasses.length > 0
                 ? ""
-                : "No Shcedualed classes at this date"}
+                : "No Scheduled classes at this date"}
             </div>
             {filteredclasses && filteredclasses.map((item) => (
               <EventComponet item={item} key={item} />

@@ -19,7 +19,7 @@ const QuoteCard = ({ quote, deleteQuote, editQuote, refetch }) => {
                                 <p>Edit</p>
                             </div>
                             <div className='border-b border-b-black/10'></div>
-                            <div onClick={() => { deleteQuote(quote._id); refetch(); toggleMenu(); }} className='cursor-pointer flex gap-2 items-center py-2 px-2 text-maroon'>
+                            <div onClick={() => { deleteQuote(quote.id); refetch(); toggleMenu(); }} className='cursor-pointer flex gap-2 items-center py-2 px-2 text-maroon'>
                                 <RiDeleteBin6Line size={20} />
                                 <p>Delete</p>
                             </div>

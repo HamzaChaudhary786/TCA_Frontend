@@ -2,30 +2,54 @@ import React, { useState, useRef } from 'react'
 import IMAGES from '../../../assets/images';
 import { IoSend } from "react-icons/io5";
 import useClickOutside from '../../../hooks/useClickOutlise';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { submitFeedback } from '../../../api/Student/Feedback';
+import { sendQuickMessage } from '../../../api/UserApis';
 import { toast } from 'react-toastify';
 import LoaderSmall from '../../../utils/LoaderSmall';
 
 const TeacherMessageDialog = ({ handleFeedback, item }) => {
+    const queryClient = useQueryClient();
     const [feedback, setFeedback] = useState("");
     const [msgText, setMsgText] = useState("");
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (!msgText.trim()) {
             toast.warning("Please enter a message.");
             return;
         }
-        // Logic for sending message (if implemented in backend)
-        toast.info("Message functionality coming soon!");
+        const teacherID = item?.teacher?.id || item?.teacherId;
+        if (!teacherID) {
+            toast.error("Teacher ID not found.");
+            return;
+        }
+        let data = { message: msgText, receiverId: teacherID };
+        const resp = await sendQuickMessage(data);
+        return resp;
     }
+
+    const messageMutation = useMutation({
+        mutationKey: ["sendquickmessage"],
+        mutationFn: handleSendMessage,
+        onSuccess: (data) => {
+            if (data) {
+                queryClient.invalidateQueries({ queryKey: ["chat"] });
+                toast.success("Message sent successfully!");
+                setMsgText("");
+                handleFeedback();
+            }
+        },
+        onError: (error) => {
+            toast.error(error?.message || "Error sending message.");
+        }
+    })
 
     const handleSendFeedback = async () => {
         if (!feedback.trim()) {
             toast.warning("Please enter feedback.");
             return;
         }
-        const teacherID = item?.teacher?._id || item?.teacherId;
+        const teacherID = item?.teacher?.id || item?.teacherId;
         if (!teacherID) {
             toast.error("Teacher ID not found.");
             return;
@@ -72,7 +96,9 @@ const TeacherMessageDialog = ({ handleFeedback, item }) => {
                             className='w-4/5 px-2 py-1 rounded-md outline-none bg-[#919191]/10 text-black text-[12px]'
                             placeholder='Send Quick Message'
                         />
-                        <IoSend size={18} onClick={handleSendMessage} className='cursor-pointer' color='#0B1053' />
+                        {messageMutation.isPending ? <LoaderSmall /> : (
+                            <IoSend size={18} onClick={() => messageMutation.mutate()} className='cursor-pointer' color='#0B1053' />
+                        )}
                     </div>
                     <div className='flex w-full items-center justify-center flex-row px-4 gap-2'>
                         <input
@@ -92,4 +118,4 @@ const TeacherMessageDialog = ({ handleFeedback, item }) => {
     )
 }
 
-export default TeacherMessageDialog
+export default TeacherMessageDialog

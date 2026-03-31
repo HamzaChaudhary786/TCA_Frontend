@@ -35,21 +35,21 @@ const AttendanceTable = ({ data }) => {
 
                         <table className="flex flex-col flex-1 bg-white rounded-lg table-fixed">
                             <tbody className="flex flex-col">
-                                {data.classData.map((item, index) => {
-                                    if(item.teacher.status == "present"){
+                                {data?.classData?.map((item, index) => {
+                                    if(item.teacherStatus === "present"){
                                         chartData[0].value = chartData[0].value + 1
                                     }
-                                    if(item.teacher.status == "absent"){
+                                    if(item.teacherStatus === "absent"){
                                         chartData[1].value = chartData[1].value + 1
                                     }
-                                    if(item.teacher.status == "leave"){
+                                    if(item.teacherStatus === "leave"){
                                         chartData[2].value = chartData[2].value + 1
                                     }
                                     return (
-                                        <tr className="flex flex-1 text-xs border-t border-t-black/10">
+                                        <tr key={index} className="flex flex-1 text-xs border-t border-t-black/10">
                                             <td className="flex-[1] py-2 lg:py-3 flex justify-center">{index + 1}</td>
-                                            <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
-                                                {item.teacher.status}
+                                            <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center uppercase">
+                                                {item.teacherStatus}
                                             </td>
                                             <td className="flex-[3] py-2 lg:py-3 border-l border-l-black/10 flex justify-center">
                                                 {moment.utc(item.startTime).format("Do MMM YYYY")}
@@ -61,7 +61,7 @@ const AttendanceTable = ({ data }) => {
                                     );
                                 })}
 
-                                {data.classData.length == 0 && <div className='justify-center flex py-2 text-xl'>No data to display</div>}
+                                {(!data?.classData || data.classData.length === 0) && <div className='justify-center flex py-2 text-xl'>No data to display</div>}
 
                             </tbody>
 

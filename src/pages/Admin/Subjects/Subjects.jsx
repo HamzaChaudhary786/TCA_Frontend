@@ -101,7 +101,7 @@ const Subjects = () => {
                                         {searchText == "" && allSubjects?.map((lvl, index) => (
                                             <DataRow
                                                 data={lvl}
-                                                key={lvl._id}
+                                                key={lvl.id}
                                                 toggleSubjectMenu={toggleSubjectMenuOpen}
                                                 refetch={subjectsRefetch}
                                                 index={index + 1}
@@ -118,7 +118,7 @@ const Subjects = () => {
                                             if (lvl.name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) || lvl.levelName.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
                                                 return <DataRow
                                                     data={lvl}
-                                                    key={lvl._id}
+                                                    key={lvl.id}
                                                     toggleSubjectMenu={toggleSubjectMenuOpen}
                                                     refetch={subjectsRefetch}
                                                     index={index + 1}

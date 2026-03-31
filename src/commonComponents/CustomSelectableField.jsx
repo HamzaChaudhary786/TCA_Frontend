@@ -7,14 +7,14 @@ const CustomSelectableField = ({ label, options, setSelectedOption, selectedOpti
         </div>
         <div>
           <select
-            value={selectedOption}
+            value={typeof selectedOption === 'object' ? JSON.stringify(selectedOption) : selectedOption}
             onChange={(e) => setSelectedOption(e.target.value)}
             className='border text-sm text-grey/70 outline-none rounded-md border-black/20 px-4 w-full py-2'
           >
             <option value={""}>Select</option>
             {options?.map((item) => {
               return (
-                <option key={item._id} value={JSON.stringify(item)}>
+                <option key={item.id} value={JSON.stringify(item)}>
                   {item.name}
                 </option>
               );

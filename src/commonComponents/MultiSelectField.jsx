@@ -49,7 +49,7 @@ const MultiSelectField = ({ options, placeholder, onChange, onSelect }) => {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-start justify-items-start">
           {options.map((option) => (
-            <div key={option._id} className="flex items-center p-2">
+            <div key={option.id} className="flex items-center p-2">
               <input
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
